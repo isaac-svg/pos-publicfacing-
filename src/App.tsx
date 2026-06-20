@@ -1,29 +1,78 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useAuthStore } from './store/auth'
+import { ActivationGateModal } from './components/ActivationGateModal'
+import { RequireActiveSubscription } from './components/RequireActiveSubscription'
+import AdminLayout from './components/AdminLayout'
+
+// Public pages
 import SignupPage from './pages/SignupPage'
 import VerifyOtpPage from './pages/VerifyOtpPage'
 import LoginPage from './pages/LoginPage'
 import SelectPlanPage from './pages/SelectPlanPage'
 import PendingPage from './pages/PendingPage'
-import DashboardPage from './pages/DashboardPage'
+
+// Admin pages
+import AdminDashboardPage from './pages/admin/DashboardPage'
+import ProductsPage from './pages/admin/products/ProductsPage'
+import CategoriesPage from './pages/admin/products/CategoriesPage'
+import InventoryPage from './pages/admin/InventoryPage'
+import ReportsPage from './pages/admin/ReportsPage'
+import CreditDashboardPage from './pages/admin/credit/CreditDashboardPage'
+import CreditCustomersPage from './pages/admin/credit/CustomersPage'
+import CreditAccountsPage from './pages/admin/credit/AccountsPage'
+import CreditReportsPage from './pages/admin/credit/CreditReportsPage'
+import CreditSettingsPage from './pages/admin/credit/CreditSettingsPage'
+import UsersPage from './pages/admin/users/UsersPage'
+import SettingsPage from './pages/admin/settings/SettingsPage'
+import SubscriptionPage from './pages/admin/SubscriptionPage'
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
+})
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { token } = useAuthStore()
   return token ? <>{children}</> : <Navigate to="/login" replace />
 }
 
+function G({ children }: { children: React.ReactNode }) {
+  return <RequireActiveSubscription>{children}</RequireActiveSubscription>
+}
+
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/verify-otp" element={<VerifyOtpPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/select-plan" element={<ProtectedRoute><SelectPlanPage /></ProtectedRoute>} />
-        <Route path="/pending" element={<ProtectedRoute><PendingPage /></ProtectedRoute>} />
-        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-        <Route path="*" element={<Navigate to="/signup" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          {/* Public */}
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/verify-otp" element={<VerifyOtpPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/select-plan" element={<ProtectedRoute><SelectPlanPage /></ProtectedRoute>} />
+          <Route path="/pending" element={<ProtectedRoute><PendingPage /></ProtectedRoute>} />
+
+          {/* Admin dashboard (with layout + subscription gating) */}
+          <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+            <Route path="/dashboard" element={<G><AdminDashboardPage /></G>} />
+            <Route path="/products" element={<G><ProductsPage /></G>} />
+            <Route path="/products/categories" element={<G><CategoriesPage /></G>} />
+            <Route path="/inventory" element={<G><InventoryPage /></G>} />
+            <Route path="/reports" element={<G><ReportsPage /></G>} />
+            <Route path="/credit/dashboard" element={<G><CreditDashboardPage /></G>} />
+            <Route path="/credit/customers" element={<G><CreditCustomersPage /></G>} />
+            <Route path="/credit/accounts" element={<G><CreditAccountsPage /></G>} />
+            <Route path="/credit/reports" element={<G><CreditReportsPage /></G>} />
+            <Route path="/credit/settings" element={<G><CreditSettingsPage /></G>} />
+            <Route path="/users" element={<G><UsersPage /></G>} />
+            <Route path="/settings/*" element={<G><SettingsPage /></G>} />
+            <Route path="/subscription" element={<G><SubscriptionPage /></G>} />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/signup" replace />} />
+        </Routes>
+        <ActivationGateModal />
+      </BrowserRouter>
+    </QueryClientProvider>
   )
 }
