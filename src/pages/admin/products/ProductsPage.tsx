@@ -9,8 +9,6 @@ export default function ProductsPage() {
   const qc = useQueryClient()
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('')
-  const [editId, setEditId] = useState<number | null>(null)
-
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products', typeFilter],
     queryFn: () => productsApi.list(typeFilter ? { itemType: typeFilter } : {}),
