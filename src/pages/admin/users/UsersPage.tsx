@@ -13,10 +13,10 @@ export default function UsersPage() {
   const { data: users = [], isLoading } = useQuery({ queryKey: ['users'], queryFn: () => usersApi.list() })
 
   const createMutation = useMutation({
-    mutationFn: () => usersApi.create({ username: form.username, fullName: form.fullName, email: form.email || undefined }),
-    onSuccess: (data: { generatedPassword?: string }) => {
+    mutationFn: () => usersApi.create({ username: form.username, fullName: form.fullName, email: form.email || undefined }) as Promise<{ generatedPassword?: string }>,
+    onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['users'] })
-      setCreated({ username: form.username, password: (data as { generatedPassword: string }).generatedPassword })
+      setCreated({ username: form.username, password: data.generatedPassword ?? '' })
       setForm({ username: '', fullName: '', email: '' })
       setShowAdd(false)
     },
