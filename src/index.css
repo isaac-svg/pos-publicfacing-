@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@theme {
+  --color-border: #e5e7eb;
+}
+
+@layer base {
+  *, *::before, *::after {
+    border-color: var(--color-border);
+  }
+}

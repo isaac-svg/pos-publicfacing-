@@ -24,7 +24,10 @@ import CreditAccountsPage from './pages/admin/credit/AccountsPage'
 import CreditReportsPage from './pages/admin/credit/CreditReportsPage'
 import CreditSettingsPage from './pages/admin/credit/CreditSettingsPage'
 import UsersPage from './pages/admin/users/UsersPage'
+import RolesPage from './pages/admin/users/RolesPage'
 import SettingsPage from './pages/admin/settings/SettingsPage'
+import TaxPage from './pages/admin/settings/TaxPage'
+import PaymentPage from './pages/admin/settings/PaymentPage'
 import SubscriptionPage from './pages/admin/SubscriptionPage'
 
 const queryClient = new QueryClient({
@@ -65,7 +68,10 @@ export default function App() {
             <Route path="/credit/reports" element={<G><CreditReportsPage /></G>} />
             <Route path="/credit/settings" element={<G><CreditSettingsPage /></G>} />
             <Route path="/users" element={<G><UsersPage /></G>} />
-            <Route path="/settings/*" element={<G><SettingsPage /></G>} />
+            <Route path="/users/roles" element={<G><RolesPage /></G>} />
+            <Route path="/settings/shop" element={<G><SettingsPage /></G>} />
+            <Route path="/settings/tax" element={<G><TaxPage /></G>} />
+            <Route path="/settings/payment" element={<G><PaymentPage /></G>} />
             <Route path="/subscription" element={<G><SubscriptionPage /></G>} />
           </Route>
 
