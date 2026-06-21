@@ -29,6 +29,8 @@ import SettingsPage from './pages/admin/settings/SettingsPage'
 import TaxPage from './pages/admin/settings/TaxPage'
 import PaymentPage from './pages/admin/settings/PaymentPage'
 import SubscriptionPage from './pages/admin/SubscriptionPage'
+import TopupSmsPage from './pages/admin/TopupSmsPage'
+import TopupCallbackPage from './pages/admin/TopupCallbackPage'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
@@ -73,6 +75,8 @@ export default function App() {
             <Route path="/settings/tax" element={<G><TaxPage /></G>} />
             <Route path="/settings/payment" element={<G><PaymentPage /></G>} />
             <Route path="/subscription" element={<G><SubscriptionPage /></G>} />
+            <Route path="/subscription/topup" element={<G><TopupSmsPage /></G>} />
+            <Route path="/subscription/topup-callback" element={<G><TopupCallbackPage /></G>} />
           </Route>
 
           <Route path="*" element={<Navigate to="/signup" replace />} />
