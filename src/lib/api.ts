@@ -127,6 +127,12 @@ export const rolesApi = {
   delete: (id: number) => api.delete(`/api/v1/roles/${id}`),
 }
 
+// ── Public (no auth) ───────────────────────────────────────────────────────
+export const publicApi = {
+  subscribeNewsletter: (d: { email: string }) => api.post('/api/v1/public/newsletter', d).then(r => r.data.data),
+  submitContact: (d: { name: string; phone: string; message: string }) => api.post('/api/v1/public/contact', d).then(r => r.data.data),
+}
+
 // ── Shops ────────────────────────────────────────────────────────────────────
 export const shopsApi = {
   list: () => w(api.get('/api/v1/shops')),

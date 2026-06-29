@@ -4,6 +4,7 @@ export const NAV = {
     { label: 'Features', href: '#pillars' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'FAQ', href: '#faq' },
+    { label: 'Contact', href: '#contact' },
   ],
   login: 'Log in',
   cta: 'Start Free Trial',
