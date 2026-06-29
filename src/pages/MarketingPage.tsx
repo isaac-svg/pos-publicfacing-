@@ -2,30 +2,31 @@ import '../components/marketing/animations/registerPlugins'
 import { useLenis } from '../components/marketing/animations/useLenis'
 import MarketingNavbar from '../components/marketing/layout/MarketingNavbar'
 import Footer from '../components/marketing/layout/Footer'
-import CustomCursor from '../components/marketing/layout/CustomCursor'
 import HeroSection from '../components/marketing/sections/HeroSection'
-import PainAgitationSection from '../components/marketing/sections/PainAgitationSection'
-import CashierModuleSection from '../components/marketing/sections/CashierModuleSection'
-import CreditShieldSection from '../components/marketing/sections/CreditShieldSection'
-import SystemResilienceSection from '../components/marketing/sections/SystemResilienceSection'
-import SocialProofSection from '../components/marketing/sections/SocialProofSection'
-import FinalCTASection from '../components/marketing/sections/FinalCTASection'
+import ProblemSection from '../components/marketing/sections/ProblemSection'
+import PillarsSection from '../components/marketing/sections/PillarsSection'
+import ClarityGridSection from '../components/marketing/sections/ClarityGridSection'
+import TrialOfferSection from '../components/marketing/sections/TrialOfferSection'
+import PricingSection from '../components/marketing/sections/PricingSection'
+import FAQSection from '../components/marketing/sections/FAQSection'
 
 export default function MarketingPage() {
   useLenis()
 
   return (
-    <div className="marketing-root" style={{ background: '#060608', color: '#f5f5f5', fontFamily: '"Geist Variable", "Geist", sans-serif' }}>
-      <CustomCursor />
+    <div
+      className="marketing-root bg-white text-slate-900"
+      style={{ fontFamily: '"Geist Variable", "Geist", system-ui, sans-serif' }}
+    >
       <MarketingNavbar />
       <main>
         <HeroSection />
-        <PainAgitationSection />
-        <CashierModuleSection />
-        <CreditShieldSection />
-        <SystemResilienceSection />
-        <SocialProofSection />
-        <FinalCTASection />
+        <ProblemSection />
+        <PillarsSection />
+        <ClarityGridSection />
+        <TrialOfferSection />
+        <PricingSection />
+        <FAQSection />
       </main>
       <Footer />
     </div>

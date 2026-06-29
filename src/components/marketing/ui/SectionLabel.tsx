@@ -4,7 +4,7 @@ interface SectionLabelProps {
 
 export default function SectionLabel({ children }: SectionLabelProps) {
   return (
-    <span className="inline-block text-sm font-semibold tracking-[0.2em] uppercase text-[#6366f1] mb-4">
+    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600 mb-4">
       {children}
     </span>
   )
