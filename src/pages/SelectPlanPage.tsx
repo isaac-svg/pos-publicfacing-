@@ -25,6 +25,7 @@ export default function SelectPlanPage() {
   const [trialDays, setTrialDays] = useState(14)
   const [selecting, setSelecting] = useState<string | null>(null)
   const [error, setError] = useState('')
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly')
 
   useEffect(() => {
     api.get('/api/v1/subscriptions/plans').then(r => {
@@ -34,11 +35,18 @@ export default function SelectPlanPage() {
     })
   }, [])
 
+  function getPrice(plan: Plan) {
+    if (billingCycle === 'annual') {
+      return { display: Math.round(plan.priceAnnual / 12), total: plan.priceAnnual, suffix: '/mo' }
+    }
+    return { display: plan.priceMonthly, total: plan.priceMonthly, suffix: '/mo' }
+  }
+
   async function selectPlan(planId: string) {
     setSelecting(planId)
     setError('')
     try {
-      const res = await api.post('/api/v1/subscriptions/select-plan', { plan: planId })
+      const res = await api.post('/api/v1/subscriptions/select-plan', { plan: planId, billingCycle })
       const newStatus = res.data.data.status
       updateSubscription({ status: newStatus, plan: planId })
 
@@ -47,7 +55,6 @@ export default function SelectPlanPage() {
         return
       }
 
-      // Paid plan — initiate Paystack payment
       const payRes = await api.post('/api/v1/subscriptions/initiate-payment')
       const { authorizationUrl } = payRes.data.data
 
@@ -68,9 +75,29 @@ export default function SelectPlanPage() {
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-12">
       <div className="max-w-5xl mx-auto space-y-6">
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <h1 className="text-3xl font-bold">Choose your plan</h1>
-          <p className="text-gray-500 mt-2">Start with a free trial — no card required</p>
+          <p className="text-gray-500">Start with a free trial — no card required</p>
+
+          {/* Billing toggle */}
+          <div className="inline-flex items-center bg-gray-100 rounded-full p-1">
+            <button
+              onClick={() => setBillingCycle('monthly')}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                billingCycle === 'monthly' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setBillingCycle('annual')}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                billingCycle === 'annual' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Annual <span className="text-emerald-600 text-xs font-semibold ml-1">Save 17%</span>
+            </button>
+          </div>
         </div>
 
         {error && (
@@ -92,6 +119,7 @@ export default function SelectPlanPage() {
           {plans.map(plan => {
             const popular = plan.popular
             const isFree = plan.priceMonthly === 0
+            const price = getPrice(plan)
             return (
               <div key={plan.id} className={`bg-white rounded-lg border ${popular ? 'border-blue-400 ring-1 ring-blue-400' : 'border-gray-200'} shadow-sm p-4 flex flex-col gap-3 relative`}>
                 {popular && (
@@ -106,8 +134,17 @@ export default function SelectPlanPage() {
                   }`}>{plan.name}</span>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-2xl font-semibold">GH₵ {plan.priceMonthly}<span className="text-sm font-normal text-gray-500">/mo</span></div>
-                  {plan.priceAnnual > 0 && <p className="text-xs text-gray-500">{plan.annualLabel}</p>}
+                  <div className="text-2xl font-semibold">
+                    GH₵ {price.display}<span className="text-sm font-normal text-gray-500">{price.suffix}</span>
+                  </div>
+                  {!isFree && billingCycle === 'annual' && (
+                    <p className="text-xs text-emerald-600 font-medium">
+                      GH₵ {plan.priceAnnual.toLocaleString()}/yr — save GH₵ {(plan.priceMonthly * 12 - plan.priceAnnual).toLocaleString()}
+                    </p>
+                  )}
+                  {!isFree && billingCycle === 'monthly' && plan.priceAnnual > 0 && (
+                    <p className="text-xs text-gray-500">{plan.annualLabel}</p>
+                  )}
                   {isFree && <p className="text-xs text-gray-500">Free forever after trial</p>}
                 </div>
                 <p className="text-xs text-gray-500 leading-relaxed">{plan.headline}</p>
@@ -136,8 +173,10 @@ export default function SelectPlanPage() {
                   }`}
                 >
                   {selecting === plan.id
-                    ? plan.id === 'free' ? 'Starting…' : 'Redirecting to payment…'
-                    : isFree ? 'Start Free Trial' : `Pay GH₵ ${plan.priceMonthly} — ${plan.name}`
+                    ? isFree ? 'Starting…' : 'Redirecting to payment…'
+                    : isFree
+                      ? 'Start Free Trial'
+                      : `Pay GH₵ ${price.total.toLocaleString()} — ${plan.name}`
                   }
                 </button>
               </div>
