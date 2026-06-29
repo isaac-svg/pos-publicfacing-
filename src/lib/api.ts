@@ -11,7 +11,7 @@ api.interceptors.request.use(config => {
 })
 
 api.interceptors.response.use(r => r, err => {
-  if (err.response?.status === 401) {
+  if (err.response?.status === 401 && !window.location.pathname.startsWith('/login')) {
     localStorage.removeItem('signup_token')
     window.location.href = '/login'
   }
@@ -41,6 +41,8 @@ export const subscriptionApi = {
   plans: () => api.get('/api/v1/subscriptions/plans').then(r => r.data.data),
   selectPlan: (d: { plan: string }) => api.post('/api/v1/subscriptions/select-plan', d).then(r => r.data.data),
   status: () => api.get('/api/v1/subscriptions/status').then(r => r.data.data),
+  initiatePayment: () => api.post('/api/v1/subscriptions/initiate-payment').then(r => r.data.data),
+  verifyPayment: (reference: string) => api.get(`/api/v1/subscriptions/verify-payment/${reference}`).then(r => r.data.data),
 }
 
 // ── Products ────────────────────────────────────────────────────────────────

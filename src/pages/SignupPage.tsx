@@ -15,16 +15,22 @@ export default function SignupPage() {
     setError('')
     if (form.password !== form.confirm) { setError('Passwords do not match'); return }
     if (form.password.length < 8) { setError('Password must be at least 8 characters'); return }
+    if (!form.phone.trim()) { setError('Phone number is required'); return }
 
     setLoading(true)
     try {
-      await api.post('/api/v1/business/signup', {
+      const res = await api.post('/api/v1/business/signup', {
         businessName: form.businessName,
-        ownerEmail: form.email,
-        ownerPhone: form.phone || undefined,
+        ownerEmail: form.email || undefined,
+        ownerPhone: form.phone,
         password: form.password,
       })
-      navigate(`/verify-otp?email=${encodeURIComponent(form.email)}`)
+      const needsOtp = res.data.data.needsEmailVerification
+      if (needsOtp && form.email) {
+        navigate(`/verify-otp?email=${encodeURIComponent(form.email)}`)
+      } else {
+        navigate('/login?verified=1')
+      }
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Signup failed'
       setError(msg)
@@ -49,12 +55,12 @@ export default function SignupPage() {
             <input value={form.businessName} onChange={set('businessName')} required className="w-full h-10 rounded-md border px-3 text-sm" placeholder="Kofi's Provision Shop" />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-medium">Email</label>
-            <input type="email" value={form.email} onChange={set('email')} required className="w-full h-10 rounded-md border px-3 text-sm" placeholder="kofi@example.com" />
+            <label className="text-sm font-medium">Phone <span className="text-red-500">*</span></label>
+            <input type="tel" value={form.phone} onChange={set('phone')} required className="w-full h-10 rounded-md border px-3 text-sm" placeholder="024XXXXXXX" />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-medium">Phone <span className="text-gray-400 font-normal">(optional)</span></label>
-            <input type="tel" value={form.phone} onChange={set('phone')} className="w-full h-10 rounded-md border px-3 text-sm" placeholder="024XXXXXXX" />
+            <label className="text-sm font-medium">Email <span className="text-gray-400 font-normal">(optional)</span></label>
+            <input type="email" value={form.email} onChange={set('email')} className="w-full h-10 rounded-md border px-3 text-sm" placeholder="kofi@example.com" />
           </div>
           <div className="space-y-1">
             <label className="text-sm font-medium">Password</label>

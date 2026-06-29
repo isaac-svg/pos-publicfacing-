@@ -4,68 +4,176 @@ import { api } from '../lib/api'
 import { useAuthStore } from '../store/auth'
 
 interface Plan {
-  id: string; name: string; productLimit: number; shopLimit: number
-  employeeLimit: number | null; creditModuleEnabled: boolean; features: string[]
+  id: string; name: string; priceMonthly: number; priceAnnual: number
+  productLimit: number | null; categoryLimit: number | null
+  dailySalesLimit: number | null; shopLimit: number
+  employeeLimit: number | null; smsAllocation: number
+  creditModuleEnabled: boolean; features: string[]
+  popular?: boolean; tagline: string; headline: string
+  pills: { label: string }[]; annualLabel: string
+}
+
+interface SmsAddon {
+  id: string; credits: number; price: number; description: string
 }
 
 export default function SelectPlanPage() {
   const navigate = useNavigate()
-  const { updateSubscription } = useAuthStore()
+  const { updateSubscription, subscription } = useAuthStore()
   const [plans, setPlans] = useState<Plan[]>([])
-  const [note, setNote] = useState('')
+  const [smsAddons, setSmsAddons] = useState<SmsAddon[]>([])
+  const [trialDays, setTrialDays] = useState(14)
   const [selecting, setSelecting] = useState<string | null>(null)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     api.get('/api/v1/subscriptions/plans').then(r => {
       setPlans(r.data.data.plans)
-      setNote(r.data.data.note)
+      setSmsAddons(r.data.data.smsAddons ?? [])
+      setTrialDays(r.data.data.trialDays ?? 14)
     })
   }, [])
 
   async function selectPlan(planId: string) {
     setSelecting(planId)
+    setError('')
     try {
-      await api.post('/api/v1/subscriptions/select-plan', { plan: planId })
-      updateSubscription({ status: 'pending_payment', plan: planId })
-      navigate('/pending')
-    } catch {
+      const res = await api.post('/api/v1/subscriptions/select-plan', { plan: planId })
+      const newStatus = res.data.data.status
+      updateSubscription({ status: newStatus, plan: planId })
+
+      if (newStatus === 'trial') {
+        navigate('/dashboard')
+        return
+      }
+
+      // Paid plan — initiate Paystack payment
+      const payRes = await api.post('/api/v1/subscriptions/initiate-payment')
+      const { authorizationUrl } = payRes.data.data
+
+      if (authorizationUrl) {
+        window.location.href = authorizationUrl
+      } else {
+        navigate('/pending')
+      }
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to process plan selection'
+      setError(msg)
       setSelecting(null)
     }
   }
 
+  const alreadyOnPaidPlan = subscription?.status === 'pending_payment' || subscription?.status === 'active'
+
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-12">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-5xl mx-auto space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold">Choose your plan</h1>
-          <p className="text-gray-500 mt-2">Select the plan that best fits your business</p>
+          <p className="text-gray-500 mt-2">Start with a free trial — no card required</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map(plan => (
-            <div key={plan.id} className="bg-white rounded-lg border shadow-sm p-6 flex flex-col gap-4">
-              <h3 className="text-lg font-semibold">{plan.name}</h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded">{plan.productLimit.toLocaleString()} products</span>
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded">{plan.shopLimit} shop{plan.shopLimit > 1 ? 's' : ''}</span>
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded">{plan.employeeLimit ?? 'Unlimited'} employees</span>
-                {plan.creditModuleEnabled && <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">Credit module</span>}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">{error}</div>
+        )}
+
+        {alreadyOnPaidPlan && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-sm text-blue-800">
+            You already have a plan selected. <button onClick={() => navigate('/pending')} className="underline font-medium">Check payment status</button>
+          </div>
+        )}
+
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 flex items-center gap-3 text-sm text-amber-800">
+          <span className="text-lg">🎁</span>
+          <span>Start with a <strong>{trialDays}-day free trial</strong> — every feature unlocked, no card required. After {trialDays} days you move to the Free plan automatically.</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {plans.map(plan => {
+            const popular = plan.popular
+            const isFree = plan.priceMonthly === 0
+            return (
+              <div key={plan.id} className={`bg-white rounded-lg border ${popular ? 'border-blue-400 ring-1 ring-blue-400' : 'border-gray-200'} shadow-sm p-4 flex flex-col gap-3 relative`}>
+                {popular && (
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-3 py-0.5 rounded-full">Most popular</span>
+                )}
+                <div>
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                    plan.id === 'free' ? 'bg-gray-100 text-gray-600' :
+                    plan.id === 'growth' ? 'bg-blue-50 text-blue-700' :
+                    plan.id === 'pro' ? 'bg-emerald-50 text-emerald-700' :
+                    'bg-amber-50 text-amber-700'
+                  }`}>{plan.name}</span>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-2xl font-semibold">GH₵ {plan.priceMonthly}<span className="text-sm font-normal text-gray-500">/mo</span></div>
+                  {plan.priceAnnual > 0 && <p className="text-xs text-gray-500">{plan.annualLabel}</p>}
+                  {isFree && <p className="text-xs text-gray-500">Free forever after trial</p>}
+                </div>
+                <p className="text-xs text-gray-500 leading-relaxed">{plan.headline}</p>
+                <p className="text-xs text-gray-400 leading-relaxed">{plan.tagline}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {plan.pills.map(pill => (
+                    <span key={pill.label} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">{pill.label}</span>
+                  ))}
+                </div>
+                <hr className="border-gray-100" />
+                <ul className="text-xs text-gray-500 space-y-1 flex-1">
+                  {plan.features.map(f => (
+                    <li key={f} className="flex items-start gap-1.5">
+                      <span className="text-emerald-500 shrink-0 mt-0.5">✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => selectPlan(plan.id)}
+                  disabled={selecting !== null}
+                  className={`w-full h-9 rounded-md text-sm font-medium transition disabled:opacity-50 ${
+                    popular
+                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  {selecting === plan.id
+                    ? plan.id === 'free' ? 'Starting…' : 'Redirecting to payment…'
+                    : isFree ? 'Start Free Trial' : `Pay GH₵ ${plan.priceMonthly} — ${plan.name}`
+                  }
+                </button>
               </div>
-              <ul className="text-sm text-gray-600 space-y-1 flex-1">
-                {plan.features.map(f => <li key={f}>✓ {f}</li>)}
-              </ul>
-              <button
-                onClick={() => selectPlan(plan.id)}
-                disabled={selecting !== null}
-                className="w-full h-10 rounded-md bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 disabled:opacity-50"
-              >
-                {selecting === plan.id ? 'Selecting…' : `Select ${plan.name}`}
-              </button>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
-        {note && <p className="text-center text-sm text-gray-400">{note}</p>}
+        {smsAddons.length > 0 && (
+          <div>
+            <p className="text-sm font-medium text-gray-500 mb-2">SMS add-ons — Growth and above</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {smsAddons.map(addon => (
+                <div key={addon.id} className="bg-white rounded-lg border border-gray-200 p-3">
+                  <p className="text-sm font-semibold">{addon.credits.toLocaleString()} SMS</p>
+                  <p className="text-xs text-gray-500">{addon.description}</p>
+                  <p className="text-sm font-semibold text-blue-600 mt-1">GH₵ {addon.price}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-md bg-gray-200 flex items-center justify-center text-gray-500 text-lg shrink-0">🏢</div>
+            <div>
+              <p className="text-sm font-semibold">Enterprise — custom pricing</p>
+              <p className="text-xs text-gray-500">Unlimited shops, custom SMS volumes, SLA agreement, multi-tenant architecture, and dedicated engineering support.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="hidden sm:flex items-center gap-1 text-xs text-gray-500"><span className="text-emerald-500">✓</span> Unlimited shops</span>
+            <span className="hidden sm:flex items-center gap-1 text-xs text-gray-500"><span className="text-emerald-500">✓</span> Custom SMS</span>
+            <span className="hidden sm:flex items-center gap-1 text-xs text-gray-500"><span className="text-emerald-500">✓</span> SLA</span>
+          </div>
+        </div>
       </div>
     </div>
   )

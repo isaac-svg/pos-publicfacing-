@@ -1,5 +1,6 @@
 import { useActivationGate } from '../store/activationGate'
 import { useSubscriptionStatus } from '../hooks/useSubscriptionStatus'
+import { useAuthStore } from '../store/auth'
 
 const SIGNUP_URL = import.meta.env.VITE_SIGNUP_URL ?? '/select-plan'
 const SUPPORT_PHONE = import.meta.env.VITE_SUPPORT_PHONE ?? '+233 XX XXX XXXX'
@@ -7,9 +8,12 @@ const SUPPORT_EMAIL = import.meta.env.VITE_SUPPORT_EMAIL ?? 'support@shepherdpos
 
 export function ActivationGateModal() {
   const { isOpen, close } = useActivationGate()
-  const { data: sub } = useSubscriptionStatus()
+  const token = useAuthStore(s => s.token)
+  const { data: sub } = useSubscriptionStatus({ enabled: !!token })
 
   if (!isOpen) return null
+
+  if (sub?.status === 'trial' || sub?.status === 'active') return null
 
   const noPlan = sub?.status === 'no_plan_selected'
 

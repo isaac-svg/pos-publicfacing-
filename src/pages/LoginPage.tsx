@@ -23,6 +23,7 @@ export default function LoginPage() {
 
       switch (subscription.status) {
         case 'no_plan_selected': navigate('/select-plan'); break
+        case 'trial':            navigate('/dashboard'); break
         case 'pending_payment':  navigate('/pending'); break
         case 'active':           navigate('/dashboard'); break
         default:                 navigate('/pending'); break
@@ -47,8 +48,8 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-sm font-medium">Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full h-10 rounded-md border px-3 text-sm" />
+            <label className="text-sm font-medium">Email or Phone</label>
+            <input type="text" value={email} onChange={e => setEmail(e.target.value)} required className="w-full h-10 rounded-md border px-3 text-sm" placeholder="kofi@example.com or 024XXXXXXX" />
           </div>
           <div className="space-y-1">
             <label className="text-sm font-medium">Password</label>

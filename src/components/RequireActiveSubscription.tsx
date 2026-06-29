@@ -7,7 +7,7 @@ export function RequireActiveSubscription({ children }: { children: React.ReactN
   const { open } = useActivationGate()
 
   useEffect(() => {
-    if (!isLoading && sub?.status !== 'active') {
+    if (!isLoading && sub?.status !== 'active' && sub?.status !== 'trial') {
       open()
     }
   }, [isLoading, sub?.status, open])
@@ -16,7 +16,7 @@ export function RequireActiveSubscription({ children }: { children: React.ReactN
     return <div className="flex items-center justify-center h-64 text-gray-400 text-sm">Loading…</div>
   }
 
-  if (sub?.status !== 'active') {
+  if (sub?.status !== 'active' && sub?.status !== 'trial') {
     return <div className="h-screen" />
   }
 

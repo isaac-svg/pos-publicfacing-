@@ -4,7 +4,15 @@ import { subscriptionApi } from '../../lib/api'
 export default function SubscriptionPage() {
   const { data: sub } = useQuery({ queryKey: ['subscription-status'], queryFn: () => subscriptionApi.status() })
 
-  const s = sub as { status?: string; plan?: string; billingCycle?: string; activatedAt?: string; expiresAt?: string; productLimit?: number; shopLimit?: number; employeeLimit?: number | null; creditModuleEnabled?: boolean } | undefined
+  const s = sub as {
+    status?: string; plan?: string; billingCycle?: string
+    activatedAt?: string; expiresAt?: string
+    trialStartedAt?: string; trialEndsAt?: string
+    productLimit?: number; shopLimit?: number; employeeLimit?: number | null
+    creditModuleEnabled?: boolean; smsAllocation?: number; smsUsedThisCycle?: number
+  } | undefined
+
+  const isTrial = s?.status === 'trial'
 
   return (
     <div className="space-y-4 max-w-lg">
@@ -12,14 +20,24 @@ export default function SubscriptionPage() {
 
       {s && (
         <div className="bg-white rounded-lg border p-6 space-y-4">
+          {isTrial && s.trialEndsAt && (
+            <div className="bg-amber-50 border border-amber-200 rounded-md px-3 py-2 text-sm text-amber-800">
+              Trial ends {new Date(s.trialEndsAt).toLocaleDateString()}
+            </div>
+          )}
+
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold capitalize">{s.plan ?? 'No plan'}</h2>
-              <span className={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${s.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                {s.status?.replace(/_/g, ' ') ?? 'Unknown'}
+              <span className={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${
+                s.status === 'active' ? 'bg-green-100 text-green-700' :
+                isTrial ? 'bg-amber-100 text-amber-700' :
+                'bg-gray-100 text-gray-600'
+              }`}>
+                {isTrial ? 'Trial' : s.status?.replace(/_/g, ' ') ?? 'Unknown'}
               </span>
             </div>
-            {s.expiresAt && (
+            {s.expiresAt && !isTrial && (
               <div className="text-right text-sm text-gray-500">
                 <p>Renews: {new Date(s.expiresAt).toLocaleDateString()}</p>
                 <p className="capitalize">{s.billingCycle}</p>
@@ -30,7 +48,7 @@ export default function SubscriptionPage() {
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-gray-50 rounded-md p-3">
               <p className="text-xs text-gray-500">Products</p>
-              <p className="font-semibold">up to {s.productLimit?.toLocaleString() ?? '—'}</p>
+              <p className="font-semibold">{s.productLimit != null ? `up to ${s.productLimit.toLocaleString()}` : 'Unlimited'}</p>
             </div>
             <div className="bg-gray-50 rounded-md p-3">
               <p className="text-xs text-gray-500">Shops</p>
@@ -42,8 +60,14 @@ export default function SubscriptionPage() {
             </div>
             <div className="bg-gray-50 rounded-md p-3">
               <p className="text-xs text-gray-500">Credit module</p>
-              <p className="font-semibold">{s.creditModuleEnabled ? 'Enabled ✓' : 'Not included'}</p>
+              <p className="font-semibold">{s.creditModuleEnabled ? 'Enabled' : 'Not included'}</p>
             </div>
+            {s.smsAllocation != null && s.smsAllocation > 0 && (
+              <div className="bg-gray-50 rounded-md p-3">
+                <p className="text-xs text-gray-500">SMS allocation</p>
+                <p className="font-semibold">{s.smsAllocation.toLocaleString()} / mo</p>
+              </div>
+            )}
           </div>
         </div>
       )}

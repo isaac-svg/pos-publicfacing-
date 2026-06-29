@@ -9,3 +9,36 @@
     border-color: var(--color-border);
   }
 }
+
+/* Geist font */
+@import "@fontsource/geist";
+
+/* Marketing theme - scoped to marketing pages only */
+.marketing-root {
+  --mk-bg: #060608;
+  --mk-indigo: #6366f1;
+  --mk-glass-bg: rgba(255,255,255,0.03);
+  --mk-glass-border: rgba(255,255,255,0.06);
+  --mk-text: #f5f5f5;
+  --mk-text-muted: rgba(255,255,255,0.5);
+}
+
+.glass-card {
+  background: var(--mk-glass-bg);
+  border: 1px solid var(--mk-glass-border);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-card-featured {
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.will-animate {
+  will-change: transform, opacity;
+}

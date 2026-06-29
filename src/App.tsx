@@ -5,6 +5,9 @@ import { ActivationGateModal } from './components/ActivationGateModal'
 import { RequireActiveSubscription } from './components/RequireActiveSubscription'
 import AdminLayout from './components/AdminLayout'
 
+// Marketing page
+import MarketingPage from './pages/MarketingPage'
+
 // Public pages
 import SignupPage from './pages/SignupPage'
 import VerifyOtpPage from './pages/VerifyOtpPage'
@@ -50,6 +53,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          {/* Marketing landing page */}
+          <Route path="/" element={<MarketingPage />} />
+
           {/* Public */}
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/verify-otp" element={<VerifyOtpPage />} />
@@ -79,7 +85,7 @@ export default function App() {
             <Route path="/subscription/topup-callback" element={<G><TopupCallbackPage /></G>} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/signup" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <ActivationGateModal />
       </BrowserRouter>

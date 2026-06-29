@@ -77,7 +77,7 @@ export default function AdminLayout() {
   const { open: openGate } = useActivationGate()
 
   function handleNav(to: string) {
-    if (sub?.status !== 'active') {
+    if (sub?.status !== 'active' && sub?.status !== 'trial') {
       openGate()
       setDrawerOpen(false)
       return
