@@ -10,8 +10,12 @@ api.interceptors.request.use(config => {
   return config
 })
 
+const PUBLIC_PATHS = ['/', '/login', '/signup', '/verify-otp', '/forgot-password', '/reset-password']
+
 api.interceptors.response.use(r => r, err => {
-  if (err.response?.status === 401 && !window.location.pathname.startsWith('/login')) {
+  const path = window.location.pathname
+  const isPublic = PUBLIC_PATHS.some(p => path === p || path.startsWith(p + '?'))
+  if (err.response?.status === 401 && !isPublic) {
     localStorage.removeItem('signup_token')
     window.location.href = '/login'
   }
