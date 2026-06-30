@@ -111,7 +111,7 @@ export default function ExpenseCategoriesPage() {
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button title="Delete category"
+                        <button
                           className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                           title="Delete category" onClick={() => deleteMutation.mutate(cat.id)}
                         >

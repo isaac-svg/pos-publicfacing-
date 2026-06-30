@@ -175,7 +175,7 @@ export default function RegistersPage() {
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button title="Delete register"
+                        <button
                           className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                           title="Delete register" onClick={() => deleteMutation.mutate(r.id)}
                         >
