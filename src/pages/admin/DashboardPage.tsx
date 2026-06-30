@@ -14,10 +14,12 @@ export default function AdminDashboardPage() {
 
   const todaySales = (sales as { totalAmount: string }[])
   const todayTotal = todaySales.reduce((s: number, sale: { totalAmount: string }) => s + Number(sale.totalAmount), 0)
-  const monthTotal = (report as { summary?: { totalRevenue: number } })?.summary?.totalRevenue ?? 0
+  const monthTotal = Number((report as { summary?: { totalRevenue: string | number } })?.summary?.totalRevenue ?? 0)
   const lowStockCount = (allocs as unknown[]).length
 
-  const topProducts = ((report as { byProduct?: { name: string; revenue: number }[] })?.byProduct ?? []).slice(0, 5)
+  const topProducts = ((report as { byProduct?: { name: string; revenue: string | number }[] })?.byProduct ?? [])
+    .slice(0, 5)
+    .map(p => ({ ...p, revenue: Number(p.revenue) }))
 
   return (
     <div className="space-y-6">
