@@ -47,7 +47,6 @@ export const subscriptionApi = {
   status: () => api.get('/api/v1/subscriptions/status').then(r => r.data.data),
   initiatePayment: () => api.post('/api/v1/subscriptions/initiate-payment').then(r => r.data.data),
   verifyPayment: (reference: string) => api.get(`/api/v1/subscriptions/verify-payment/${reference}`).then(r => r.data.data),
-  changePlan: (d: { plan: string; billingCycle?: string }) => api.post('/api/v1/subscriptions/change-plan', d).then(r => r.data.data),
 }
 
 // ── Products ────────────────────────────────────────────────────────────────

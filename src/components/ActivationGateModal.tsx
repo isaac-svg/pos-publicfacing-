@@ -2,7 +2,6 @@ import { useActivationGate } from '../store/activationGate'
 import { useSubscriptionStatus } from '../hooks/useSubscriptionStatus'
 import { useAuthStore } from '../store/auth'
 
-const SIGNUP_URL = import.meta.env.VITE_SIGNUP_URL ?? '/select-plan'
 const SUPPORT_PHONE = import.meta.env.VITE_SUPPORT_PHONE ?? '+233 XX XXX XXXX'
 const SUPPORT_EMAIL = import.meta.env.VITE_SUPPORT_EMAIL ?? 'support@shepherdpos.com'
 
@@ -12,50 +11,41 @@ export function ActivationGateModal() {
   const { data: sub } = useSubscriptionStatus({ enabled: !!token })
 
   if (!isOpen) return null
-
   if (sub?.status === 'trial' || sub?.status === 'active') return null
 
-  const noPlan = sub?.status === 'no_plan_selected'
+  const isSuspended = sub?.status === 'suspended'
+  const isPendingPayment = sub?.status === 'pending_payment'
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 space-y-4">
-        <h2 className="text-lg font-semibold">
-          {noPlan ? 'Choose a plan' : 'Activate your subscription'}
+      <div className="bg-card rounded-xl shadow-xl w-full max-w-md p-6 space-y-4 border border-border">
+        <h2 className="text-base font-semibold text-foreground">
+          {isSuspended ? 'Account suspended' :
+           isPendingPayment ? 'Payment pending' :
+           'Subscription required'}
         </h2>
 
-        {noPlan ? (
-          <>
-            <p className="text-sm text-gray-500">
-              You haven't selected a plan yet. Choose a plan to get started, then complete payment to activate your account.
-            </p>
-            <a
-              href={SIGNUP_URL}
-              className="block w-full h-10 rounded-md bg-blue-600 text-white text-sm font-medium text-center leading-10 hover:bg-blue-700"
-            >
-              Choose a plan
-            </a>
-          </>
-        ) : (
-          <>
-            <p className="text-sm text-gray-500">
-              {sub?.plan
-                ? `You selected the ${sub.plan} plan. To start using Shepherd POS, please complete payment with us.`
-                : 'Please complete payment to activate your account.'}
-            </p>
-            <div className="text-sm space-y-1">
-              <p>📞 {SUPPORT_PHONE}</p>
-              <p>✉️ {SUPPORT_EMAIL}</p>
-            </div>
-            <p className="text-xs text-gray-400">
-              Once payment is confirmed, every section will unlock immediately.
-            </p>
-          </>
-        )}
+        <p className="text-sm text-muted-foreground">
+          {isSuspended
+            ? 'Your account has been suspended. Please contact us to resolve this.'
+            : isPendingPayment
+            ? `Your ${sub?.plan ?? 'selected'} plan payment is pending. Contact us to confirm your payment.`
+            : 'Your trial or subscription has ended. Contact us to activate your plan.'}
+        </p>
+
+        <div className="rounded-lg bg-muted/40 border border-border px-4 py-3 text-sm space-y-1">
+          <p className="font-medium text-foreground">Get in touch</p>
+          <p className="text-muted-foreground">📞 {SUPPORT_PHONE}</p>
+          <p className="text-muted-foreground">✉️ {SUPPORT_EMAIL}</p>
+        </div>
+
+        <p className="text-xs text-muted-foreground">
+          Once your plan is activated, every section unlocks immediately.
+        </p>
 
         <button
           onClick={close}
-          className="w-full h-10 rounded-md border border-gray-300 text-sm font-medium hover:bg-gray-50"
+          className="w-full h-10 rounded-lg border border-border text-sm font-medium text-foreground hover:bg-muted/40 transition-colors"
         >
           Got it
         </button>

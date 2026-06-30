@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
 import { subscriptionApi } from '../../lib/api'
 
 interface SubStatus {
@@ -12,103 +10,115 @@ interface SubStatus {
   creditModuleEnabled: boolean; smsAllocation: number; smsUsedThisCycle: number
 }
 
+function fmt(s: string) {
+  return new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
 export default function SubscriptionPage() {
-  const { data: sub } = useQuery<SubStatus>({ queryKey: ['subscription-status'], queryFn: () => subscriptionApi.status() })
-  const [upgrading, setUpgrading] = useState(false)
-  const [upgradeError, setUpgradeError] = useState('')
+  const { data: sub } = useQuery<SubStatus>({
+    queryKey: ['subscription-status'],
+    queryFn: () => subscriptionApi.status(),
+  })
 
   const isTrial = sub?.status === 'trial'
   const isActive = sub?.status === 'active'
-  const isExpired = sub?.expiresAt && new Date(sub.expiresAt) < new Date()
-  const isFree = sub?.plan === 'free'
-  const daysLeft = sub?.expiresAt ? Math.max(0, Math.ceil((new Date(sub.expiresAt).getTime() - Date.now()) / 86_400_000)) : null
-
-  async function handleRenew() {
-    if (!sub) return
-    setUpgrading(true)
-    setUpgradeError('')
-    try {
-      const data = await subscriptionApi.changePlan({ plan: sub.plan, billingCycle: sub.billingCycle ?? 'monthly' })
-      if (data.authorizationUrl) {
-        window.location.href = data.authorizationUrl
-      }
-    } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to initiate payment'
-      setUpgradeError(msg)
-    } finally {
-      setUpgrading(false)
-    }
-  }
+  const isFree = sub?.plan === 'free' || !sub?.plan
+  const expired = sub?.expiresAt ? new Date(sub.expiresAt) < new Date() : false
+  const daysLeft = sub?.expiresAt
+    ? Math.max(0, Math.ceil((new Date(sub.expiresAt).getTime() - Date.now()) / 86_400_000))
+    : null
+  const trialDaysLeft = sub?.trialDaysRemaining ?? null
 
   return (
     <div className="space-y-4 max-w-lg">
-      <h1 className="text-2xl font-bold">Subscription</h1>
+      <h1 className="text-xl font-bold text-foreground">Subscription</h1>
 
       {sub && (
-        <div className="bg-card rounded-lg border p-6 space-y-4">
-          {isTrial && sub.trialEndsAt && (
-            <div className="bg-muted border border-amber-200 rounded-md px-3 py-2 text-sm text-amber-800">
-              Trial ends {new Date(sub.trialEndsAt).toLocaleDateString()}
-              {sub.trialDaysRemaining != null && ` (${sub.trialDaysRemaining} day${sub.trialDaysRemaining !== 1 ? 's' : ''} left)`}
+        <div className="bg-card rounded-xl border border-border p-6 space-y-5">
+          {/* Status banners */}
+          {isTrial && trialDaysLeft !== null && (
+            <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
+              🎁 You are on a <strong>14-day free trial</strong> (Growth plan).{' '}
+              {trialDaysLeft > 0
+                ? <><strong>{trialDaysLeft} day{trialDaysLeft !== 1 ? 's' : ''}</strong> remaining.</>
+                : 'Trial ends today.'
+              }{' '}
+              After the trial you move to the Free plan automatically.
             </div>
           )}
 
-          {isActive && !isFree && isExpired && (
-            <div className="bg-destructive/10 border border-destructive/30 rounded-md px-3 py-2 text-sm text-red-800">
-              Your subscription has expired. Renew to keep your features.
+          {isActive && !isFree && expired && (
+            <div className="rounded-lg bg-destructive/10 border border-destructive/30 px-4 py-3 text-sm text-destructive">
+              Your subscription has expired. Contact us to renew.
             </div>
           )}
 
-          {isActive && !isFree && !isExpired && daysLeft != null && daysLeft <= 7 && (
-            <div className="bg-muted border border-amber-200 rounded-md px-3 py-2 text-sm text-amber-800">
-              Your subscription expires in {daysLeft} day{daysLeft !== 1 ? 's' : ''}.
+          {isActive && !isFree && !expired && daysLeft !== null && daysLeft <= 7 && (
+            <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
+              Your subscription expires in <strong>{daysLeft} day{daysLeft !== 1 ? 's' : ''}</strong>. Contact us to renew.
             </div>
           )}
 
+          {/* Plan name + status */}
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold capitalize">{sub.plan ?? 'No plan'}</h2>
-              <span className={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${
-                isActive ? 'bg-green-100 text-accent-foreground' :
-                isTrial ? 'bg-amber-100 text-foreground' :
+              <h2 className="text-lg font-semibold capitalize text-foreground">{sub.plan ?? 'Free'}</h2>
+              <span className={`inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                isTrial ? 'bg-amber-100 text-amber-700' :
+                isActive ? 'bg-accent text-accent-foreground' :
                 sub.status === 'pending_payment' ? 'bg-blue-100 text-blue-700' :
                 'bg-muted text-muted-foreground'
               }`}>
-                {isTrial ? 'Trial' : sub.status?.replace(/_/g, ' ') ?? 'Unknown'}
+                {isTrial ? `Trial` : sub.status?.replace(/_/g, ' ') ?? 'Unknown'}
               </span>
             </div>
+
             {sub.expiresAt && !isTrial && (
               <div className="text-right text-sm text-muted-foreground">
-                <p>{isExpired ? 'Expired' : 'Renews'}: {new Date(sub.expiresAt).toLocaleDateString()}</p>
+                <p>{expired ? 'Expired' : 'Renews'} {fmt(sub.expiresAt)}</p>
                 <p className="capitalize">{sub.billingCycle ?? 'monthly'}</p>
+              </div>
+            )}
+
+            {isTrial && sub.trialEndsAt && (
+              <div className="text-right text-sm text-muted-foreground">
+                <p>Trial ends {fmt(sub.trialEndsAt)}</p>
               </div>
             )}
           </div>
 
+          {/* Limits grid */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-background rounded-md p-3">
+            <div className="bg-muted/40 rounded-lg p-3">
               <p className="text-xs text-muted-foreground">Products</p>
-              <p className="font-semibold">{sub.productLimit != null ? `up to ${sub.productLimit.toLocaleString()}` : 'Unlimited'}</p>
+              <p className="font-semibold text-foreground">
+                {sub.productLimit != null ? `up to ${sub.productLimit.toLocaleString()}` : 'Unlimited'}
+              </p>
             </div>
-            <div className="bg-background rounded-md p-3">
+            <div className="bg-muted/40 rounded-lg p-3">
               <p className="text-xs text-muted-foreground">Shops</p>
-              <p className="font-semibold">{sub.shopLimit ?? '—'}</p>
+              <p className="font-semibold text-foreground">{sub.shopLimit ?? '—'}</p>
             </div>
-            <div className="bg-background rounded-md p-3">
+            <div className="bg-muted/40 rounded-lg p-3">
               <p className="text-xs text-muted-foreground">Employees</p>
-              <p className="font-semibold">{sub.employeeLimit ?? 'Unlimited'}</p>
+              <p className="font-semibold text-foreground">{sub.employeeLimit ?? 'Unlimited'}</p>
             </div>
-            <div className="bg-background rounded-md p-3">
+            <div className="bg-muted/40 rounded-lg p-3">
               <p className="text-xs text-muted-foreground">Credit module</p>
-              <p className="font-semibold">{sub.creditModuleEnabled ? 'Enabled' : 'Not included'}</p>
+              <p className="font-semibold text-foreground">{sub.creditModuleEnabled ? 'Enabled' : 'Not included'}</p>
             </div>
+
             {sub.smsAllocation > 0 && (
-              <div className="bg-background rounded-md p-3 col-span-2">
-                <p className="text-xs text-muted-foreground">SMS this cycle</p>
-                <p className="font-semibold">{sub.smsUsedThisCycle.toLocaleString()} / {sub.smsAllocation.toLocaleString()}</p>
-                <div className="mt-1.5 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div className="bg-muted/40 rounded-lg p-3 col-span-2">
+                <div className="flex items-center justify-between mb-1.5">
+                  <p className="text-xs text-muted-foreground">SMS this cycle</p>
+                  <p className="text-xs font-medium text-foreground">
+                    {sub.smsUsedThisCycle.toLocaleString()} / {sub.smsAllocation.toLocaleString()}
+                  </p>
+                </div>
+                <div className="h-1.5 rounded-full bg-border overflow-hidden">
                   <div
-                    className="h-full bg-blue-500 rounded-full transition-all"
+                    className="h-full rounded-full bg-primary transition-all"
                     style={{ width: `${Math.min(100, (sub.smsUsedThisCycle / sub.smsAllocation) * 100)}%` }}
                   />
                 </div>
@@ -116,24 +126,18 @@ export default function SubscriptionPage() {
             )}
           </div>
 
-          {upgradeError && <p className="text-sm text-destructive">{upgradeError}</p>}
-
-          <div className="flex gap-3 pt-2">
-            {!isFree && (isActive || sub.status === 'pending_payment') && (
-              <button
-                onClick={handleRenew}
-                disabled={upgrading}
-                className="flex-1 h-10 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-              >
-                {upgrading ? 'Redirecting…' : isExpired ? 'Renew subscription' : 'Renew early'}
-              </button>
-            )}
-            <Link
-              to="/select-plan"
-              className="flex-1 h-10 rounded-md border border-gray-300 text-sm font-medium text-center leading-10 hover:bg-background"
-            >
-              {isFree || isTrial ? 'Upgrade plan' : 'Change plan'}
-            </Link>
+          {/* Upgrade notice */}
+          <div className="rounded-lg border border-border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+            <p>
+              {isFree && !isTrial
+                ? 'You are on the Free plan. '
+                : expired
+                ? 'Your subscription has expired. '
+                : ''}
+              To upgrade or renew your subscription, please{' '}
+              <a href="#contact" className="text-primary font-medium hover:underline">contact our team</a>
+              {' '}and we'll activate your plan.
+            </p>
           </div>
         </div>
       )}

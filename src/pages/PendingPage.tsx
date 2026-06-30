@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams, Link } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Loader2 } from 'lucide-react'
 import { api } from '../lib/api'
 import { useAuthStore } from '../store/auth'
+
+const SUPPORT_PHONE = import.meta.env.VITE_SUPPORT_PHONE ?? '+233 XX XXX XXXX'
+const SUPPORT_EMAIL = import.meta.env.VITE_SUPPORT_EMAIL ?? 'support@shepherdpos.com'
 
 export default function PendingPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const reference = params.get('reference')
   const { subscription, updateSubscription } = useAuthStore()
-  const [status, setStatus] = useState<'loading' | 'success' | 'failed' | 'pending' | 'idle'>('idle')
+  const [status, setStatus] = useState<'loading' | 'success' | 'failed' | 'idle'>('idle')
   const [checking, setChecking] = useState(false)
   const [error, setError] = useState('')
 
@@ -18,22 +22,24 @@ export default function PendingPage() {
     api.get(`/api/v1/subscriptions/verify-payment/${reference}`)
       .then(res => {
         const s = res.data.data.status
-        setStatus(s === 'success' ? 'success' : 'failed')
         if (s === 'success') {
           updateSubscription({ status: 'active', plan: res.data.data.plan })
+          setStatus('success')
+        } else {
+          setStatus('failed')
         }
       })
       .catch(() => setStatus('failed'))
   }, [reference, updateSubscription])
 
   async function checkStatus() {
-    setChecking(true)
-    setError('')
+    setChecking(true); setError('')
     try {
       const res = await api.get('/api/v1/subscriptions/status')
       const data = res.data.data
       updateSubscription({ status: data.status, plan: data.plan })
       if (data.status === 'active' || data.status === 'trial') navigate('/dashboard')
+      else setError('Payment not confirmed yet. Try again in a moment.')
     } catch (err: unknown) {
       setError((err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to check status')
     } finally {
@@ -43,10 +49,10 @@ export default function PendingPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-4">
-        <div className="text-center space-y-4">
-          <div className="mx-auto w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
-          <p className="text-muted-foreground font-medium">Verifying your payment…</p>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-3">
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Verifying your payment…</p>
         </div>
       </div>
     )
@@ -55,19 +61,17 @@ export default function PendingPage() {
   if (status === 'success') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
-        <div className="w-full max-w-md bg-card rounded-lg shadow-sm border p-8 space-y-6 text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-accent flex items-center justify-center">
-            <span className="text-3xl">✅</span>
-          </div>
+        <div className="w-full max-w-md bg-card rounded-xl border border-border p-8 text-center space-y-5">
+          <div className="mx-auto w-14 h-14 rounded-full bg-accent flex items-center justify-center text-2xl">✅</div>
           <div>
-            <h1 className="text-xl font-bold">Payment successful!</h1>
-            <p className="text-sm text-muted-foreground mt-2">
-              Your <strong className="capitalize">{subscription?.plan ?? 'selected'}</strong> plan is now active.
+            <h1 className="text-xl font-bold text-foreground">Payment successful!</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Your <strong className="capitalize">{subscription?.plan ?? ''}</strong> plan is now active.
             </p>
           </div>
           <button
             onClick={() => navigate('/dashboard')}
-            className="w-full h-10 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+            className="w-full h-10 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors"
           >
             Go to dashboard
           </button>
@@ -79,77 +83,57 @@ export default function PendingPage() {
   if (status === 'failed') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
-        <div className="w-full max-w-md bg-card rounded-lg shadow-sm border p-8 space-y-6 text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
-            <span className="text-3xl">❌</span>
-          </div>
+        <div className="w-full max-w-md bg-card rounded-xl border border-border p-8 text-center space-y-5">
+          <div className="mx-auto w-14 h-14 rounded-full bg-destructive/10 flex items-center justify-center text-2xl">❌</div>
           <div>
-            <h1 className="text-xl font-bold">Payment failed</h1>
-            <p className="text-sm text-muted-foreground mt-2">
-              The payment could not be completed. Please try again or contact support.
-            </p>
+            <h1 className="text-xl font-bold text-foreground">Payment failed</h1>
+            <p className="text-sm text-muted-foreground mt-1">The payment could not be completed.</p>
           </div>
-          <div className="flex gap-3">
-            <Link
-              to="/select-plan"
-              className="flex-1 h-10 rounded-md border border-gray-300 text-sm font-medium inline-flex items-center justify-center hover:bg-background"
-            >
-              Try again
-            </Link>
-            <button
-              onClick={checkStatus}
-              disabled={checking}
-              className="flex-1 h-10 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-            >
-              {checking ? 'Checking…' : 'Check status'}
-            </button>
+          <div className="rounded-lg bg-muted/40 border border-border px-4 py-3 text-sm text-left space-y-1">
+            <p className="font-medium text-foreground">Contact us to sort this out</p>
+            <p className="text-muted-foreground">📞 {SUPPORT_PHONE}</p>
+            <p className="text-muted-foreground">✉️ {SUPPORT_EMAIL}</p>
           </div>
+          {error && <p className="text-sm text-destructive">{error}</p>}
+          <button
+            onClick={checkStatus}
+            disabled={checking}
+            className="w-full h-10 rounded-lg border border-border text-sm font-medium hover:bg-muted/40 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {checking && <Loader2 className="w-4 h-4 animate-spin" />}
+            {checking ? 'Checking…' : 'Check payment status'}
+          </button>
         </div>
       </div>
     )
   }
 
-  // Default: no reference (user navigated here directly)
+  // Idle: user navigated directly to /pending (e.g. pending_payment status on login)
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md bg-card rounded-lg shadow-sm border p-8 space-y-6 text-center">
-        <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center">
-          <span className="text-3xl">⏳</span>
-        </div>
-
+      <div className="w-full max-w-md bg-card rounded-xl border border-border p-8 text-center space-y-5">
+        <div className="mx-auto w-14 h-14 rounded-full bg-muted flex items-center justify-center text-2xl">⏳</div>
         <div>
-          <h1 className="text-xl font-bold">Your account is almost ready</h1>
-          <p className="text-sm text-muted-foreground mt-2">
-            You selected the <strong className="capitalize">{subscription?.plan ?? 'selected'}</strong> plan.
+          <h1 className="text-xl font-bold text-foreground">Payment pending</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {subscription?.plan
+              ? <>Your <strong className="capitalize">{subscription.plan}</strong> plan is awaiting payment confirmation.</>
+              : 'Your account is awaiting payment confirmation.'}
           </p>
         </div>
-
-        <div className="bg-background rounded-md p-4 text-sm text-muted-foreground space-y-2 text-left">
-          <p>To activate your account, please complete payment:</p>
-          {(subscription?.plan && subscription.plan !== 'free') ? (
-            <Link
-              to="/select-plan"
-              className="block w-full h-10 rounded-md bg-blue-600 text-white text-sm font-medium text-center leading-10 hover:bg-blue-700"
-            >
-              Go to payment
-            </Link>
-          ) : (
-            <>
-              <p className="font-medium">📞 +233 XX XXX XXXX</p>
-              <p className="font-medium">✉️ support@shepherdpos.com</p>
-              <p className="text-xs text-muted-foreground mt-2">Once payment is confirmed, your account will be activated and you can download the POS desktop app.</p>
-            </>
-          )}
+        <div className="rounded-lg bg-muted/40 border border-border px-4 py-3 text-sm text-left space-y-1">
+          <p className="font-medium text-foreground">Contact us to complete setup</p>
+          <p className="text-muted-foreground">📞 {SUPPORT_PHONE}</p>
+          <p className="text-muted-foreground">✉️ {SUPPORT_EMAIL}</p>
         </div>
-
         {error && <p className="text-sm text-destructive">{error}</p>}
-
         <button
           onClick={checkStatus}
           disabled={checking}
-          className="w-full h-10 rounded-md border border-gray-300 text-sm font-medium hover:bg-background disabled:opacity-50"
+          className="w-full h-10 rounded-lg border border-border text-sm font-medium hover:bg-muted/40 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
         >
-          {checking ? 'Checking…' : 'Check status'}
+          {checking && <Loader2 className="w-4 h-4 animate-spin" />}
+          {checking ? 'Checking…' : 'Check payment status'}
         </button>
       </div>
     </div>
