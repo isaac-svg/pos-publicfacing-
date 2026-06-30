@@ -13,7 +13,7 @@ interface Account {
 }
 
 const typeColors: Record<string, string> = {
-  cash: 'bg-green-100 text-green-700',
+  cash: 'bg-green-100 text-accent-foreground',
   mobile_money: 'bg-blue-100 text-blue-700',
   bank: 'bg-purple-100 text-purple-700',
   system_wallet: 'bg-orange-100 text-orange-700',
@@ -58,19 +58,19 @@ export default function AccountsPage() {
 
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Payment Accounts</h1>
-          <p className="text-sm text-slate-500">Cash, mobile money, bank & system wallets</p>
+          <h1 className="text-xl font-bold text-foreground">Payment Accounts</h1>
+          <p className="text-sm text-muted-foreground">Cash, mobile money, bank & system wallets</p>
         </div>
         <div className="flex gap-2">
           <button
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-border bg-card text-foreground text-sm font-medium hover:bg-muted/40"
             onClick={() => navigate('/admin/accounts/transfer')}
           >
             <ArrowUpDown className="w-4 h-4" />
             Transfer
           </button>
           <button
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
             onClick={() => navigate('/admin/accounts/new')}
           >
             <Plus className="w-4 h-4" />
@@ -79,44 +79,44 @@ export default function AccountsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-muted/40 border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Type</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Currency</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Balance</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Type</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Currency</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Balance</th>
                 <th className="px-4 py-3 w-32"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {accounts.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-sm text-slate-400">No payment accounts configured</td>
+                  <td colSpan={6} className="px-4 py-12 text-center text-sm text-muted-foreground">No payment accounts configured</td>
                 </tr>
               ) : (
                 accounts.map((acc) => (
-                  <tr key={acc.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 text-sm font-medium text-slate-900">{acc.name}</td>
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${typeColors[acc.type] ?? 'bg-slate-100 text-slate-600'}`}>
+                  <tr key={acc.id} className="hover:bg-muted/40">
+                    <td className="px-4 py-3 text-sm font-medium text-foreground">{acc.name}</td>
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${typeColors[acc.type] ?? 'bg-muted text-muted-foreground'}`}>
                         {acc.type.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-700">{acc.currency}</td>
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${acc.isActive ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                    <td className="px-4 py-3 text-sm text-foreground">{acc.currency}</td>
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${acc.isActive ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>
                         {acc.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right text-sm text-slate-700">
+                    <td className="px-4 py-3 text-right text-sm text-foreground">
                       <button
                         className="font-mono font-semibold hover:underline"
                         onClick={() => loadBalance(acc.id)}
@@ -124,26 +124,26 @@ export default function AccountsPage() {
                         {acc.id in balances ? (
                           `GH₵ ${Number(balances[acc.id]).toLocaleString('en-GH', { minimumFractionDigits: 2 })}`
                         ) : (
-                          <span className="text-slate-400 text-xs">Click to load</span>
+                          <span className="text-muted-foreground text-xs">Click to load</span>
                         )}
                       </button>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1">
                         <button
-                          className="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                          className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
                           onClick={() => navigate(`/admin/accounts/${acc.id}`)}
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
-                          className="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                          className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
                           onClick={() => navigate(`/admin/accounts/${acc.id}/edit`)}
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button
-                          className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50"
+                          className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                           onClick={() => deleteMutation.mutate(acc.id)}
                         >
                           <Trash2 className="w-4 h-4" />

@@ -12,8 +12,8 @@ export default function CreditDashboardPage() {
       {s && (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {([['Outstanding', s.totalOutstanding], ['Collected Today', s.collectedToday], ['This Month', s.collectedThisMonth], ['Active Accounts', s.activeAccounts], ['Overdue', s.overdueAccounts], ['High Risk', s.highRiskCustomers]] as [string, number | undefined][]).map(([l, v]) => (
-            <div key={l} className="bg-white rounded-lg border p-4">
-              <p className="text-xs text-gray-500">{l}</p>
+            <div key={l} className="bg-card rounded-lg border p-4">
+              <p className="text-xs text-muted-foreground">{l}</p>
               <p className="text-xl font-bold mt-1">{typeof v === 'number' && l !== 'Active Accounts' && l !== 'Overdue' && l !== 'High Risk' ? `GH₵${v.toFixed(2)}` : v ?? '—'}</p>
             </div>
           ))}

@@ -151,19 +151,19 @@ export default function RecurringExpensesPage() {
 
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Recurring expenses</h1>
-          <p className="text-sm text-slate-500">Auto-generated monthly bills (rent, salaries, etc.)</p>
+          <h1 className="text-xl font-bold text-foreground">Recurring expenses</h1>
+          <p className="text-sm text-muted-foreground">Auto-generated monthly bills (rent, salaries, etc.)</p>
         </div>
         <div className="flex gap-2">
           <button
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-border bg-card text-foreground text-sm font-medium hover:bg-muted/40"
             onClick={() => window.history.back()}
           >
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>
           <button
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
             onClick={openCreate}
           >
             <Plus className="w-4 h-4" />
@@ -172,62 +172,62 @@ export default function RecurringExpensesPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-muted/40 border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Frequency</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Day</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Method</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Amount</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Category</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Description</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Frequency</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Day</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Method</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Amount</th>
                 <th className="px-4 py-3 w-24"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {recurring.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-slate-400">No recurring expenses configured</td>
+                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-muted-foreground">No recurring expenses configured</td>
                 </tr>
               ) : (
                 recurring.map((re) => (
-                  <tr key={re.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">{re.category.name}</span>
+                  <tr key={re.id} className="hover:bg-muted/40">
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">{re.category.name}</span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-700 max-w-[200px] truncate">{re.description}</td>
-                    <td className="px-4 py-3 text-xs text-slate-700 capitalize">{re.frequency}</td>
-                    <td className="px-4 py-3 text-xs text-slate-700">
+                    <td className="px-4 py-3 text-sm text-foreground max-w-[200px] truncate">{re.description}</td>
+                    <td className="px-4 py-3 text-xs text-foreground capitalize">{re.frequency}</td>
+                    <td className="px-4 py-3 text-xs text-foreground">
                       {re.dayOfMonth != null ? `Day ${re.dayOfMonth}` : re.dayOfWeek != null ? `Day ${re.dayOfWeek}` : '—'}
                     </td>
-                    <td className="px-4 py-3 text-xs text-slate-700 capitalize">{re.paymentMethod.replace('_', ' ')}</td>
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${re.isActive ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                    <td className="px-4 py-3 text-xs text-foreground capitalize">{re.paymentMethod.replace('_', ' ')}</td>
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${re.isActive ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>
                         {re.isActive ? 'Active' : 'Paused'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right text-sm font-mono font-semibold text-slate-900">
+                    <td className="px-4 py-3 text-right text-sm font-mono font-semibold text-foreground">
                       GH₵ {Number(re.amount).toLocaleString('en-GH', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1">
-                        <button className="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100" onClick={() => openEdit(re)}>
+                        <button className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted" onClick={() => openEdit(re)}>
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button
-                          className="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                          className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
                           onClick={() => toggleMutation.mutate({ id: re.id, isActive: !re.isActive })}
                         >
-                          <Play className={`w-4 h-4 ${re.isActive ? 'text-slate-400' : 'text-indigo-600'}`} />
+                          <Play className={`w-4 h-4 ${re.isActive ? 'text-muted-foreground' : 'text-primary'}`} />
                         </button>
-                        <button className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50" onClick={() => deleteMutation.mutate(re.id)}>
+                        <button className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => deleteMutation.mutate(re.id)}>
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -243,15 +243,15 @@ export default function RecurringExpensesPage() {
       {/* Form modal */}
       {dialogOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
-            <h2 className="text-base font-semibold text-slate-900 mb-4">
+          <div className="bg-card rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
+            <h2 className="text-base font-semibold text-foreground mb-4">
               {editingId ? 'Edit recurring expense' : 'Add recurring expense'}
             </h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-slate-700 mb-1">Category *</label>
+                <label className="block text-sm text-foreground mb-1">Category *</label>
                 <select
-                  className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                  className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                   value={form.categoryId}
                   onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
                 >
@@ -262,29 +262,29 @@ export default function RecurringExpensesPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm text-slate-700 mb-1">Amount (GH₵) *</label>
+                <label className="block text-sm text-foreground mb-1">Amount (GH₵) *</label>
                 <input
                   type="number"
                   step="0.01"
                   min="0.01"
-                  className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                  className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                   value={form.amount}
                   onChange={(e) => setForm({ ...form, amount: e.target.value })}
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-700 mb-1">Description *</label>
+                <label className="block text-sm text-foreground mb-1">Description *</label>
                 <input
-                  className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                  className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm text-slate-700 mb-1">Frequency</label>
+                  <label className="block text-sm text-foreground mb-1">Frequency</label>
                   <select
-                    className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                    className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                     value={form.frequency}
                     onChange={(e) => setForm({ ...form, frequency: e.target.value })}
                   >
@@ -294,12 +294,12 @@ export default function RecurringExpensesPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm text-slate-700 mb-1">
+                  <label className="block text-sm text-foreground mb-1">
                     {form.frequency === 'weekly' ? 'Day of week' : 'Day of month'}
                   </label>
                   {form.frequency === 'weekly' ? (
                     <select
-                      className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                      className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                       value={form.dayOfWeek}
                       onChange={(e) => setForm({ ...form, dayOfWeek: e.target.value })}
                     >
@@ -312,7 +312,7 @@ export default function RecurringExpensesPage() {
                       type="number"
                       min="1"
                       max="31"
-                      className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                      className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                       value={form.dayOfMonth}
                       onChange={(e) => setForm({ ...form, dayOfMonth: e.target.value })}
                     />
@@ -320,9 +320,9 @@ export default function RecurringExpensesPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-slate-700 mb-1">Payment method</label>
+                <label className="block text-sm text-foreground mb-1">Payment method</label>
                 <select
-                  className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                  className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                   value={form.paymentMethod}
                   onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
                 >
@@ -333,7 +333,7 @@ export default function RecurringExpensesPage() {
               </div>
               <div className="flex gap-3 pt-2">
                 <button
-                  className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 flex-1 justify-center"
+                  className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50 flex-1 justify-center"
                   onClick={() => editingId ? updateMutation.mutate() : createMutation.mutate()}
                   disabled={!form.categoryId || !form.amount || !form.description || createMutation.isPending || updateMutation.isPending}
                 >
@@ -341,7 +341,7 @@ export default function RecurringExpensesPage() {
                   {editingId ? 'Save changes' : 'Create recurring expense'}
                 </button>
                 <button
-                  className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50"
+                  className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-border bg-card text-foreground text-sm font-medium hover:bg-muted/40"
                   onClick={() => setDialogOpen(false)}
                 >
                   Cancel

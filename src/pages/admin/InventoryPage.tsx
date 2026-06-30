@@ -22,9 +22,9 @@ export default function InventoryPage() {
         </label>
       </div>
 
-      <div className="bg-white rounded-lg border overflow-x-auto">
+      <div className="bg-card rounded-lg border overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-xs text-gray-500">
+          <thead className="bg-background text-xs text-muted-foreground">
             <tr>
               <th className="px-4 py-2 text-left font-medium">Product</th>
               <th className="px-4 py-2 text-left font-medium">Shop</th>
@@ -34,12 +34,12 @@ export default function InventoryPage() {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {isLoading ? <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-400">Loading…</td></tr> :
-              items.length === 0 ? <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-400">No allocations</td></tr> :
+            {isLoading ? <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">Loading…</td></tr> :
+              items.length === 0 ? <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">No allocations</td></tr> :
               items.map(a => (
-                <tr key={a.id} className={a.isLowStock ? 'bg-red-50' : 'hover:bg-gray-50'}>
-                  <td className="px-4 py-2"><p className="font-medium">{a.product.name}</p><p className="text-xs text-gray-400 font-mono">{a.product.sku}</p></td>
-                  <td className="px-4 py-2 text-gray-500">{a.shop.name}</td>
+                <tr key={a.id} className={a.isLowStock ? 'bg-destructive/10' : 'hover:bg-background'}>
+                  <td className="px-4 py-2"><p className="font-medium">{a.product.name}</p><p className="text-xs text-muted-foreground font-mono">{a.product.sku}</p></td>
+                  <td className="px-4 py-2 text-muted-foreground">{a.shop.name}</td>
                   <td className="px-4 py-2 text-right">{a.qtyAllocated}</td>
                   <td className="px-4 py-2 text-right">{a.qtySold}</td>
                   <td className="px-4 py-2 text-right font-medium">{a.qtyRemaining}</td>

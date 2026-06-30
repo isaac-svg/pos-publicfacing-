@@ -43,18 +43,18 @@ export default function AccountTransferPage() {
     },
   })
 
-  const inputCls = 'w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400'
+  const inputCls = 'w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring'
   const selectCls = inputCls
 
   return (
     <div className="max-w-lg space-y-5">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Transfer between accounts</h1>
-          <p className="text-sm text-slate-500">Move money from one account to another</p>
+          <h1 className="text-xl font-bold text-foreground">Transfer between accounts</h1>
+          <p className="text-sm text-muted-foreground">Move money from one account to another</p>
         </div>
         <button
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50"
+          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-border bg-card text-foreground text-sm font-medium hover:bg-muted/40"
           onClick={() => navigate('/admin/accounts')}
         >
           <ArrowLeft className="w-4 h-4" />
@@ -63,16 +63,16 @@ export default function AccountTransferPage() {
       </div>
 
       {error && (
-        <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">{error}</div>
+        <div className="rounded-lg bg-destructive/10 border border-destructive/30 px-4 py-3 text-sm text-destructive">{error}</div>
       )}
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="px-5 pt-4 pb-2 border-b border-slate-100">
-          <p className="text-sm font-semibold text-slate-900">Transfer details</p>
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="px-5 pt-4 pb-2 border-b border-border">
+          <p className="text-sm font-semibold text-foreground">Transfer details</p>
         </div>
         <div className="p-5 space-y-4">
           <div>
-            <label className="block text-sm text-slate-700 mb-1">From account *</label>
+            <label className="block text-sm text-foreground mb-1">From account *</label>
             <select
               className={selectCls}
               value={fromAccountId}
@@ -88,7 +88,7 @@ export default function AccountTransferPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-slate-700 mb-1">To account *</label>
+            <label className="block text-sm text-foreground mb-1">To account *</label>
             <select
               className={selectCls}
               value={toAccountId}
@@ -104,7 +104,7 @@ export default function AccountTransferPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-slate-700 mb-1">Amount (GH₵) *</label>
+            <label className="block text-sm text-foreground mb-1">Amount (GH₵) *</label>
             <input
               type="number"
               min="0.01"
@@ -117,9 +117,9 @@ export default function AccountTransferPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-slate-700 mb-1">Description *</label>
+            <label className="block text-sm text-foreground mb-1">Description *</label>
             <textarea
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 resize-none"
+              className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring resize-none"
               rows={3}
               placeholder="Reason for transfer"
               value={description}
@@ -128,7 +128,7 @@ export default function AccountTransferPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-slate-700 mb-1">Reference</label>
+            <label className="block text-sm text-foreground mb-1">Reference</label>
             <input
               className={inputCls}
               placeholder="Optional reference"
@@ -138,7 +138,7 @@ export default function AccountTransferPage() {
           </div>
 
           <button
-            className="inline-flex items-center justify-center gap-1.5 h-10 w-full rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 h-10 w-full rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
             onClick={() => mutation.mutate()}
             disabled={!isValid || mutation.isPending}
           >

@@ -22,20 +22,20 @@ export default function CreditReportsPage() {
         <input type="date" value={from} onChange={e => setFrom(e.target.value)} className="h-9 rounded-md border px-3 text-sm" />
         <input type="date" value={to} onChange={e => setTo(e.target.value)} className="h-9 rounded-md border px-3 text-sm" />
       </div>
-      <div className="bg-white rounded-lg border overflow-x-auto">
+      <div className="bg-card rounded-lg border overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-xs text-gray-500">
+          <thead className="bg-background text-xs text-muted-foreground">
             <tr><th className="px-4 py-2 text-left font-medium">Date</th><th className="px-4 py-2 text-left font-medium">Customer</th><th className="px-4 py-2 text-right font-medium">Amount</th><th className="px-4 py-2 text-left font-medium">Method</th><th className="px-4 py-2 text-left font-medium">By</th></tr>
           </thead>
           <tbody className="divide-y">
-            {list.length === 0 ? <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-400">No collections</td></tr> :
+            {list.length === 0 ? <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">No collections</td></tr> :
               list.map(c => (
-                <tr key={c.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 text-xs text-gray-500">{new Date(c.createdAt).toLocaleDateString()}</td>
+                <tr key={c.id} className="hover:bg-background">
+                  <td className="px-4 py-2 text-xs text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</td>
                   <td className="px-4 py-2 font-medium">{c.creditAccount.customer.fullName}</td>
                   <td className="px-4 py-2 text-right">GH₵{Number(c.amount).toFixed(2)}</td>
                   <td className="px-4 py-2 capitalize">{c.method.replace('_', ' ')}</td>
-                  <td className="px-4 py-2 text-gray-500">{c.recorder.fullName}</td>
+                  <td className="px-4 py-2 text-muted-foreground">{c.recorder.fullName}</td>
                 </tr>
               ))}
           </tbody>

@@ -4,6 +4,7 @@ import { useAuthStore } from './store/auth'
 import { ActivationGateModal } from './components/ActivationGateModal'
 import { RequireActiveSubscription } from './components/RequireActiveSubscription'
 import AdminLayout from './components/AdminLayout'
+import { Toaster } from '@/components/ui/toaster'
 
 // Marketing
 import MarketingPage from './pages/MarketingPage'
@@ -147,6 +148,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <ActivationGateModal />
+        <Toaster />
       </BrowserRouter>
     </QueryClientProvider>
   )

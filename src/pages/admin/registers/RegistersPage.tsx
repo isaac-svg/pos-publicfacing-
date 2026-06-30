@@ -94,11 +94,11 @@ export default function RegistersPage() {
 
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Cash Registers</h1>
-          <p className="text-sm text-slate-500">Manage registers and open sessions for cashiers</p>
+          <h1 className="text-xl font-bold text-foreground">Cash Registers</h1>
+          <p className="text-sm text-muted-foreground">Manage registers and open sessions for cashiers</p>
         </div>
         <button
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
           onClick={() => navigate('/admin/registers/new')}
         >
           <Plus className="w-4 h-4" />
@@ -106,19 +106,19 @@ export default function RegistersPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="p-4 border-b border-slate-100 flex flex-wrap items-center gap-3">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="p-4 border-b border-border flex flex-wrap items-center gap-3">
           <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
-              className="w-full h-9 rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+              className="w-full h-9 rounded-lg border border-border bg-card pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
               placeholder="Search registers..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <select
-            className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 w-44"
+            className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring w-44"
             value={shopFilter}
             onChange={(e) => setShopFilter(e.target.value === 'all' ? '' : e.target.value)}
           >
@@ -129,32 +129,32 @@ export default function RegistersPage() {
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-muted/40 border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Code</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Shop</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Code</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Shop</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
                 <th className="px-4 py-3 w-32"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-12 text-center text-sm text-slate-400">No registers found</td>
+                  <td colSpan={5} className="px-4 py-12 text-center text-sm text-muted-foreground">No registers found</td>
                 </tr>
               ) : (
                 filtered.map((r) => (
-                  <tr key={r.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 text-sm font-medium text-slate-900">{r.name}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-slate-500">{r.code ?? '—'}</td>
-                    <td className="px-4 py-3 text-sm text-slate-500">{r.shop?.name ?? '—'}</td>
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${r.isActive ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                  <tr key={r.id} className="hover:bg-muted/40">
+                    <td className="px-4 py-3 text-sm font-medium text-foreground">{r.name}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{r.code ?? '—'}</td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground">{r.shop?.name ?? '—'}</td>
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${r.isActive ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>
                         {r.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
@@ -162,7 +162,7 @@ export default function RegistersPage() {
                       <div className="flex gap-1">
                         {r.isActive && (
                           <button
-                            className="p-1.5 rounded text-slate-400 hover:text-indigo-600 hover:bg-indigo-50"
+                            className="p-1.5 rounded text-muted-foreground hover:text-primary hover:bg-accent"
                             title="Open session"
                             onClick={() => { setOpenSessionFor(r.id); setAssignedCashier(''); setOpeningFloat(''); setOpeningNote('') }}
                           >
@@ -170,13 +170,13 @@ export default function RegistersPage() {
                           </button>
                         )}
                         <button
-                          className="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                          className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
                           onClick={() => navigate(`/admin/registers/${r.id}/edit`)}
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button
-                          className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50"
+                          className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                           onClick={() => deleteMutation.mutate(r.id)}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -193,15 +193,15 @@ export default function RegistersPage() {
 
       {/* Open Session panel */}
       {openSessionFor && (
-        <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
-          <p className="text-sm font-semibold text-slate-900">
+        <div className="bg-card rounded-xl border border-border p-5 space-y-4">
+          <p className="text-sm font-semibold text-foreground">
             Open Register Session — {registers.find((r) => r.id === openSessionFor)?.name}
           </p>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm text-slate-700 mb-1">Assign cashier *</label>
+              <label className="block text-sm text-foreground mb-1">Assign cashier *</label>
               <select
-                className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                 value={assignedCashier}
                 onChange={(e) => setAssignedCashier(e.target.value)}
               >
@@ -212,12 +212,12 @@ export default function RegistersPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm text-slate-700 mb-1">Opening float (GH₵) *</label>
+              <label className="block text-sm text-foreground mb-1">Opening float (GH₵) *</label>
               <input
                 type="number"
                 step="0.01"
                 min="0"
-                className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+                className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
                 value={openingFloat}
                 onChange={(e) => setOpeningFloat(e.target.value)}
                 placeholder="200.00"
@@ -225,9 +225,9 @@ export default function RegistersPage() {
             </div>
           </div>
           <div>
-            <label className="block text-sm text-slate-700 mb-1">Note (optional)</label>
+            <label className="block text-sm text-foreground mb-1">Note (optional)</label>
             <input
-              className="w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+              className="w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
               value={openingNote}
               onChange={(e) => setOpeningNote(e.target.value)}
               placeholder="e.g. Morning shift"
@@ -235,7 +235,7 @@ export default function RegistersPage() {
           </div>
           <div className="flex gap-2">
             <button
-              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
               disabled={!assignedCashier || !openingFloat || openSessionMutation.isPending}
               onClick={() => openSessionMutation.mutate()}
             >
@@ -243,7 +243,7 @@ export default function RegistersPage() {
               Open Session
             </button>
             <button
-              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-border bg-card text-foreground text-sm font-medium hover:bg-muted/40"
               onClick={() => setOpenSessionFor(null)}
             >
               Cancel

@@ -17,7 +17,7 @@ export default function MarketingPage() {
 
   return (
     <div
-      className="marketing-root bg-white text-slate-900"
+      className="marketing-root bg-card text-foreground"
       style={{ fontFamily: '"Geist Variable", "Geist", system-ui, sans-serif' }}
     >
       <MarketingNavbar />

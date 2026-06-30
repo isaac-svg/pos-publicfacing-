@@ -17,25 +17,25 @@ export default function CreditAccountsPage() {
       <div className="flex gap-1">
         {['', 'active', 'completed', 'defaulted'].map(s => (
           <button key={s || 'all'} onClick={() => setStatus(s)}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium ${status === s ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+            className={`px-3 py-1.5 rounded-md text-xs font-medium ${status === s ? 'bg-blue-600 text-white' : 'bg-muted text-muted-foreground hover:bg-gray-200'}`}>
             {s ? s.charAt(0).toUpperCase() + s.slice(1) : 'All'}
           </button>
         ))}
       </div>
-      <div className="bg-white rounded-lg border overflow-x-auto">
+      <div className="bg-card rounded-lg border overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-xs text-gray-500">
+          <thead className="bg-background text-xs text-muted-foreground">
             <tr><th className="px-4 py-2 text-left font-medium">Customer</th><th className="px-4 py-2 text-right font-medium">Total Due</th><th className="px-4 py-2 text-right font-medium">Remaining</th><th className="px-4 py-2 text-center font-medium">Status</th></tr>
           </thead>
           <tbody className="divide-y">
-            {isLoading ? <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400">Loading…</td></tr> :
-              list.length === 0 ? <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400">No accounts</td></tr> :
+            {isLoading ? <tr><td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">Loading…</td></tr> :
+              list.length === 0 ? <tr><td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">No accounts</td></tr> :
               list.map(a => (
-                <tr key={a.id} className="hover:bg-gray-50">
+                <tr key={a.id} className="hover:bg-background">
                   <td className="px-4 py-2 font-medium">{a.customer?.fullName ?? '—'}</td>
                   <td className="px-4 py-2 text-right">GH₵{Number(a.totalDue).toFixed(2)}</td>
                   <td className="px-4 py-2 text-right">GH₵{Number(a.balanceRemaining).toFixed(2)}</td>
-                  <td className="px-4 py-2 text-center"><span className={`px-2 py-0.5 rounded text-xs capitalize ${a.status === 'active' ? 'bg-green-100 text-green-700' : a.status === 'defaulted' ? 'bg-red-100 text-red-700' : 'bg-gray-100'}`}>{a.status}</span></td>
+                  <td className="px-4 py-2 text-center"><span className={`px-2 py-0.5 rounded text-xs capitalize ${a.status === 'active' ? 'bg-green-100 text-accent-foreground' : a.status === 'defaulted' ? 'bg-red-100 text-destructive' : 'bg-muted'}`}>{a.status}</span></td>
                 </tr>
               ))}
           </tbody>

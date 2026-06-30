@@ -33,39 +33,39 @@ export default function RolesPage() {
       </div>
 
       {showAdd && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+        <div className="bg-card rounded-lg border border-border p-4 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="text-sm font-medium">Role name</label>
-              <input value={name} onChange={e => setName(e.target.value)} className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" placeholder="e.g. Manager" />
+              <input value={name} onChange={e => setName(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder="e.g. Manager" />
             </div>
             <div className="space-y-1">
               <label className="text-sm font-medium">Description</label>
-              <input value={desc} onChange={e => setDesc(e.target.value)} className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" placeholder="Optional" />
+              <input value={desc} onChange={e => setDesc(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder="Optional" />
             </div>
           </div>
           <div className="flex gap-2">
             <button disabled={!name.trim()} onClick={() => createMutation.mutate()} className="h-9 px-4 rounded-md bg-blue-600 text-white text-sm font-medium disabled:opacity-50">Create</button>
-            <button onClick={() => setShowAdd(false)} className="h-9 px-4 rounded-md border border-gray-200 text-sm">Cancel</button>
+            <button onClick={() => setShowAdd(false)} className="h-9 px-4 rounded-md border border-border text-sm">Cancel</button>
           </div>
         </div>
       )}
 
-      <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
-        {isLoading ? <p className="p-8 text-center text-gray-400 text-sm">Loading…</p> :
-          list.length === 0 ? <p className="p-8 text-center text-gray-400 text-sm">No roles</p> :
+      <div className="bg-card rounded-lg border border-border divide-y divide-gray-100">
+        {isLoading ? <p className="p-8 text-center text-muted-foreground text-sm">Loading…</p> :
+          list.length === 0 ? <p className="p-8 text-center text-muted-foreground text-sm">No roles</p> :
           list.map(r => (
             <div key={r.id} className="flex items-center justify-between px-4 py-3">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">{r.name}</span>
-                  {r.isSystem && <span className="px-1.5 py-0.5 rounded text-[10px] bg-gray-100 text-gray-500">System</span>}
+                  {r.isSystem && <span className="px-1.5 py-0.5 rounded text-[10px] bg-muted text-muted-foreground">System</span>}
                 </div>
-                {r.description && <p className="text-xs text-gray-400 mt-0.5">{r.description}</p>}
-                <p className="text-xs text-gray-400">{r.moduleAccess.length} module(s) configured</p>
+                {r.description && <p className="text-xs text-muted-foreground mt-0.5">{r.description}</p>}
+                <p className="text-xs text-muted-foreground">{r.moduleAccess.length} module(s) configured</p>
               </div>
               {!r.isSystem && (
-                <button onClick={() => deleteMutation.mutate(r.id)} className="text-gray-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+                <button onClick={() => deleteMutation.mutate(r.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
               )}
             </div>
           ))}

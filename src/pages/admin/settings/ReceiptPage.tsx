@@ -3,17 +3,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2, ChevronDown } from 'lucide-react'
 import { api } from '../../../lib/api'
 
-const inputCls = 'w-full h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400'
-const labelCls = 'text-xs font-medium text-slate-600'
+const inputCls = 'w-full h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring'
+const labelCls = 'text-xs font-medium text-muted-foreground'
 
 function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <button
       type="button"
       onClick={() => onChange(!checked)}
-      className={`relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors ${checked ? 'bg-indigo-600' : 'bg-slate-200'}`}
+      className={`relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-slate-200'}`}
     >
-      <span className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform mt-0.5 ml-0.5 ${checked ? 'translate-x-4' : 'translate-x-0'}`} />
+      <span className={`inline-block h-4 w-4 rounded-full bg-card shadow-sm transition-transform mt-0.5 ml-0.5 ${checked ? 'translate-x-4' : 'translate-x-0'}`} />
     </button>
   )
 }
@@ -21,7 +21,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
 function Row({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <div className="flex items-center justify-between gap-4 py-1.5">
-      <span className="text-sm text-slate-700">{label}</span>
+      <span className="text-sm text-foreground">{label}</span>
       <Toggle checked={checked} onChange={onChange} />
     </div>
   )
@@ -30,16 +30,16 @@ function Row({ label, checked, onChange }: { label: string; checked: boolean; on
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(true)
   return (
-    <div className="border border-slate-200 rounded-lg overflow-hidden">
+    <div className="border border-border rounded-lg overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className="flex w-full items-center justify-between px-4 py-3 text-sm font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 transition-colors"
+        className="flex w-full items-center justify-between px-4 py-3 text-sm font-semibold text-foreground bg-muted/40 hover:bg-muted transition-colors"
       >
         {title}
-        <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
-      {open && <div className="px-4 py-4 space-y-3 bg-white">{children}</div>}
+      {open && <div className="px-4 py-4 space-y-3 bg-card">{children}</div>}
     </div>
   )
 }
@@ -96,22 +96,22 @@ export default function ReceiptPage() {
     setForm(prev => ({ ...prev, [k]: v }))
   }
 
-  if (isLoading) return <div className="flex justify-center py-12"><Loader2 className="w-5 h-5 animate-spin text-slate-400" /></div>
+  if (isLoading) return <div className="flex justify-center py-12"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>
 
   return (
     <form onSubmit={e => { e.preventDefault(); mutation.mutate(form) }} className="space-y-5 max-w-xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Receipt Configuration</h1>
-          <p className="text-sm text-slate-500">Customise how receipts look across all shops</p>
+          <h1 className="text-xl font-bold text-foreground">Receipt Configuration</h1>
+          <p className="text-sm text-muted-foreground">Customise how receipts look across all shops</p>
         </div>
-        <button type="submit" disabled={mutation.isPending} className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50">
+        <button type="submit" disabled={mutation.isPending} className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50">
           {mutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
           {saved ? 'Saved ✓' : 'Save changes'}
         </button>
       </div>
 
-      {error && <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">{error}</div>}
+      {error && <div className="rounded-lg bg-destructive/10 border border-destructive/30 px-4 py-3 text-sm text-destructive">{error}</div>}
 
       <Section title="Header">
         <div className="space-y-1">
@@ -145,7 +145,7 @@ export default function ReceiptPage() {
           <div className="flex gap-1">
             {(['left', 'center', 'right'] as const).map(a => (
               <button key={a} type="button" onClick={() => set('headerAlignment', a)}
-                className={`flex-1 h-9 rounded-lg border text-sm capitalize transition-colors ${form.headerAlignment === a ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
+                className={`flex-1 h-9 rounded-lg border text-sm capitalize transition-colors ${form.headerAlignment === a ? 'bg-primary border-indigo-600 text-white' : 'border-border text-muted-foreground hover:bg-muted/40'}`}>
                 {a}
               </button>
             ))}

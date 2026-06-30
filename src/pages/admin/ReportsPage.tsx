@@ -33,31 +33,31 @@ export default function ReportsPage() {
 
       <div className="flex flex-wrap items-end gap-3">
         <div className="space-y-1">
-          <label className="text-xs font-medium text-gray-500">From</label>
+          <label className="text-xs font-medium text-muted-foreground">From</label>
           <input type="date" value={from} onChange={e => setFrom(e.target.value)} className="h-9 rounded-md border px-3 text-sm" />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-medium text-gray-500">To</label>
+          <label className="text-xs font-medium text-muted-foreground">To</label>
           <input type="date" value={to} onChange={e => setTo(e.target.value)} className="h-9 rounded-md border px-3 text-sm" />
         </div>
         {r?.byProduct && (
-          <button onClick={exportCsv} className="h-9 px-4 rounded-md border text-sm font-medium hover:bg-gray-50">Export CSV</button>
+          <button onClick={exportCsv} className="h-9 px-4 rounded-md border text-sm font-medium hover:bg-background">Export CSV</button>
         )}
       </div>
 
-      {isLoading ? <p className="text-sm text-gray-400 py-8 text-center">Loading…</p> : r?.summary && (
+      {isLoading ? <p className="text-sm text-muted-foreground py-8 text-center">Loading…</p> : r?.summary && (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {([['Revenue', r.summary.totalRevenue], ['Cost', r.summary.totalCost], ['Profit', r.summary.totalProfit], ['Transactions', r.summary.totalTransactions]] as [string, number][]).map(([l, v]) => (
-              <div key={l} className="bg-white rounded-lg border p-3">
-                <p className="text-xs text-gray-500">{l}</p>
+              <div key={l} className="bg-card rounded-lg border p-3">
+                <p className="text-xs text-muted-foreground">{l}</p>
                 <p className="text-lg font-bold mt-1">{l === 'Transactions' ? v : `GH₵${v.toFixed(2)}`}</p>
               </div>
             ))}
           </div>
 
           {r.chartData && r.chartData.length > 0 && (
-            <div className="bg-white rounded-lg border p-4">
+            <div className="bg-card rounded-lg border p-4">
               <h2 className="text-sm font-semibold mb-3">Revenue Over Time</h2>
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={r.chartData}>
@@ -71,9 +71,9 @@ export default function ReportsPage() {
           )}
 
           {r.byProduct && r.byProduct.length > 0 && (
-            <div className="bg-white rounded-lg border overflow-x-auto">
+            <div className="bg-card rounded-lg border overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50 text-xs text-gray-500">
+                <thead className="bg-background text-xs text-muted-foreground">
                   <tr>
                     <th className="px-4 py-2 text-left font-medium">Product</th>
                     <th className="px-4 py-2 text-right font-medium">Revenue</th>
@@ -83,7 +83,7 @@ export default function ReportsPage() {
                 </thead>
                 <tbody className="divide-y">
                   {r.byProduct.map((p, i) => (
-                    <tr key={i} className="hover:bg-gray-50">
+                    <tr key={i} className="hover:bg-background">
                       <td className="px-4 py-2 font-medium">{p.name}</td>
                       <td className="px-4 py-2 text-right">GH₵{p.revenue.toFixed(2)}</td>
                       <td className="px-4 py-2 text-right">{p.quantity}</td>

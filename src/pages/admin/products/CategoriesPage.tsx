@@ -30,7 +30,7 @@ export default function CategoriesPage() {
       </div>
 
       {showAdd && (
-        <div className="bg-white rounded-lg border p-4 flex gap-3 items-end">
+        <div className="bg-card rounded-lg border p-4 flex gap-3 items-end">
           <div className="flex-1 space-y-1">
             <label className="text-sm font-medium">Name</label>
             <input value={name} onChange={e => setName(e.target.value)} className="w-full h-9 rounded-md border px-3 text-sm" placeholder="e.g. Beverages" />
@@ -40,13 +40,13 @@ export default function CategoriesPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg border divide-y">
+      <div className="bg-card rounded-lg border divide-y">
         {(categories as { id: number; name: string; isActive: boolean }[]).length === 0 ? (
-          <p className="p-8 text-center text-gray-400 text-sm">No categories yet</p>
+          <p className="p-8 text-center text-muted-foreground text-sm">No categories yet</p>
         ) : (categories as { id: number; name: string; isActive: boolean }[]).map(c => (
           <div key={c.id} className="flex items-center justify-between px-4 py-3">
             <span className="text-sm font-medium">{c.name}</span>
-            <button onClick={() => deleteMutation.mutate(c.id)} className="text-gray-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+            <button onClick={() => deleteMutation.mutate(c.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
           </div>
         ))}
       </div>

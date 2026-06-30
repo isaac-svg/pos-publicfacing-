@@ -22,9 +22,9 @@ interface Expense {
 }
 
 const statusBadge: Record<string, string> = {
-  pending: 'bg-amber-50 text-amber-700',
-  approved: 'bg-green-50 text-green-700',
-  rejected: 'bg-red-50 text-red-700',
+  pending: 'bg-muted text-foreground',
+  approved: 'bg-accent text-accent-foreground',
+  rejected: 'bg-destructive/10 text-destructive',
 }
 
 export default function ExpensesPage() {
@@ -90,18 +90,18 @@ export default function ExpensesPage() {
 
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Expenses</h1>
-          <p className="text-sm text-slate-500">Track all business spending</p>
+          <h1 className="text-xl font-bold text-foreground">Expenses</h1>
+          <p className="text-sm text-muted-foreground">Track all business spending</p>
         </div>
         <div className="flex gap-2">
           <button
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-border bg-card text-foreground text-sm font-medium hover:bg-muted/40"
             onClick={() => navigate('/admin/expenses/recurring')}
           >
             Recurring
           </button>
           <button
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
             onClick={() => navigate('/admin/expenses/new')}
           >
             <Plus className="w-4 h-4" />
@@ -110,19 +110,19 @@ export default function ExpensesPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="p-4 border-b border-slate-100 flex flex-wrap items-center gap-3">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="p-4 border-b border-border flex flex-wrap items-center gap-3">
           <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
-              className="w-full h-9 rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+              className="w-full h-9 rounded-lg border border-border bg-card pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
               placeholder="Search expenses..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <select
-            className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+            className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -132,7 +132,7 @@ export default function ExpensesPage() {
             <option value="rejected">Rejected</option>
           </select>
           <select
-            className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+            className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
           >
@@ -145,45 +145,45 @@ export default function ExpensesPage() {
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-muted/40 border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Method</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Amount</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Category</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Description</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Method</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Amount</th>
                 <th className="px-4 py-3 w-28"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-sm text-slate-400">No expenses found</td>
+                  <td colSpan={7} className="px-4 py-12 text-center text-sm text-muted-foreground">No expenses found</td>
                 </tr>
               ) : (
                 filtered.map((exp) => (
-                  <tr key={exp.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 text-xs text-slate-700 whitespace-nowrap">
+                  <tr key={exp.id} className="hover:bg-muted/40">
+                    <td className="px-4 py-3 text-xs text-foreground whitespace-nowrap">
                       {format(new Date(exp.recordedAt), 'dd MMM yyyy HH:mm')}
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
                         {exp.category.name}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-700 max-w-[200px] truncate">{exp.description}</td>
-                    <td className="px-4 py-3 text-xs text-slate-700 capitalize">{exp.paymentMethod.replace('_', ' ')}</td>
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge[exp.status] ?? 'bg-slate-50 text-slate-600'}`}>
+                    <td className="px-4 py-3 text-sm text-foreground max-w-[200px] truncate">{exp.description}</td>
+                    <td className="px-4 py-3 text-xs text-foreground capitalize">{exp.paymentMethod.replace('_', ' ')}</td>
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge[exp.status] ?? 'bg-muted/40 text-muted-foreground'}`}>
                         {exp.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right text-sm font-mono font-semibold text-slate-900">
+                    <td className="px-4 py-3 text-right text-sm font-mono font-semibold text-foreground">
                       GH₵ {Number(exp.amount).toLocaleString('en-GH', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-4 py-3">
@@ -191,13 +191,13 @@ export default function ExpensesPage() {
                         {exp.status === 'pending' && (
                           <>
                             <button
-                              className="p-1.5 rounded text-slate-400 hover:text-green-600 hover:bg-green-50"
+                              className="p-1.5 rounded text-muted-foreground hover:text-accent-foreground hover:bg-accent"
                               onClick={() => approveMutation.mutate({ id: exp.id, action: 'approved' })}
                             >
                               <CheckCircle className="w-4 h-4" />
                             </button>
                             <button
-                              className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50"
+                              className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                               onClick={() => { setRejectDialog(exp.id); setRejectReason('') }}
                             >
                               <XCircle className="w-4 h-4" />
@@ -206,7 +206,7 @@ export default function ExpensesPage() {
                         )}
                         {exp.status !== 'approved' && (
                           <button
-                            className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50"
+                            className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                             onClick={() => deleteMutation.mutate(exp.id)}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -225,12 +225,12 @@ export default function ExpensesPage() {
       {/* Reject modal */}
       {rejectDialog !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
-            <h2 className="text-base font-semibold text-slate-900 mb-4">Reject expense</h2>
+          <div className="bg-card rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
+            <h2 className="text-base font-semibold text-foreground mb-4">Reject expense</h2>
             <div className="space-y-3">
-              <label className="block text-sm text-slate-700">Reason for rejection</label>
+              <label className="block text-sm text-foreground">Reason for rejection</label>
               <textarea
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 resize-none"
+                className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring resize-none"
                 rows={3}
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
@@ -247,7 +247,7 @@ export default function ExpensesPage() {
                 Confirm rejection
               </button>
               <button
-                className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50"
+                className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg border border-border bg-card text-foreground text-sm font-medium hover:bg-muted/40"
                 onClick={() => setRejectDialog(null)}
               >
                 Cancel

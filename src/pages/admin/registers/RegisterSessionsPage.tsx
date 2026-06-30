@@ -23,9 +23,9 @@ interface RegisterSession {
 }
 
 const VARIANCE_CLASS: Record<string, string> = {
-  balanced: 'text-indigo-600',
-  shortage: 'text-red-600',
-  overage: 'text-amber-600',
+  balanced: 'text-primary',
+  shortage: 'text-destructive',
+  overage: 'text-foreground',
 }
 
 export default function RegisterSessionsPage() {
@@ -53,14 +53,14 @@ export default function RegisterSessionsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-slate-900">Register Sessions</h1>
-        <p className="text-sm text-slate-500">View all cash register sessions</p>
+        <h1 className="text-xl font-bold text-foreground">Register Sessions</h1>
+        <p className="text-sm text-muted-foreground">View all cash register sessions</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="p-4 border-b border-slate-100 flex flex-wrap items-center gap-3">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="p-4 border-b border-border flex flex-wrap items-center gap-3">
           <select
-            className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+            className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -69,7 +69,7 @@ export default function RegisterSessionsPage() {
             <option value="closed">Closed</option>
           </select>
           <select
-            className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+            className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
             value={userFilter}
             onChange={(e) => setUserFilter(e.target.value ? Number(e.target.value) : '')}
           >
@@ -78,13 +78,13 @@ export default function RegisterSessionsPage() {
           </select>
           <input
             type="date"
-            className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 w-40"
+            className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring w-40"
             value={from}
             onChange={(e) => setFrom(e.target.value)}
           />
           <input
             type="date"
-            className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 w-40"
+            className="h-9 rounded-lg border border-border bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring w-40"
             value={to}
             onChange={(e) => setTo(e.target.value)}
           />
@@ -92,42 +92,42 @@ export default function RegisterSessionsPage() {
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-muted/40 border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Register</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Cashier</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Opened</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Closed</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Opening</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Closing</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Variance</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Register</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Cashier</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Opened</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Closed</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Opening</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Closing</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Variance</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {sessions.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-slate-400">No sessions found</td>
+                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-muted-foreground">No sessions found</td>
                 </tr>
               ) : (
                 sessions.map((s) => (
                   <tr
                     key={s.id}
-                    className="hover:bg-slate-50 cursor-pointer"
+                    className="hover:bg-muted/40 cursor-pointer"
                     onClick={() => navigate(`/admin/registers/sessions/${s.id}`)}
                   >
-                    <td className="px-4 py-3 text-sm font-medium text-slate-900">{s.register.name}</td>
-                    <td className="px-4 py-3 text-sm text-slate-700">{s.cashier.fullName}</td>
-                    <td className="px-4 py-3 text-xs text-slate-500">{new Date(s.openedAt).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-xs text-slate-500">{s.closedAt ? new Date(s.closedAt).toLocaleString() : '—'}</td>
-                    <td className="px-4 py-3 text-right text-sm text-slate-700">
+                    <td className="px-4 py-3 text-sm font-medium text-foreground">{s.register.name}</td>
+                    <td className="px-4 py-3 text-sm text-foreground">{s.cashier.fullName}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(s.openedAt).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{s.closedAt ? new Date(s.closedAt).toLocaleString() : '—'}</td>
+                    <td className="px-4 py-3 text-right text-sm text-foreground">
                       GH₵ {Number(s.openingFloat).toLocaleString('en-GH', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-4 py-3 text-right text-sm text-slate-700">
+                    <td className="px-4 py-3 text-right text-sm text-foreground">
                       {s.closingActual
                         ? `GH₵ ${Number(s.closingActual).toLocaleString('en-GH', { minimumFractionDigits: 2 })}`
                         : '—'}
@@ -137,8 +137,8 @@ export default function RegisterSessionsPage() {
                         ? `${Number(s.variance) >= 0 ? '+' : ''}GH₵ ${Math.abs(Number(s.variance)).toLocaleString('en-GH', { minimumFractionDigits: 2 })}`
                         : '—'}
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${s.status === 'open' ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${s.status === 'open' ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>
                         {s.status === 'open' ? 'Open' : 'Closed'}
                       </span>
                     </td>

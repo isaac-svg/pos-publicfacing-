@@ -40,7 +40,7 @@ export default function CreditSettingsPage() {
   return (
     <div className="space-y-4 max-w-lg">
       <h1 className="text-2xl font-bold">Credit Policy</h1>
-      <div className="bg-white rounded-lg border p-4 space-y-3">
+      <div className="bg-card rounded-lg border p-4 space-y-3">
         {([['Max credit amount (GH₵)', maxAmt, setMaxAmt], ['Max duration (days)', maxDays, setMaxDays], ['Fee value', feeVal, setFeeVal], ['Min down payment (%)', minDown, setMinDown], ['Grace days', grace, setGrace]] as [string, string, (v: string) => void][]).map(([label, val, setter]) => (
           <div key={label} className="space-y-1">
             <label className="text-sm font-medium">{label}</label>

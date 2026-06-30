@@ -23,7 +23,7 @@ export default function TrialBalancePage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+        <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
       </div>
     )
   }
@@ -32,42 +32,42 @@ export default function TrialBalancePage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-slate-900">Trial Balance</h1>
-        <p className="text-sm text-slate-500">Verify accounting correctness</p>
+        <h1 className="text-xl font-bold text-foreground">Trial Balance</h1>
+        <p className="text-sm text-muted-foreground">Verify accounting correctness</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
-          <p className="text-sm text-slate-500">Total debits (inflows)</p>
-          <p className="text-2xl font-bold font-mono text-slate-900 mt-1">{fmt(tb.totalDebits)}</p>
+        <div className="bg-card rounded-xl border border-border p-5">
+          <p className="text-sm text-muted-foreground">Total debits (inflows)</p>
+          <p className="text-2xl font-bold font-mono text-foreground mt-1">{fmt(tb.totalDebits)}</p>
         </div>
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
-          <p className="text-sm text-slate-500">Total credits (outflows)</p>
-          <p className="text-2xl font-bold font-mono text-slate-900 mt-1">{fmt(tb.totalCredits)}</p>
+        <div className="bg-card rounded-xl border border-border p-5">
+          <p className="text-sm text-muted-foreground">Total credits (outflows)</p>
+          <p className="text-2xl font-bold font-mono text-foreground mt-1">{fmt(tb.totalCredits)}</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="px-5 pt-4 pb-2 border-b border-slate-100">
-          <p className="text-sm font-semibold text-slate-900">Verification</p>
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="px-5 pt-4 pb-2 border-b border-border">
+          <p className="text-sm font-semibold text-foreground">Verification</p>
         </div>
         <div className="p-5 space-y-4">
           <div className="flex items-center gap-3">
             {tb.inBalance ? (
-              <CheckCircle className="w-6 h-6 text-green-600" />
+              <CheckCircle className="w-6 h-6 text-accent-foreground" />
             ) : (
-              <XCircle className="w-6 h-6 text-red-600" />
+              <XCircle className="w-6 h-6 text-destructive" />
             )}
             <div>
-              <p className="font-semibold text-slate-900">{tb.inBalance ? 'In balance' : 'Out of balance'}</p>
-              <p className="text-sm text-slate-500">
+              <p className="font-semibold text-foreground">{tb.inBalance ? 'In balance' : 'Out of balance'}</p>
+              <p className="text-sm text-muted-foreground">
                 {tb.inBalance
                   ? 'Total debits equal total credits. The books are balanced.'
                   : `Difference: GH₵ ${tb.difference.toFixed(2)}`}
               </p>
             </div>
           </div>
-          <div className="border-t border-slate-100 pt-4 text-sm text-slate-500">
+          <div className="border-t border-border pt-4 text-sm text-muted-foreground">
             Based on {tb.transactionCount} transaction(s) across all accounts
           </div>
         </div>

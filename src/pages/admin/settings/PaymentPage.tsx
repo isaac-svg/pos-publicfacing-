@@ -34,28 +34,28 @@ export default function PaymentPage() {
   return (
     <div className="space-y-4 max-w-lg">
       <h1 className="text-2xl font-bold">Payment Settings</h1>
-      <p className="text-sm text-gray-500">Configure Hubtel credentials for MoMo payment collection.</p>
+      <p className="text-sm text-muted-foreground">Configure Hubtel credentials for MoMo payment collection.</p>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+      <div className="bg-card rounded-lg border border-border p-4 space-y-3">
         <div className="space-y-1">
           <label className="text-sm font-medium">Client ID</label>
-          <input type="password" value={clientId} onChange={e => setClientId(e.target.value)} className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" placeholder={c?.clientIdMasked ? 'Saved — type to change' : 'Enter Client ID'} />
+          <input type="password" value={clientId} onChange={e => setClientId(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder={c?.clientIdMasked ? 'Saved — type to change' : 'Enter Client ID'} />
         </div>
         <div className="space-y-1">
           <label className="text-sm font-medium">Client Secret</label>
-          <input type="password" value={clientSecret} onChange={e => setClientSecret(e.target.value)} className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" placeholder="Enter Client Secret" />
+          <input type="password" value={clientSecret} onChange={e => setClientSecret(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder="Enter Client Secret" />
         </div>
         <div className="space-y-1">
           <label className="text-sm font-medium">Collection Account Number</label>
-          <input value={accountNo} onChange={e => setAccountNo(e.target.value)} className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" placeholder="HMxxxxxxxx" />
+          <input value={accountNo} onChange={e => setAccountNo(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder="HMxxxxxxxx" />
         </div>
         <div className="flex items-center gap-3">
           <button onClick={() => mutation.mutate()} disabled={mutation.isPending} className="h-9 px-4 rounded-md bg-blue-600 text-white text-sm font-medium disabled:opacity-50">
             {mutation.isPending ? 'Saving…' : 'Save'}
           </button>
-          {saved && <span className="text-sm text-green-600">Saved</span>}
+          {saved && <span className="text-sm text-accent-foreground">Saved</span>}
         </div>
-        {c?.isConfigured && <p className="text-xs text-green-600">✓ Hubtel is configured</p>}
+        {c?.isConfigured && <p className="text-xs text-accent-foreground">✓ Hubtel is configured</p>}
       </div>
     </div>
   )

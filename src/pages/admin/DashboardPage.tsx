@@ -24,24 +24,24 @@ export default function AdminDashboardPage() {
       <h1 className="text-2xl font-bold">Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg border p-4">
-          <p className="text-xs text-gray-500">Today's Sales</p>
+        <div className="bg-card rounded-lg border p-4">
+          <p className="text-xs text-muted-foreground">Today's Sales</p>
           <p className="text-2xl font-bold mt-1">GH₵{todayTotal.toFixed(2)}</p>
-          <p className="text-xs text-gray-400">{todaySales.length} transaction(s)</p>
+          <p className="text-xs text-muted-foreground">{todaySales.length} transaction(s)</p>
         </div>
-        <div className="bg-white rounded-lg border p-4">
-          <p className="text-xs text-gray-500">This Month</p>
+        <div className="bg-card rounded-lg border p-4">
+          <p className="text-xs text-muted-foreground">This Month</p>
           <p className="text-2xl font-bold mt-1">GH₵{monthTotal.toFixed(2)}</p>
         </div>
-        <div className="bg-white rounded-lg border p-4">
-          <p className="text-xs text-gray-500">Low Stock Alerts</p>
+        <div className="bg-card rounded-lg border p-4">
+          <p className="text-xs text-muted-foreground">Low Stock Alerts</p>
           <p className="text-2xl font-bold mt-1">{lowStockCount}</p>
-          <p className="text-xs text-gray-400">items below threshold</p>
+          <p className="text-xs text-muted-foreground">items below threshold</p>
         </div>
       </div>
 
       {topProducts.length > 0 && (
-        <div className="bg-white rounded-lg border p-4">
+        <div className="bg-card rounded-lg border p-4">
           <h2 className="text-sm font-semibold mb-3">Top Products</h2>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={topProducts}>
@@ -54,13 +54,13 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg border">
+      <div className="bg-card rounded-lg border">
         <div className="p-4 border-b">
           <h2 className="text-sm font-semibold">Recent Sales</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-xs text-gray-500">
+            <thead className="bg-background text-xs text-muted-foreground">
               <tr>
                 <th className="px-4 py-2 text-left font-medium">ID</th>
                 <th className="px-4 py-2 text-right font-medium">Amount</th>
@@ -70,17 +70,17 @@ export default function AdminDashboardPage() {
             </thead>
             <tbody className="divide-y">
               {todaySales.slice(0, 10).map((s: { id?: number; totalAmount: string; status?: string; createdAt?: string }, i: number) => (
-                <tr key={i} className="hover:bg-gray-50">
+                <tr key={i} className="hover:bg-background">
                   <td className="px-4 py-2">#{s.id ?? i + 1}</td>
                   <td className="px-4 py-2 text-right font-medium">GH₵{Number(s.totalAmount).toFixed(2)}</td>
                   <td className="px-4 py-2">
-                    <span className="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">{s.status ?? 'completed'}</span>
+                    <span className="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-accent-foreground">{s.status ?? 'completed'}</span>
                   </td>
-                  <td className="px-4 py-2 text-gray-500 text-xs">{s.createdAt ? new Date(s.createdAt).toLocaleTimeString() : '—'}</td>
+                  <td className="px-4 py-2 text-muted-foreground text-xs">{s.createdAt ? new Date(s.createdAt).toLocaleTimeString() : '—'}</td>
                 </tr>
               ))}
               {todaySales.length === 0 && (
-                <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400">No sales today</td></tr>
+                <tr><td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">No sales today</td></tr>
               )}
             </tbody>
           </table>

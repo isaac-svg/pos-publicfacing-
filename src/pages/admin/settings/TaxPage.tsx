@@ -31,29 +31,29 @@ export default function TaxPage() {
       </div>
 
       {showAdd && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4 flex items-end gap-3">
+        <div className="bg-card rounded-lg border border-border p-4 flex items-end gap-3">
           <div className="flex-1 space-y-1">
             <label className="text-sm font-medium">Name</label>
-            <input value={name} onChange={e => setName(e.target.value)} className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" placeholder="e.g. VAT" />
+            <input value={name} onChange={e => setName(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder="e.g. VAT" />
           </div>
           <div className="w-24 space-y-1">
             <label className="text-sm font-medium">Rate (%)</label>
-            <input type="number" step="0.01" value={rate} onChange={e => setRate(e.target.value)} className="w-full h-9 rounded-md border border-gray-200 px-3 text-sm" />
+            <input type="number" step="0.01" value={rate} onChange={e => setRate(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" />
           </div>
           <button disabled={!name.trim() || !rate} onClick={() => createMutation.mutate()} className="h-9 px-4 rounded-md bg-blue-600 text-white text-sm font-medium disabled:opacity-50">Add</button>
         </div>
       )}
 
-      <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
-        {isLoading ? <p className="p-8 text-center text-gray-400 text-sm">Loading…</p> :
-          list.length === 0 ? <p className="p-8 text-center text-gray-400 text-sm">No taxes configured</p> :
+      <div className="bg-card rounded-lg border border-border divide-y divide-gray-100">
+        {isLoading ? <p className="p-8 text-center text-muted-foreground text-sm">Loading…</p> :
+          list.length === 0 ? <p className="p-8 text-center text-muted-foreground text-sm">No taxes configured</p> :
           list.map(t => (
             <div key={t.id} className="flex items-center justify-between px-4 py-3">
               <div>
                 <span className="text-sm font-medium">{t.name}</span>
-                <span className="ml-2 text-sm text-gray-500">{Number(t.rate).toFixed(2)}%</span>
+                <span className="ml-2 text-sm text-muted-foreground">{Number(t.rate).toFixed(2)}%</span>
               </div>
-              <button onClick={() => deleteMutation.mutate(t.id)} className="text-gray-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+              <button onClick={() => deleteMutation.mutate(t.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
             </div>
           ))}
       </div>

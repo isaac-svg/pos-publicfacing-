@@ -11,6 +11,7 @@ import { useAuthStore } from '../store/auth'
 import { useSubscriptionStatus } from '../hooks/useSubscriptionStatus'
 import { useActivationGate } from '../store/activationGate'
 import { api } from '../lib/api'
+import { cn } from '@/lib/utils'
 
 interface NavItem {
   label: string
@@ -109,9 +110,6 @@ const navSections: NavSection[] = [
   },
 ]
 
-function cn(...classes: (string | boolean | undefined)[]) {
-  return classes.filter(Boolean).join(' ')
-}
 
 function sectionHasActiveRoute(items: NavItem[], pathname: string) {
   return items.some(item =>
@@ -159,20 +157,20 @@ export default function AdminLayout() {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center h-14 border-b border-slate-200 px-3 gap-2 shrink-0">
+      <div className="flex items-center h-14 border-b border-border px-3 gap-2 shrink-0">
         {!sidebarCollapsed && (
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            <div className="w-6 h-6 rounded bg-indigo-600 flex items-center justify-center shrink-0">
+            <div className="w-6 h-6 rounded bg-primary flex items-center justify-center shrink-0">
               <span className="text-white text-[10px] font-bold">S</span>
             </div>
-            <span className="text-sm font-semibold text-slate-900 truncate">
+            <span className="text-sm font-semibold text-foreground truncate">
               {business?.businessName ?? 'Shepherd POS'}
             </span>
           </div>
         )}
         <button
           onClick={() => setSidebarCollapsed(v => !v)}
-          className="ml-auto hidden md:flex p-1 rounded text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors shrink-0"
+          className="ml-auto hidden md:flex p-1 rounded text-muted-foreground hover:bg-muted hover:text-muted-foreground transition-colors shrink-0"
         >
           {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </button>
@@ -193,7 +191,7 @@ export default function AdminLayout() {
                   onClick={() => toggleSection(section.heading)}
                   className={cn(
                     'flex w-full items-center justify-between px-3 pb-1 pt-2.5 text-[11px] font-semibold uppercase tracking-wider transition-colors',
-                    hasActive ? 'text-slate-800' : 'text-slate-400 hover:text-slate-600',
+                    hasActive ? 'text-foreground' : 'text-muted-foreground hover:text-muted-foreground',
                   )}
                 >
                   {section.heading}
@@ -213,8 +211,8 @@ export default function AdminLayout() {
                       'flex w-full items-center gap-3 mx-1 px-2.5 py-1.5 text-sm rounded-md transition-colors',
                       sidebarCollapsed ? 'justify-center' : '',
                       active
-                        ? 'bg-indigo-600 text-white'
-                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+                        ? 'bg-primary text-white'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                     )}
                     style={{ width: sidebarCollapsed ? 'calc(100% - 8px)' : 'calc(100% - 8px)' }}
                   >
@@ -250,11 +248,11 @@ export default function AdminLayout() {
       )}
 
       {/* Footer */}
-      <div className="p-2 border-t border-slate-200 shrink-0">
+      <div className="p-2 border-t border-border shrink-0">
         <button
           onClick={handleLogout}
           className={cn(
-            'flex items-center gap-2.5 w-full px-2.5 py-2 text-sm text-slate-500 hover:text-slate-700 rounded-md hover:bg-slate-100 transition-colors',
+            'flex items-center gap-2.5 w-full px-2.5 py-2 text-sm text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors',
             sidebarCollapsed ? 'justify-center' : '',
           )}
           title={sidebarCollapsed ? 'Logout' : undefined}
@@ -267,10 +265,10 @@ export default function AdminLayout() {
   )
 
   return (
-    <div className="flex h-screen bg-slate-50" style={{ fontFamily: '"Geist Variable", "Geist", system-ui, sans-serif' }}>
+    <div className="flex h-screen bg-muted" style={{ fontFamily: '"Geist Variable", "Geist", system-ui, sans-serif' }}>
       {/* Desktop sidebar */}
       <aside className={cn(
-        'hidden md:flex flex-col border-r border-slate-200 bg-white shrink-0 transition-all duration-200',
+        'hidden md:flex flex-col border-r border-border bg-card shrink-0 transition-all duration-200',
         sidebarCollapsed ? 'w-14' : 'w-56',
       )}>
         {sidebarContent}
@@ -280,10 +278,10 @@ export default function AdminLayout() {
       {mobileOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 bottom-0 w-64 bg-white shadow-xl flex flex-col">
+          <aside className="absolute left-0 top-0 bottom-0 w-64 bg-card shadow-xl flex flex-col">
             <button
               onClick={() => setMobileOpen(false)}
-              className="absolute right-3 top-3 p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              className="absolute right-3 top-3 p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
             >
               <X className="h-4 w-4" />
             </button>
@@ -295,15 +293,15 @@ export default function AdminLayout() {
       {/* Main */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-14 items-center justify-between border-b border-slate-200 bg-white px-4 shrink-0">
+        <header className="flex h-14 items-center justify-between border-b border-border bg-card px-4 shrink-0">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileOpen(true)}
-              className="md:hidden p-1.5 -ml-1 rounded text-slate-500 hover:bg-slate-100"
+              className="md:hidden p-1.5 -ml-1 rounded text-muted-foreground hover:bg-muted"
             >
               <Menu className="h-5 w-5" />
             </button>
-            <span className="text-sm text-slate-500 hidden md:inline">
+            <span className="text-sm text-muted-foreground hidden md:inline">
               {business?.businessName ?? 'Shepherd POS'}
             </span>
           </div>
@@ -327,7 +325,7 @@ export default function AdminLayout() {
             )}
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 px-2.5 py-1.5 rounded-md hover:bg-slate-100 transition-colors"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors"
             >
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Logout</span>

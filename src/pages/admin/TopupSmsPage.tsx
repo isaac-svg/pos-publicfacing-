@@ -33,13 +33,13 @@ export default function TopupSmsPage() {
       <h1 className="text-2xl font-bold">Buy SMS Credits</h1>
 
       {b && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-2">
+        <div className="bg-card rounded-lg border border-border p-4 space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Plan allocation</span>
+            <span className="text-muted-foreground">Plan allocation</span>
             <span className="font-medium">{b.remainingAllocation ?? 0} remaining of {b.planAllocation ?? 0}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Topped-up credits</span>
+            <span className="text-muted-foreground">Topped-up credits</span>
             <span className="font-medium">{b.toppedUpCredits ?? 0}</span>
           </div>
           <div className="flex justify-between text-sm font-semibold border-t border-gray-100 pt-2">
@@ -49,21 +49,21 @@ export default function TopupSmsPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+      <div className="bg-card rounded-lg border border-border p-4 space-y-4">
         <div className="space-y-1.5">
           <label className="text-sm font-medium">How many SMS would you like?</label>
           <input
             type="number" min={50} step={50}
             value={quantity}
             onChange={e => setQuantity(Math.max(50, parseInt(e.target.value) || 50))}
-            className="w-full h-10 rounded-md border border-gray-200 px-3 text-lg font-mono"
+            className="w-full h-10 rounded-md border border-border px-3 text-lg font-mono"
           />
-          <p className="text-xs text-gray-400">Minimum 50 SMS</p>
+          <p className="text-xs text-muted-foreground">Minimum 50 SMS</p>
         </div>
 
-        <div className="bg-gray-50 rounded-md p-3 space-y-1">
+        <div className="bg-background rounded-md p-3 space-y-1">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Price per SMS</span>
+            <span className="text-muted-foreground">Price per SMS</span>
             <span>GH₵{pricePerUnit.toFixed(4)}</span>
           </div>
           <div className="flex justify-between text-base font-semibold">
@@ -72,7 +72,7 @@ export default function TopupSmsPage() {
           </div>
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-destructive">{error}</p>}
 
         <button
           onClick={handlePurchase}

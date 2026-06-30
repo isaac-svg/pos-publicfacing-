@@ -1,17 +1,71 @@
 @import "tailwindcss";
+@import "@fontsource/geist";
+@plugin "tailwindcss-animate";
 
+/* ── Theme ─────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-border: #e2e8f0;
-}
+  /* Colors — matching pos-frontend exactly */
+  --color-background:          rgb(252 252 252);
+  --color-foreground:          rgb(14 20 43);
+  --color-card:                rgb(250 250 250);
+  --color-card-foreground:     rgb(14 20 43);
+  --color-popover:             rgb(255 255 255);
+  --color-popover-foreground:  rgb(14 20 43);
+  --color-primary:             rgb(46 103 255);
+  --color-primary-foreground:  rgb(255 255 255);
+  --color-secondary:           rgb(14 20 43);
+  --color-secondary-foreground: rgb(255 255 255);
+  --color-muted:               rgb(245 245 245);
+  --color-muted-foreground:    rgb(107 114 128);
+  --color-accent:              rgb(235 240 255);
+  --color-accent-foreground:   rgb(46 103 255);
+  --color-destructive:         rgb(255 108 53);
+  --color-destructive-foreground: rgb(255 255 255);
+  --color-border:              rgb(231 228 228);
+  --color-input:               rgb(204 204 204);
+  --color-ring:                rgb(46 106 255);
 
-@layer base {
-  *, *::before, *::after {
-    border-color: var(--color-border);
+  /* Charts */
+  --color-chart-1: rgb(46 103 255);
+  --color-chart-2: rgb(0 205 204);
+  --color-chart-3: rgb(249 255 64);
+  --color-chart-4: rgb(0 238 186);
+  --color-chart-5: rgb(255 40 34);
+
+  /* Border radius — matching --radius: 1.3rem */
+  --radius-lg:   1.3rem;
+  --radius-md:   calc(1.3rem - 4px);
+  --radius-sm:   calc(1.3rem - 8px);
+  --radius-full: 9999px;
+
+  /* Animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up:   accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to   { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to   { height: 0; }
   }
 }
 
-@import "@fontsource/geist";
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
 
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Geist', 'Open Sans', system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* ── Marketing page (scoped, no leakage) ──────────────────────────────────── */
 .marketing-root {
   --mk-accent: #4f46e5;
   --mk-accent-light: #eef2ff;

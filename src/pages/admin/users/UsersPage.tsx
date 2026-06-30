@@ -33,7 +33,7 @@ export default function UsersPage() {
       </div>
 
       {showAdd && (
-        <div className="bg-white rounded-lg border p-4 space-y-3">
+        <div className="bg-card rounded-lg border p-4 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {([['Full name', 'fullName', 'John Doe'], ['Username', 'username', 'john'], ['Email', 'email', 'john@example.com']] as [string, string, string][]).map(([label, key, ph]) => (
               <div key={key} className="space-y-1">
@@ -50,35 +50,35 @@ export default function UsersPage() {
       )}
 
       {created && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
+        <div className="bg-accent border border-green-200 rounded-lg p-4 space-y-2">
           <p className="text-sm font-semibold text-green-800">User created — share these credentials</p>
-          <div className="font-mono text-sm bg-white rounded p-2">
+          <div className="font-mono text-sm bg-card rounded p-2">
             <p>Username: {created.username}</p>
             <p>Password: {created.password}</p>
           </div>
           <button onClick={() => { navigator.clipboard.writeText(`Username: ${created.username}\nPassword: ${created.password}`); }} className="text-xs text-blue-600 hover:underline">Copy</button>
-          <button onClick={() => setCreated(null)} className="text-xs text-gray-400 ml-3 hover:underline">Dismiss</button>
+          <button onClick={() => setCreated(null)} className="text-xs text-muted-foreground ml-3 hover:underline">Dismiss</button>
         </div>
       )}
 
       <div className="relative max-w-xs">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…" className="w-full h-9 rounded-md border pl-9 px-3 text-sm" />
       </div>
 
-      <div className="bg-white rounded-lg border overflow-x-auto">
+      <div className="bg-card rounded-lg border overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-xs text-gray-500">
+          <thead className="bg-background text-xs text-muted-foreground">
             <tr><th className="px-4 py-2 text-left font-medium">Name</th><th className="px-4 py-2 text-left font-medium">Username</th><th className="px-4 py-2 text-left font-medium">Email</th><th className="px-4 py-2 text-center font-medium">Status</th></tr>
           </thead>
           <tbody className="divide-y">
-            {isLoading ? <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400">Loading…</td></tr> :
+            {isLoading ? <tr><td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">Loading…</td></tr> :
               list.map(u => (
-                <tr key={u.id} className="hover:bg-gray-50">
+                <tr key={u.id} className="hover:bg-background">
                   <td className="px-4 py-2 font-medium">{u.fullName}</td>
-                  <td className="px-4 py-2 text-gray-500">{u.username}</td>
-                  <td className="px-4 py-2 text-gray-500">{u.email ?? '—'}</td>
-                  <td className="px-4 py-2 text-center"><span className={`px-2 py-0.5 rounded text-xs ${u.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>{u.isActive ? 'Active' : 'Inactive'}</span></td>
+                  <td className="px-4 py-2 text-muted-foreground">{u.username}</td>
+                  <td className="px-4 py-2 text-muted-foreground">{u.email ?? '—'}</td>
+                  <td className="px-4 py-2 text-center"><span className={`px-2 py-0.5 rounded text-xs ${u.isActive ? 'bg-green-100 text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>{u.isActive ? 'Active' : 'Inactive'}</span></td>
                 </tr>
               ))}
           </tbody>

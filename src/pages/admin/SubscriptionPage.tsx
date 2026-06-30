@@ -45,22 +45,22 @@ export default function SubscriptionPage() {
       <h1 className="text-2xl font-bold">Subscription</h1>
 
       {sub && (
-        <div className="bg-white rounded-lg border p-6 space-y-4">
+        <div className="bg-card rounded-lg border p-6 space-y-4">
           {isTrial && sub.trialEndsAt && (
-            <div className="bg-amber-50 border border-amber-200 rounded-md px-3 py-2 text-sm text-amber-800">
+            <div className="bg-muted border border-amber-200 rounded-md px-3 py-2 text-sm text-amber-800">
               Trial ends {new Date(sub.trialEndsAt).toLocaleDateString()}
               {sub.trialDaysRemaining != null && ` (${sub.trialDaysRemaining} day${sub.trialDaysRemaining !== 1 ? 's' : ''} left)`}
             </div>
           )}
 
           {isActive && !isFree && isExpired && (
-            <div className="bg-red-50 border border-red-200 rounded-md px-3 py-2 text-sm text-red-800">
+            <div className="bg-destructive/10 border border-destructive/30 rounded-md px-3 py-2 text-sm text-red-800">
               Your subscription has expired. Renew to keep your features.
             </div>
           )}
 
           {isActive && !isFree && !isExpired && daysLeft != null && daysLeft <= 7 && (
-            <div className="bg-amber-50 border border-amber-200 rounded-md px-3 py-2 text-sm text-amber-800">
+            <div className="bg-muted border border-amber-200 rounded-md px-3 py-2 text-sm text-amber-800">
               Your subscription expires in {daysLeft} day{daysLeft !== 1 ? 's' : ''}.
             </div>
           )}
@@ -69,16 +69,16 @@ export default function SubscriptionPage() {
             <div>
               <h2 className="text-lg font-semibold capitalize">{sub.plan ?? 'No plan'}</h2>
               <span className={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${
-                isActive ? 'bg-green-100 text-green-700' :
-                isTrial ? 'bg-amber-100 text-amber-700' :
+                isActive ? 'bg-green-100 text-accent-foreground' :
+                isTrial ? 'bg-amber-100 text-foreground' :
                 sub.status === 'pending_payment' ? 'bg-blue-100 text-blue-700' :
-                'bg-gray-100 text-gray-600'
+                'bg-muted text-muted-foreground'
               }`}>
                 {isTrial ? 'Trial' : sub.status?.replace(/_/g, ' ') ?? 'Unknown'}
               </span>
             </div>
             {sub.expiresAt && !isTrial && (
-              <div className="text-right text-sm text-gray-500">
+              <div className="text-right text-sm text-muted-foreground">
                 <p>{isExpired ? 'Expired' : 'Renews'}: {new Date(sub.expiresAt).toLocaleDateString()}</p>
                 <p className="capitalize">{sub.billingCycle ?? 'monthly'}</p>
               </div>
@@ -86,25 +86,25 @@ export default function SubscriptionPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gray-50 rounded-md p-3">
-              <p className="text-xs text-gray-500">Products</p>
+            <div className="bg-background rounded-md p-3">
+              <p className="text-xs text-muted-foreground">Products</p>
               <p className="font-semibold">{sub.productLimit != null ? `up to ${sub.productLimit.toLocaleString()}` : 'Unlimited'}</p>
             </div>
-            <div className="bg-gray-50 rounded-md p-3">
-              <p className="text-xs text-gray-500">Shops</p>
+            <div className="bg-background rounded-md p-3">
+              <p className="text-xs text-muted-foreground">Shops</p>
               <p className="font-semibold">{sub.shopLimit ?? '—'}</p>
             </div>
-            <div className="bg-gray-50 rounded-md p-3">
-              <p className="text-xs text-gray-500">Employees</p>
+            <div className="bg-background rounded-md p-3">
+              <p className="text-xs text-muted-foreground">Employees</p>
               <p className="font-semibold">{sub.employeeLimit ?? 'Unlimited'}</p>
             </div>
-            <div className="bg-gray-50 rounded-md p-3">
-              <p className="text-xs text-gray-500">Credit module</p>
+            <div className="bg-background rounded-md p-3">
+              <p className="text-xs text-muted-foreground">Credit module</p>
               <p className="font-semibold">{sub.creditModuleEnabled ? 'Enabled' : 'Not included'}</p>
             </div>
             {sub.smsAllocation > 0 && (
-              <div className="bg-gray-50 rounded-md p-3 col-span-2">
-                <p className="text-xs text-gray-500">SMS this cycle</p>
+              <div className="bg-background rounded-md p-3 col-span-2">
+                <p className="text-xs text-muted-foreground">SMS this cycle</p>
                 <p className="font-semibold">{sub.smsUsedThisCycle.toLocaleString()} / {sub.smsAllocation.toLocaleString()}</p>
                 <div className="mt-1.5 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                   <div
@@ -116,7 +116,7 @@ export default function SubscriptionPage() {
             )}
           </div>
 
-          {upgradeError && <p className="text-sm text-red-600">{upgradeError}</p>}
+          {upgradeError && <p className="text-sm text-destructive">{upgradeError}</p>}
 
           <div className="flex gap-3 pt-2">
             {!isFree && (isActive || sub.status === 'pending_payment') && (
@@ -130,7 +130,7 @@ export default function SubscriptionPage() {
             )}
             <Link
               to="/select-plan"
-              className="flex-1 h-10 rounded-md border border-gray-300 text-sm font-medium text-center leading-10 hover:bg-gray-50"
+              className="flex-1 h-10 rounded-md border border-gray-300 text-sm font-medium text-center leading-10 hover:bg-background"
             >
               {isFree || isTrial ? 'Upgrade plan' : 'Change plan'}
             </Link>

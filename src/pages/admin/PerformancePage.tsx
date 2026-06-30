@@ -30,15 +30,15 @@ function StatCard({ icon: Icon, label, value, sub }: {
   sub?: string
 }) {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-5">
+    <div className="bg-card rounded-xl border border-border p-5">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-xs text-slate-500">{label}</p>
-          <p className="text-xl font-bold text-slate-900">{value}</p>
-          {sub && <p className="text-xs text-slate-500">{sub}</p>}
+          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="text-xl font-bold text-foreground">{value}</p>
+          {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
         </div>
-        <div className="rounded-md bg-indigo-50 p-2">
-          <Icon className="h-4 w-4 text-indigo-600" />
+        <div className="rounded-md bg-accent p-2">
+          <Icon className="h-4 w-4 text-primary" />
         </div>
       </div>
     </div>
@@ -52,10 +52,10 @@ function RevenueTooltip({ active, payload, label }: {
 }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-md border border-slate-200 bg-white px-3 py-2 shadow-md text-xs">
-      <p className="font-medium text-slate-900 mb-1">{label}</p>
+    <div className="rounded-md border border-border bg-card px-3 py-2 shadow-md text-xs">
+      <p className="font-medium text-foreground mb-1">{label}</p>
       {payload.map((p) => (
-        <p key={p.dataKey} className="text-slate-500">
+        <p key={p.dataKey} className="text-muted-foreground">
           {p.dataKey === 'revenue' ? `Revenue: ${fmt(p.value)}` : `Sales: ${p.value}`}
         </p>
       ))}
@@ -70,9 +70,9 @@ function BarTooltip({ active, payload, label }: {
 }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-md border border-slate-200 bg-white px-3 py-2 shadow-md text-xs">
-      <p className="font-medium text-slate-900 mb-1">{label}</p>
-      <p className="text-slate-500">{fmt(payload[0].value)}</p>
+    <div className="rounded-md border border-border bg-card px-3 py-2 shadow-md text-xs">
+      <p className="font-medium text-foreground mb-1">{label}</p>
+      <p className="text-muted-foreground">{fmt(payload[0].value)}</p>
     </div>
   )
 }
@@ -90,18 +90,18 @@ export default function PerformancePage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Performance</h1>
-          <p className="text-sm text-slate-500">Sales trends and business insights</p>
+          <h1 className="text-xl font-bold text-foreground">Performance</h1>
+          <p className="text-sm text-muted-foreground">Sales trends and business insights</p>
         </div>
-        <div className="flex gap-1 rounded-lg border border-slate-200 bg-slate-50 p-1">
+        <div className="flex gap-1 rounded-lg border border-border bg-muted/40 p-1">
           {PERIODS.map((p) => (
             <button
               key={p.value}
               onClick={() => setPeriod(p.value)}
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                 period === p.value
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-900'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {p.label}
@@ -112,7 +112,7 @@ export default function PerformancePage() {
 
       {isLoading && (
         <div className="flex items-center justify-center py-16">
-          <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
         </div>
       )}
 
@@ -136,13 +136,13 @@ export default function PerformancePage() {
             />
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-card rounded-xl border border-border overflow-hidden">
             <div className="px-5 pt-4 pb-2">
-              <p className="text-sm font-medium text-slate-500">Revenue trend</p>
+              <p className="text-sm font-medium text-muted-foreground">Revenue trend</p>
             </div>
             <div className="px-5 pb-5">
               {data.series.length === 0 ? (
-                <p className="py-8 text-center text-sm text-slate-400">No sales in this period.</p>
+                <p className="py-8 text-center text-sm text-muted-foreground">No sales in this period.</p>
               ) : (
                 <ResponsiveContainer width="100%" height={260}>
                   <AreaChart data={data.series} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
@@ -184,13 +184,13 @@ export default function PerformancePage() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-card rounded-xl border border-border overflow-hidden">
               <div className="px-5 pt-4 pb-2">
-                <p className="text-sm font-medium text-slate-500">Top products by revenue</p>
+                <p className="text-sm font-medium text-muted-foreground">Top products by revenue</p>
               </div>
               <div className="px-5 pb-5">
                 {data.topProducts.length === 0 ? (
-                  <p className="py-6 text-center text-sm text-slate-400">No product sales in this period.</p>
+                  <p className="py-6 text-center text-sm text-muted-foreground">No product sales in this period.</p>
                 ) : (
                   <ResponsiveContainer width="100%" height={220}>
                     <BarChart
@@ -227,13 +227,13 @@ export default function PerformancePage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-card rounded-xl border border-border overflow-hidden">
               <div className="px-5 pt-4 pb-2">
-                <p className="text-sm font-medium text-slate-500">Revenue by shop</p>
+                <p className="text-sm font-medium text-muted-foreground">Revenue by shop</p>
               </div>
               <div className="px-5 pb-5">
                 {data.byShop.length === 0 ? (
-                  <p className="py-6 text-center text-sm text-slate-400">No sales in this period.</p>
+                  <p className="py-6 text-center text-sm text-muted-foreground">No sales in this period.</p>
                 ) : (
                   <ResponsiveContainer width="100%" height={220}>
                     <BarChart

@@ -49,11 +49,11 @@ export default function ExpenseCategoriesPage() {
 
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Expense categories</h1>
-          <p className="text-sm text-slate-500">Manage expense classification</p>
+          <h1 className="text-xl font-bold text-foreground">Expense categories</h1>
+          <p className="text-sm text-muted-foreground">Manage expense classification</p>
         </div>
         <button
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50"
           onClick={() => navigate('/admin/expenses/categories/new')}
         >
           <Plus className="w-4 h-4" />
@@ -61,12 +61,12 @@ export default function ExpenseCategoriesPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="p-4 border-b border-slate-100">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="p-4 border-b border-border">
           <div className="relative max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
-              className="w-full h-9 rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400"
+              className="w-full h-9 rounded-lg border border-border bg-card pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring"
               placeholder="Search categories..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -76,43 +76,43 @@ export default function ExpenseCategoriesPage() {
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-5 h-5 animate-spin text-slate-400" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-muted/40 border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Description</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
                 <th className="px-4 py-3 w-24"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-12 text-center text-sm text-slate-400">No categories found</td>
+                  <td colSpan={4} className="px-4 py-12 text-center text-sm text-muted-foreground">No categories found</td>
                 </tr>
               ) : (
                 filtered.map((cat) => (
-                  <tr key={cat.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 text-sm font-medium text-slate-900">{cat.name}</td>
-                    <td className="px-4 py-3 text-sm text-slate-500">{cat.description ?? '—'}</td>
-                    <td className="px-4 py-3 text-sm text-slate-700">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cat.isActive ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                  <tr key={cat.id} className="hover:bg-muted/40">
+                    <td className="px-4 py-3 text-sm font-medium text-foreground">{cat.name}</td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground">{cat.description ?? '—'}</td>
+                    <td className="px-4 py-3 text-sm text-foreground">
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cat.isActive ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>
                         {cat.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1">
                         <button
-                          className="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                          className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
                           onClick={() => navigate(`/admin/expenses/categories/${cat.id}/edit`)}
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button
-                          className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50"
+                          className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                           onClick={() => deleteMutation.mutate(cat.id)}
                         >
                           <Trash2 className="w-4 h-4" />
