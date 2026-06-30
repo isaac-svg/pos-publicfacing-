@@ -21,6 +21,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage'
 // Admin - existing pages
 import AdminDashboardPage from './pages/admin/DashboardPage'
 import ProductsPage from './pages/admin/products/ProductsPage'
+import ProductFormPage from './pages/admin/products/ProductFormPage'
 import CategoriesPage from './pages/admin/products/CategoriesPage'
 import InventoryPage from './pages/admin/InventoryPage'
 import ReportsPage from './pages/admin/ReportsPage'
@@ -94,6 +95,8 @@ export default function App() {
 
             {/* Inventory */}
             <Route path="/products"             element={<G><ProductsPage /></G>} />
+            <Route path="/products/new"         element={<G><ProductFormPage /></G>} />
+            <Route path="/products/:id/edit"    element={<G><ProductFormPage /></G>} />
             <Route path="/products/categories"  element={<G><CategoriesPage /></G>} />
             <Route path="/inventory"            element={<G><InventoryPage /></G>} />
 
