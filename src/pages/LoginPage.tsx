@@ -60,9 +60,10 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500">
-          Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline">Sign up</Link>
-        </p>
+        <div className="flex items-center justify-between text-sm text-gray-500">
+          <p>Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline">Sign up</Link></p>
+          <Link to="/forgot-password" className="text-blue-600 hover:underline">Forgot password?</Link>
+        </div>
       </div>
     </div>
   )

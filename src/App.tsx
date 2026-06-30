@@ -14,6 +14,8 @@ import VerifyOtpPage from './pages/VerifyOtpPage'
 import LoginPage from './pages/LoginPage'
 import SelectPlanPage from './pages/SelectPlanPage'
 import PendingPage from './pages/PendingPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 // Admin pages
 import AdminDashboardPage from './pages/admin/DashboardPage'
@@ -60,6 +62,8 @@ export default function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/verify-otp" element={<VerifyOtpPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/select-plan" element={<ProtectedRoute><SelectPlanPage /></ProtectedRoute>} />
           <Route path="/pending" element={<ProtectedRoute><PendingPage /></ProtectedRoute>} />
 
