@@ -146,54 +146,56 @@ export const shopsApi = {
 }
 
 // ── Expenses ─────────────────────────────────────────────────────────────────
+const d = (p: Promise<{ data: { data: unknown } }>): Promise<any> => p.then(r => (r as { data: { data: unknown } }).data.data)
+
 export const expensesApi = {
-  list: (p?: { status?: string; categoryId?: number }) => w(api.get('/api/v1/expenses', { params: p })),
-  approve: (id: number, action: 'approved' | 'rejected', rejectReason?: string) =>
-    w(api.patch(`/api/v1/expenses/${id}/approve`, { action, rejectReason })),
+  list: (p?: { status?: string; categoryId?: number }): Promise<any[]> => d(api.get('/api/v1/expenses', { params: p })),
+  approve: (id: number, action: 'approved' | 'rejected', rejectReason?: string): Promise<any> =>
+    d(api.patch(`/api/v1/expenses/${id}/approve`, { action, rejectReason })),
   delete: (id: number) => api.delete(`/api/v1/expenses/${id}`),
-  listRecurring: () => w(api.get('/api/v1/expenses/recurring')),
-  createRecurring: (d: Record<string, unknown>) => w(api.post('/api/v1/expenses/recurring', d)),
-  updateRecurring: (id: number, d: Record<string, unknown>) => w(api.patch(`/api/v1/expenses/recurring/${id}`, d)),
+  listRecurring: (): Promise<any[]> => d(api.get('/api/v1/expenses/recurring')),
+  createRecurring: (dto: Record<string, unknown>): Promise<any> => d(api.post('/api/v1/expenses/recurring', dto)),
+  updateRecurring: (id: number, dto: Record<string, unknown>): Promise<any> => d(api.patch(`/api/v1/expenses/recurring/${id}`, dto)),
   deleteRecurring: (id: number) => api.delete(`/api/v1/expenses/recurring/${id}`),
 }
 
 export const expenseCategoriesApi = {
-  list: (p?: { include_inactive?: boolean }) => w(api.get('/api/v1/expense-categories', { params: p })),
+  list: (p?: { include_inactive?: boolean }): Promise<any[]> => d(api.get('/api/v1/expense-categories', { params: p })),
   delete: (id: number) => api.delete(`/api/v1/expense-categories/${id}`),
 }
 
 // ── Suppliers ─────────────────────────────────────────────────────────────────
 export const suppliersApi = {
-  list: (p?: { include_deleted?: boolean }) => w(api.get('/api/v1/suppliers', { params: p })),
+  list: (p?: { include_deleted?: boolean }): Promise<any[]> => d(api.get('/api/v1/suppliers', { params: p })),
   delete: (id: number) => api.delete(`/api/v1/suppliers/${id}`),
 }
 
 // ── Cash Registers ────────────────────────────────────────────────────────────
 export const registersApi = {
-  listRegisters: (p?: { shopId?: number }) => w(api.get('/api/v1/cash-registers', { params: p })),
+  listRegisters: (p?: { shopId?: number }): Promise<any[]> => d(api.get('/api/v1/cash-registers', { params: p })),
   deleteRegister: (id: number) => api.delete(`/api/v1/cash-registers/${id}`),
-  openSession: (d: Record<string, unknown>) => w(api.post('/api/v1/cash-registers/sessions/open', d)),
-  listSessions: (p?: Record<string, unknown>) => w(api.get('/api/v1/cash-registers/sessions/list', { params: p })),
-  getRegisterHistory: (id: number, p?: Record<string, unknown>) => w(api.get(`/api/v1/cash-registers/reports/register/${id}`, { params: p })),
-  getCashierReport: (id: number, p?: Record<string, unknown>) => w(api.get(`/api/v1/cash-registers/reports/cashier/${id}`, { params: p })),
-  getEndOfDayReport: (p: Record<string, unknown>) => w(api.get('/api/v1/cash-registers/reports/end-of-day', { params: p })),
+  openSession: (dto: Record<string, unknown>): Promise<any> => d(api.post('/api/v1/cash-registers/sessions/open', dto)),
+  listSessions: (p?: Record<string, unknown>): Promise<any[]> => d(api.get('/api/v1/cash-registers/sessions/list', { params: p })),
+  getRegisterHistory: (id: number, p?: Record<string, unknown>): Promise<any> => d(api.get(`/api/v1/cash-registers/reports/register/${id}`, { params: p })),
+  getCashierReport: (id: number, p?: Record<string, unknown>): Promise<any> => d(api.get(`/api/v1/cash-registers/reports/cashier/${id}`, { params: p })),
+  getEndOfDayReport: (p: Record<string, unknown>): Promise<any> => d(api.get('/api/v1/cash-registers/reports/end-of-day', { params: p })),
 }
 
 // ── Payment Accounts ─────────────────────────────────────────────────────────
 export const accountsApi = {
-  list: (p?: { include_inactive?: boolean }) => w(api.get('/api/v1/accounts', { params: p })),
+  list: (p?: { include_inactive?: boolean }): Promise<any[]> => d(api.get('/api/v1/accounts', { params: p })),
   delete: (id: number) => api.delete(`/api/v1/accounts/${id}`),
-  getBalance: (id: number) => w(api.get(`/api/v1/accounts/${id}/balance`)),
-  transfer: (d: Record<string, unknown>) => w(api.post('/api/v1/accounts/transfer', d)),
-  getGeneralLedger: (p?: Record<string, unknown>) => w(api.get('/api/v1/accounts/reports/general-ledger', { params: p })),
-  getCashflowReport: () => w(api.get('/api/v1/accounts/reports/cashflow')),
-  getBalanceSheet: () => w(api.get('/api/v1/accounts/reports/balance-sheet')),
-  getTrialBalance: () => w(api.get('/api/v1/accounts/reports/trial-balance')),
+  getBalance: (id: number): Promise<any> => d(api.get(`/api/v1/accounts/${id}/balance`)),
+  transfer: (dto: Record<string, unknown>): Promise<any> => d(api.post('/api/v1/accounts/transfer', dto)),
+  getGeneralLedger: (p?: Record<string, unknown>): Promise<any[]> => d(api.get('/api/v1/accounts/reports/general-ledger', { params: p })),
+  getCashflowReport: (): Promise<any> => d(api.get('/api/v1/accounts/reports/cashflow')),
+  getBalanceSheet: (): Promise<any> => d(api.get('/api/v1/accounts/reports/balance-sheet')),
+  getTrialBalance: (): Promise<any> => d(api.get('/api/v1/accounts/reports/trial-balance')),
 }
 
 // ── Performance chart ─────────────────────────────────────────────────────────
 export const performanceApi = {
-  chart: (period: string) => w(api.get('/api/v1/reports/chart', { params: { period } })),
+  chart: (period: string): Promise<any> => d(api.get('/api/v1/reports/chart', { params: { period } })),
 }
 
 // ── Settings ────────────────────────────────────────────────────────────────
