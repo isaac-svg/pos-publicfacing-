@@ -74,8 +74,8 @@ export default function ProductsPage() {
                   <td className="px-4 py-2 text-right">{p.wholesaleQty}</td>
                   <td className="px-4 py-2">
                     <div className="flex gap-1">
-                      <a href={`/products/${p.id}/edit`} className="p-1 text-muted-foreground hover:text-muted-foreground"><Pencil className="h-3.5 w-3.5" /></a>
-                      <button onClick={() => deleteMutation.mutate(p.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                      <a href={`/products/${p.id}/edit`} title="Edit product" className="p-1 text-muted-foreground hover:text-muted-foreground"><Pencil className="h-3.5 w-3.5" /></a>
+                      <button title="Delete product" onClick={() => deleteMutation.mutate(p.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
                     </div>
                   </td>
                 </tr>

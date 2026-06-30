@@ -97,7 +97,7 @@ export default function SubscriptionPage() {
             </div>
             <div className="bg-muted/40 rounded-lg p-3">
               <p className="text-xs text-muted-foreground">Shops</p>
-              <p className="font-semibold text-foreground">{sub.shopLimit ?? '—'}</p>
+              <p className="font-semibold text-foreground">{sub.shopLimit ?? '-'}</p>
             </div>
             <div className="bg-muted/40 rounded-lg p-3">
               <p className="text-xs text-muted-foreground">Employees</p>

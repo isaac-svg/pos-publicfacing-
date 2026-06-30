@@ -186,7 +186,7 @@ export const TRIAL_OFFER = {
     {
       title: 'Done-For-You Stock Upload',
       description:
-        'Send us your Excel sheets or paper invoices—our team will upload your entire stock list for you during your trial.',
+        'Send us your Excel sheets or paper invoices-our team will upload your entire stock list for you during your trial.',
     },
     {
       title: 'Free Staff Training',

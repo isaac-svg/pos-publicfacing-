@@ -132,19 +132,19 @@ export default function AccountsPage() {
                       <div className="flex gap-1">
                         <button
                           className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
-                          onClick={() => navigate(`/admin/accounts/${acc.id}`)}
+                          title="View transactions" onClick={() => navigate(`/admin/accounts/${acc.id}`)}
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
                           className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
-                          onClick={() => navigate(`/admin/accounts/${acc.id}/edit`)}
+                          title="Edit account" onClick={() => navigate(`/admin/accounts/${acc.id}/edit`)}
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button
+                        <button title="Delete account"
                           className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                          onClick={() => deleteMutation.mutate(acc.id)}
+                          title="Delete account" onClick={() => deleteMutation.mutate(acc.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

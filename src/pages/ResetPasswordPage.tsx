@@ -44,7 +44,7 @@ export default function ResetPasswordPage() {
       }
       setPageState('success')
     } catch (err: unknown) {
-      setError((err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Reset failed — the link may have expired.')
+      setError((err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Reset failed - the link may have expired.')
     } finally {
       setLoading(false)
     }
@@ -150,7 +150,7 @@ export default function ResetPasswordPage() {
                   placeholder="At least 8 characters"
                   className="w-full h-10 rounded-lg border border-border bg-card px-3 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring transition-colors"
                 />
-                <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground">
+                <button type="button" title="Show or hide password" onClick={() => setShowPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground">
                   {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>

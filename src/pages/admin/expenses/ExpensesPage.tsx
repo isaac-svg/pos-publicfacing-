@@ -190,7 +190,7 @@ export default function ExpensesPage() {
                       <div className="flex gap-1">
                         {exp.status === 'pending' && (
                           <>
-                            <button
+                            <button title="Approve expense"
                               className="p-1.5 rounded text-muted-foreground hover:text-accent-foreground hover:bg-accent"
                               onClick={() => approveMutation.mutate({ id: exp.id, action: 'approved' })}
                             >
@@ -205,7 +205,7 @@ export default function ExpensesPage() {
                           </>
                         )}
                         {exp.status !== 'approved' && (
-                          <button
+                          <button title="Delete expense"
                             className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                             onClick={() => deleteMutation.mutate(exp.id)}
                           >

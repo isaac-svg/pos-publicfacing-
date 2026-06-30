@@ -163,12 +163,12 @@ export default function RegisterReportsPage() {
                         <div key={s.id} className="flex justify-between px-3 py-2">
                           <span className="text-foreground">{s.cashier.fullName}</span>
                           <span className="text-muted-foreground">Float: {fmt(Number(s.openingFloat))}</span>
-                          <span className="text-muted-foreground">Actual: {s.closingActual ? fmt(Number(s.closingActual)) : '—'}</span>
+                          <span className="text-muted-foreground">Actual: {s.closingActual ? fmt(Number(s.closingActual)) : '-'}</span>
                           <span className={
                             s.varianceType === 'shortage' ? 'text-destructive' :
                             s.varianceType === 'overage' ? 'text-foreground' : 'text-primary'
                           }>
-                            {s.variance != null ? `${Number(s.variance) >= 0 ? '+' : ''}${Number(s.variance).toFixed(2)}` : '—'}
+                            {s.variance != null ? `${Number(s.variance) >= 0 ? '+' : ''}${Number(s.variance).toFixed(2)}` : '-'}
                           </span>
                         </div>
                       ))}

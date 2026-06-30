@@ -34,7 +34,8 @@ export default function TaxPage() {
         <div className="bg-card rounded-lg border border-border p-4 flex items-end gap-3">
           <div className="flex-1 space-y-1">
             <label className="text-sm font-medium">Name</label>
-            <input value={name} onChange={e => setName(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder="e.g. VAT" />
+            <input value={name} onChange={e => setName(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder="e.g. VAT"
+                  title="Short name displayed on receipts" />
           </div>
           <div className="w-24 space-y-1">
             <label className="text-sm font-medium">Rate (%)</label>
@@ -53,7 +54,7 @@ export default function TaxPage() {
                 <span className="text-sm font-medium">{t.name}</span>
                 <span className="ml-2 text-sm text-muted-foreground">{Number(t.rate).toFixed(2)}%</span>
               </div>
-              <button onClick={() => deleteMutation.mutate(t.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
+              <button title="Delete tax" onClick={() => deleteMutation.mutate(t.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
             </div>
           ))}
       </div>

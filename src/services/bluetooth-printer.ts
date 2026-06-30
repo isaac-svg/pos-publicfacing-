@@ -125,7 +125,7 @@ export async function printViaBluetooth(receipt: BluetoothReceiptData): Promise<
 
   const data = buildReceiptBytes(receipt)
 
-  // BLE has a 512-byte MTU limit typically — send in chunks
+  // BLE has a 512-byte MTU limit typically - send in chunks
   const CHUNK_SIZE = 512
   for (let i = 0; i < data.length; i += CHUNK_SIZE) {
     const chunk = data.slice(i, i + CHUNK_SIZE)

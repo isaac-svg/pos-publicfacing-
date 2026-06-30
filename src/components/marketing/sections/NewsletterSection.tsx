@@ -62,7 +62,7 @@ export default function NewsletterSection() {
           Free Tips to Run Your Shop Smarter
         </h2>
         <p className="newsletter-reveal mt-3 text-sm text-slate-500 max-w-md mx-auto">
-          Subscribe to receive free tips, strategies, and insights on how to efficiently run your retail business — straight to your inbox.
+          Subscribe to receive free tips, strategies, and insights on how to efficiently run your retail business - straight to your inbox.
         </p>
 
         {status === 'success' ? (

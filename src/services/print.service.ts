@@ -35,21 +35,21 @@ export const PrintService = {
   async print(receipt: ReceiptPayload, saleId?: number): Promise<PrintResult> {
     const methods = await this.getAvailableMethods()
 
-    // Path 1 — Print bridge (Electron app connected)
+    // Path 1 - Print bridge (Electron app connected)
     if (methods.bridge) {
       return this.printViaBridge(receipt, saleId)
     }
 
-    // Path 2 — Web Bluetooth (Chrome/Edge + BLE printer)
+    // Path 2 - Web Bluetooth (Chrome/Edge + BLE printer)
     if (methods.webBluetooth) {
       try {
         return await this.printViaBluetooth(receipt)
       } catch {
-        // User cancelled pairing or Bluetooth failed — fall through
+        // User cancelled pairing or Bluetooth failed - fall through
       }
     }
 
-    // Path 3 — Browser print dialog (universal fallback)
+    // Path 3 - Browser print dialog (universal fallback)
     return this.printViaBrowser(receipt)
   },
 

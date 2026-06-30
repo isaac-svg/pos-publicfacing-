@@ -51,7 +51,7 @@ export default function UsersPage() {
 
       {created && (
         <div className="bg-accent border border-green-200 rounded-lg p-4 space-y-2">
-          <p className="text-sm font-semibold text-green-800">User created — share these credentials</p>
+          <p className="text-sm font-semibold text-green-800">User created - share these credentials</p>
           <div className="font-mono text-sm bg-card rounded p-2">
             <p>Username: {created.username}</p>
             <p>Password: {created.password}</p>
@@ -77,7 +77,7 @@ export default function UsersPage() {
                 <tr key={u.id} className="hover:bg-background">
                   <td className="px-4 py-2 font-medium">{u.fullName}</td>
                   <td className="px-4 py-2 text-muted-foreground">{u.username}</td>
-                  <td className="px-4 py-2 text-muted-foreground">{u.email ?? '—'}</td>
+                  <td className="px-4 py-2 text-muted-foreground">{u.email ?? '-'}</td>
                   <td className="px-4 py-2 text-center"><span className={`px-2 py-0.5 rounded text-xs ${u.isActive ? 'bg-green-100 text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>{u.isActive ? 'Active' : 'Inactive'}</span></td>
                 </tr>
               ))}

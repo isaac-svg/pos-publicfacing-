@@ -18,7 +18,7 @@ import PendingPage from './pages/PendingPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 
-// Admin — existing pages
+// Admin - existing pages
 import AdminDashboardPage from './pages/admin/DashboardPage'
 import ProductsPage from './pages/admin/products/ProductsPage'
 import CategoriesPage from './pages/admin/products/CategoriesPage'
@@ -38,7 +38,7 @@ import SubscriptionPage from './pages/admin/SubscriptionPage'
 import TopupSmsPage from './pages/admin/TopupSmsPage'
 import TopupCallbackPage from './pages/admin/TopupCallbackPage'
 
-// Admin — new pages
+// Admin - new pages
 import ShopsPage from './pages/admin/ShopsPage'
 import ReturnsPage from './pages/admin/ReturnsPage'
 import SuppliersPage from './pages/admin/SuppliersPage'
@@ -87,7 +87,7 @@ export default function App() {
           <Route path="/select-plan"     element={<ProtectedRoute><SelectPlanPage /></ProtectedRoute>} />
           <Route path="/pending"         element={<ProtectedRoute><PendingPage /></ProtectedRoute>} />
 
-          {/* Admin — all protected + subscription gated */}
+          {/* Admin - all protected + subscription gated */}
           <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
             {/* Overview */}
             <Route path="/dashboard"  element={<G><AdminDashboardPage /></G>} />

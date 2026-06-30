@@ -18,7 +18,7 @@ export default function ForgotPasswordPage() {
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { error?: { message?: string } } } })
         ?.response?.data?.error?.message
-      if (!msg || err === null) { setDone(true); return } // rate limit — still show success
+      if (!msg || err === null) { setDone(true); return } // rate limit - still show success
       setError(msg)
     } finally {
       setLoading(false)

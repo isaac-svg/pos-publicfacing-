@@ -39,7 +39,7 @@ export default function PaymentPage() {
       <div className="bg-card rounded-lg border border-border p-4 space-y-3">
         <div className="space-y-1">
           <label className="text-sm font-medium">Client ID</label>
-          <input type="password" value={clientId} onChange={e => setClientId(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder={c?.clientIdMasked ? 'Saved — type to change' : 'Enter Client ID'} />
+          <input type="password" value={clientId} onChange={e => setClientId(e.target.value)} className="w-full h-9 rounded-md border border-border px-3 text-sm" placeholder={c?.clientIdMasked ? 'Saved - type to change' : 'Enter Client ID'} />
         </div>
         <div className="space-y-1">
           <label className="text-sm font-medium">Client Secret</label>

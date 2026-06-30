@@ -97,7 +97,7 @@ export default function ExpenseCategoriesPage() {
                 filtered.map((cat) => (
                   <tr key={cat.id} className="hover:bg-muted/40">
                     <td className="px-4 py-3 text-sm font-medium text-foreground">{cat.name}</td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">{cat.description ?? '—'}</td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground">{cat.description ?? '-'}</td>
                     <td className="px-4 py-3 text-sm text-foreground">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cat.isActive ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>
                         {cat.isActive ? 'Active' : 'Inactive'}
@@ -107,13 +107,13 @@ export default function ExpenseCategoriesPage() {
                       <div className="flex gap-1">
                         <button
                           className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
-                          onClick={() => navigate(`/admin/expenses/categories/${cat.id}/edit`)}
+                          title="Edit category" onClick={() => navigate(`/admin/expenses/categories/${cat.id}/edit`)}
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button
+                        <button title="Delete category"
                           className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                          onClick={() => deleteMutation.mutate(cat.id)}
+                          title="Delete category" onClick={() => deleteMutation.mutate(cat.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

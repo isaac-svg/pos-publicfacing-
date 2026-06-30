@@ -151,8 +151,8 @@ export default function RegistersPage() {
                 filtered.map((r) => (
                   <tr key={r.id} className="hover:bg-muted/40">
                     <td className="px-4 py-3 text-sm font-medium text-foreground">{r.name}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{r.code ?? '—'}</td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">{r.shop?.name ?? '—'}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{r.code ?? '-'}</td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground">{r.shop?.name ?? '-'}</td>
                     <td className="px-4 py-3 text-sm text-foreground">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${r.isActive ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>
                         {r.isActive ? 'Active' : 'Inactive'}
@@ -171,13 +171,13 @@ export default function RegistersPage() {
                         )}
                         <button
                           className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
-                          onClick={() => navigate(`/admin/registers/${r.id}/edit`)}
+                          title="Edit register" onClick={() => navigate(`/admin/registers/${r.id}/edit`)}
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button
+                        <button title="Delete register"
                           className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                          onClick={() => deleteMutation.mutate(r.id)}
+                          title="Delete register" onClick={() => deleteMutation.mutate(r.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -195,7 +195,7 @@ export default function RegistersPage() {
       {openSessionFor && (
         <div className="bg-card rounded-xl border border-border p-5 space-y-4">
           <p className="text-sm font-semibold text-foreground">
-            Open Register Session — {registers.find((r) => r.id === openSessionFor)?.name}
+            Open Register Session - {registers.find((r) => r.id === openSessionFor)?.name}
           </p>
           <div className="grid grid-cols-2 gap-3">
             <div>

@@ -92,7 +92,7 @@ export default function LoginPage() {
         email: identifier.trim(),
         password,
       })
-    } catch { /* ignore — code already sent */ }
+    } catch { /* ignore - code already sent */ }
   }
 
   return (
@@ -120,7 +120,7 @@ export default function LoginPage() {
 
               {verified && (
                 <div className="rounded-lg bg-accent/50 border border-accent px-4 py-3 text-sm text-accent-foreground">
-                  Email verified — you can now log in.
+                  Email verified - you can now log in.
                 </div>
               )}
               {error && (
@@ -160,6 +160,7 @@ export default function LoginPage() {
                     />
                     <button
                       type="button"
+                      title="Show or hide password"
                       onClick={() => setShowPw(v => !v)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     >

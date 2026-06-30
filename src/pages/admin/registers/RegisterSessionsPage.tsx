@@ -123,19 +123,19 @@ export default function RegisterSessionsPage() {
                     <td className="px-4 py-3 text-sm font-medium text-foreground">{s.register.name}</td>
                     <td className="px-4 py-3 text-sm text-foreground">{s.cashier.fullName}</td>
                     <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(s.openedAt).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground">{s.closedAt ? new Date(s.closedAt).toLocaleString() : '—'}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{s.closedAt ? new Date(s.closedAt).toLocaleString() : '-'}</td>
                     <td className="px-4 py-3 text-right text-sm text-foreground">
                       GH₵ {Number(s.openingFloat).toLocaleString('en-GH', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-4 py-3 text-right text-sm text-foreground">
                       {s.closingActual
                         ? `GH₵ ${Number(s.closingActual).toLocaleString('en-GH', { minimumFractionDigits: 2 })}`
-                        : '—'}
+                        : '-'}
                     </td>
                     <td className={`px-4 py-3 text-right text-sm font-medium ${VARIANCE_CLASS[s.varianceType ?? ''] ?? ''}`}>
                       {s.variance != null
                         ? `${Number(s.variance) >= 0 ? '+' : ''}GH₵ ${Math.abs(Number(s.variance)).toLocaleString('en-GH', { minimumFractionDigits: 2 })}`
-                        : '—'}
+                        : '-'}
                     </td>
                     <td className="px-4 py-3 text-sm text-foreground">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${s.status === 'open' ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>

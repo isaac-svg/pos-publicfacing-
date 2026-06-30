@@ -73,7 +73,7 @@ export default function ContactSection() {
               Got a Question? We're Here.
             </h2>
             <p className="contact-reveal mt-3 text-sm text-slate-500 leading-relaxed">
-              Whether you need help getting started, have a feature request, or just want to chat about how Shepherd can work for your shop — drop us a message. Our team responds fast.
+              Whether you need help getting started, have a feature request, or just want to chat about how Shepherd can work for your shop - drop us a message. Our team responds fast.
             </p>
 
             <div className="contact-reveal mt-8 space-y-4">

@@ -109,7 +109,7 @@ export default function PricingSection() {
 
                 {annual && (
                   <p className="text-xs text-green-600 mt-1">
-                    GH₵{tier.annualPrice.toLocaleString()}/yr — Save GH₵
+                    GH₵{tier.annualPrice.toLocaleString()}/yr - Save GH₵
                     {(tier.monthlyPrice * 12 - tier.annualPrice).toLocaleString()}
                   </p>
                 )}

@@ -76,7 +76,7 @@ export default function AdminDashboardPage() {
                   <td className="px-4 py-2">
                     <span className="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-accent-foreground">{s.status ?? 'completed'}</span>
                   </td>
-                  <td className="px-4 py-2 text-muted-foreground text-xs">{s.createdAt ? new Date(s.createdAt).toLocaleTimeString() : '—'}</td>
+                  <td className="px-4 py-2 text-muted-foreground text-xs">{s.createdAt ? new Date(s.createdAt).toLocaleTimeString() : '-'}</td>
                 </tr>
               ))}
               {todaySales.length === 0 && (

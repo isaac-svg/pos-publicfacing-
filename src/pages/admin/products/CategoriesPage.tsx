@@ -46,7 +46,7 @@ export default function CategoriesPage() {
         ) : (categories as { id: number; name: string; isActive: boolean }[]).map(c => (
           <div key={c.id} className="flex items-center justify-between px-4 py-3">
             <span className="text-sm font-medium">{c.name}</span>
-            <button onClick={() => deleteMutation.mutate(c.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
+            <button title="Delete category" onClick={() => deleteMutation.mutate(c.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
           </div>
         ))}
       </div>

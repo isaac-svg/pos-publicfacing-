@@ -32,7 +32,7 @@ export default function CreditAccountsPage() {
               list.length === 0 ? <tr><td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">No accounts</td></tr> :
               list.map(a => (
                 <tr key={a.id} className="hover:bg-background">
-                  <td className="px-4 py-2 font-medium">{a.customer?.fullName ?? '—'}</td>
+                  <td className="px-4 py-2 font-medium">{a.customer?.fullName ?? '-'}</td>
                   <td className="px-4 py-2 text-right">GH₵{Number(a.totalDue).toFixed(2)}</td>
                   <td className="px-4 py-2 text-right">GH₵{Number(a.balanceRemaining).toFixed(2)}</td>
                   <td className="px-4 py-2 text-center"><span className={`px-2 py-0.5 rounded text-xs capitalize ${a.status === 'active' ? 'bg-green-100 text-accent-foreground' : a.status === 'defaulted' ? 'bg-red-100 text-destructive' : 'bg-muted'}`}>{a.status}</span></td>

@@ -44,7 +44,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3 text-sm text-amber-800">
               <span className="text-lg shrink-0">🎁</span>
               <span>
-                You're on a <strong>free trial</strong> — {sub.trialDaysRemaining != null
+                You're on a <strong>free trial</strong> - {sub.trialDaysRemaining != null
                   ? <>{sub.trialDaysRemaining} day{sub.trialDaysRemaining !== 1 ? 's' : ''} remaining</>
                   : <>ends {new Date(sub.trialEndsAt!).toLocaleDateString()}</>
                 }. All features are unlocked.

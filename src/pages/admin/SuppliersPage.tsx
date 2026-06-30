@@ -124,8 +124,8 @@ export default function SuppliersPage() {
                     <td className="px-4 py-3 text-sm text-foreground">
                       <span className={`font-medium ${s.isDeleted ? 'text-muted-foreground line-through' : ''}`}>{s.name}</span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">{s.companyName ?? '—'}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-foreground">{s.phone ?? '—'}</td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground">{s.companyName ?? '-'}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-foreground">{s.phone ?? '-'}</td>
                     <td className="px-4 py-3 text-sm">
                       <span className={`font-mono font-semibold ${s.currentBalance > 0 ? 'text-destructive' : 'text-foreground'}`}>
                         {s.currentBalance > 0 ? '+' : ''}GH₵ {Number(s.currentBalance).toLocaleString('en-GH', { minimumFractionDigits: 2 })}
@@ -147,7 +147,7 @@ export default function SuppliersPage() {
                           >
                             <Pencil className="w-3.5 h-3.5" />
                           </button>
-                          <button
+                          <button title="Delete supplier"
                             className="p-1.5 rounded text-red-400 hover:text-destructive hover:bg-destructive/10"
                             onClick={(e) => { e.stopPropagation(); setDeleteTarget(s) }}
                           >

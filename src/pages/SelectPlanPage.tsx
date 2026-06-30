@@ -77,7 +77,7 @@ export default function SelectPlanPage() {
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="text-center space-y-4">
           <h1 className="text-3xl font-bold">Choose your plan</h1>
-          <p className="text-muted-foreground">Start with a free trial — no card required</p>
+          <p className="text-muted-foreground">Start with a free trial - no card required</p>
 
           {/* Billing toggle */}
           <div className="inline-flex items-center bg-muted rounded-full p-1">
@@ -112,7 +112,7 @@ export default function SelectPlanPage() {
 
         <div className="bg-muted border border-amber-200 rounded-lg px-4 py-3 flex items-center gap-3 text-sm text-amber-800">
           <span className="text-lg">🎁</span>
-          <span>Start with a <strong>{trialDays}-day free trial</strong> — every feature unlocked, no card required. After {trialDays} days you move to the Free plan automatically.</span>
+          <span>Start with a <strong>{trialDays}-day free trial</strong> - every feature unlocked, no card required. After {trialDays} days you move to the Free plan automatically.</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -139,7 +139,7 @@ export default function SelectPlanPage() {
                   </div>
                   {!isFree && billingCycle === 'annual' && (
                     <p className="text-xs text-accent-foreground font-medium">
-                      GH₵ {plan.priceAnnual.toLocaleString()}/yr — save GH₵ {(plan.priceMonthly * 12 - plan.priceAnnual).toLocaleString()}
+                      GH₵ {plan.priceAnnual.toLocaleString()}/yr - save GH₵ {(plan.priceMonthly * 12 - plan.priceAnnual).toLocaleString()}
                     </p>
                   )}
                   {!isFree && billingCycle === 'monthly' && plan.priceAnnual > 0 && (
@@ -176,7 +176,7 @@ export default function SelectPlanPage() {
                     ? isFree ? 'Starting…' : 'Redirecting to payment…'
                     : isFree
                       ? 'Start Free Trial'
-                      : `Pay GH₵ ${price.total.toLocaleString()} — ${plan.name}`
+                      : `Pay GH₵ ${price.total.toLocaleString()} - ${plan.name}`
                   }
                 </button>
               </div>
@@ -186,7 +186,7 @@ export default function SelectPlanPage() {
 
         {smsAddons.length > 0 && (
           <div>
-            <p className="text-sm font-medium text-muted-foreground mb-2">SMS add-ons — Growth and above</p>
+            <p className="text-sm font-medium text-muted-foreground mb-2">SMS add-ons - Growth and above</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {smsAddons.map(addon => (
                 <div key={addon.id} className="bg-card rounded-lg border border-border p-3">
@@ -203,7 +203,7 @@ export default function SelectPlanPage() {
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-md bg-gray-200 flex items-center justify-center text-muted-foreground text-lg shrink-0">🏢</div>
             <div>
-              <p className="text-sm font-semibold">Enterprise — custom pricing</p>
+              <p className="text-sm font-semibold">Enterprise - custom pricing</p>
               <p className="text-xs text-muted-foreground">Unlimited shops, custom SMS volumes, SLA agreement, multi-tenant architecture, and dedicated engineering support.</p>
             </div>
           </div>

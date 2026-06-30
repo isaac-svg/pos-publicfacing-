@@ -205,7 +205,7 @@ export default function RecurringExpensesPage() {
                     <td className="px-4 py-3 text-sm text-foreground max-w-[200px] truncate">{re.description}</td>
                     <td className="px-4 py-3 text-xs text-foreground capitalize">{re.frequency}</td>
                     <td className="px-4 py-3 text-xs text-foreground">
-                      {re.dayOfMonth != null ? `Day ${re.dayOfMonth}` : re.dayOfWeek != null ? `Day ${re.dayOfWeek}` : '—'}
+                      {re.dayOfMonth != null ? `Day ${re.dayOfMonth}` : re.dayOfWeek != null ? `Day ${re.dayOfWeek}` : '-'}
                     </td>
                     <td className="px-4 py-3 text-xs text-foreground capitalize">{re.paymentMethod.replace('_', ' ')}</td>
                     <td className="px-4 py-3 text-sm text-foreground">
@@ -218,16 +218,16 @@ export default function RecurringExpensesPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1">
-                        <button className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted" onClick={() => openEdit(re)}>
+                        <button title="Edit" className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted" onClick={() => openEdit(re)}>
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button
+                        <button title="Toggle active/paused"
                           className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted"
                           onClick={() => toggleMutation.mutate({ id: re.id, isActive: !re.isActive })}
                         >
                           <Play className={`w-4 h-4 ${re.isActive ? 'text-muted-foreground' : 'text-primary'}`} />
                         </button>
-                        <button className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => deleteMutation.mutate(re.id)}>
+                        <button title="Delete" className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => deleteMutation.mutate(re.id)}>
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>

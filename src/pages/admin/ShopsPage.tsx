@@ -96,14 +96,14 @@ export default function ShopsPage() {
               {shops.map(shop => (
                 <tr key={shop.id} className="hover:bg-muted/40">
                   <td className="px-4 py-3 font-medium text-foreground">{shop.name}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{shop.address ?? '—'}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{shop.address ?? '-'}</td>
                   <td className="px-4 py-3">
                     <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${shop.isActive ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'}`}>
                       {shop.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <button onClick={() => setModal({ open: true, shop })} className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted">
+                    <button title="Edit shop" onClick={() => setModal({ open: true, shop })} className="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted">
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
                   </td>
