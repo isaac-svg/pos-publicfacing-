@@ -22,7 +22,7 @@ api.interceptors.response.use(r => r, err => {
   return Promise.reject(err)
 })
 
-const w = <T,>(p: Promise<{ data: { data: T } }>) => p.then(r => r.data.data)
+const w = (p: Promise<unknown>): Promise<any> => (p as Promise<{ data: { data: unknown } }>).then(r => r.data.data)
 
 // ── Auth ────────────────────────────────────────────────────────────────────
 export const authApi = {
