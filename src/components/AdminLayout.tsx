@@ -258,7 +258,7 @@ export default function AdminLayout() {
                   <button
                     key={item.to}
                     onClick={() => handleNav(item.to, item)}
-                    title={sidebarCollapsed ? item.label : undefined}
+                    title={locked ? `Upgrade to ${item.requiredPlan} to unlock ${item.label}` : sidebarCollapsed ? item.label : undefined}
                     className={cn(
                       'flex w-full items-center gap-3 mx-1 px-2.5 py-1.5 text-sm rounded-md transition-colors',
                       sidebarCollapsed ? 'justify-center' : '',
@@ -269,7 +269,6 @@ export default function AdminLayout() {
                         : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                     )}
                     style={{ width: 'calc(100% - 8px)' }}
-                    title={locked ? `Upgrade to ${item.requiredPlan} to access ${item.label}` : undefined}
                   >
                     {locked
                       ? <Lock className="h-4 w-4 shrink-0 opacity-50" />
