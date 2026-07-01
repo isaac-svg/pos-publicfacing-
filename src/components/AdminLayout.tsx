@@ -175,7 +175,8 @@ export default function AdminLayout() {
     setOpenSections(prev => ({ ...prev, [heading]: !prev[heading] }))
   }, [])
 
-  const currentPlan = subscription?.plan ?? sub?.plan ?? 'free'
+  // sub?.plan is always live from the API; subscription?.plan may be stale from login
+  const currentPlan = sub?.plan ?? subscription?.plan ?? 'free'
 
   function handleNav(to: string, item?: NavItem) {
     // Expired / suspended — block with gate modal
