@@ -9,7 +9,7 @@ export default function ForgotPasswordPage() {
   const navigate = useNavigate()
   const [step, setStep] = useState<Step>('identifier')
   const [identifier, setIdentifier] = useState('')
-  const [channel, setChannel] = useState<'sms' | 'email'>('sms')
+  const [_channel, setChannel] = useState<'sms' | 'email'>('sms')
   const [hint, setHint] = useState('')
   const [otp, setOtp] = useState('')
   const [resetToken, setResetToken] = useState('')
