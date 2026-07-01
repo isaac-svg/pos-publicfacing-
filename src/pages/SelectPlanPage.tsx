@@ -127,9 +127,10 @@ export default function SelectPlanPage() {
                 )}
                 <div>
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                    plan.id === 'free' ? 'bg-muted text-muted-foreground' :
-                    plan.id === 'growth' ? 'bg-blue-50 text-blue-700' :
-                    plan.id === 'pro' ? 'bg-emerald-50 text-accent-foreground' :
+                    plan.id === 'free'   ? 'bg-muted text-muted-foreground' :
+                    plan.id === 'solo'   ? 'bg-secondary/20 text-foreground' :
+                    plan.id === 'growth' ? 'bg-primary/10 text-primary' :
+                    plan.id === 'vip'    ? 'bg-amber-100 text-amber-700' :
                     'bg-muted text-foreground'
                   }`}>{plan.name}</span>
                 </div>
@@ -167,9 +168,10 @@ export default function SelectPlanPage() {
                   onClick={() => selectPlan(plan.id)}
                   disabled={selecting !== null}
                   className={`w-full h-9 rounded-md text-sm font-medium transition disabled:opacity-50 ${
-                    popular
-                      ? 'bg-blue-600 text-white hover:bg-blue-700'
-                      : 'border border-gray-300 text-foreground hover:bg-background'
+                    plan.id === 'vip'    ? 'bg-amber-600 text-white hover:bg-amber-700' :
+                    plan.id === 'growth' ? 'bg-primary text-primary-foreground hover:bg-primary/90' :
+                    plan.id === 'solo'   ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90' :
+                    'border border-border text-foreground hover:bg-muted/40'
                   }`}
                 >
                   {selecting === plan.id

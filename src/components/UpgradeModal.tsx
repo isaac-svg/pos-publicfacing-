@@ -10,21 +10,21 @@ interface Plan {
 }
 
 const PLAN_ICONS: Record<string, React.ReactNode> = {
-  growth:   <Zap className="w-4 h-4" />,
-  pro:      <Star className="w-4 h-4" />,
-  business: <Building2 className="w-4 h-4" />,
+  solo:   <Zap className="w-4 h-4" />,
+  growth: <Star className="w-4 h-4" />,
+  vip:    <Building2 className="w-4 h-4" />,
 }
 
 const PLAN_ACCENT: Record<string, string> = {
-  growth:   'border-primary/40 bg-primary/5',
-  pro:      'border-emerald-400/40 bg-emerald-50',
-  business: 'border-amber-400/40 bg-amber-50',
+  solo:   'border-border bg-background',
+  growth: 'border-primary/40 bg-primary/5',
+  vip:    'border-amber-400/40 bg-amber-50',
 }
 
 const PLAN_BUTTON: Record<string, string> = {
-  growth:   'bg-primary text-primary-foreground hover:bg-primary/90',
-  pro:      'bg-emerald-600 text-white hover:bg-emerald-700',
-  business: 'bg-amber-600 text-white hover:bg-amber-700',
+  solo:   'bg-secondary text-secondary-foreground hover:bg-secondary/90',
+  growth: 'bg-primary text-primary-foreground hover:bg-primary/90',
+  vip:    'bg-amber-600 text-white hover:bg-amber-700',
 }
 
 function fmt(n: number) {
@@ -130,7 +130,11 @@ export function UpgradeModal({ onClose }: { onClose: () => void }) {
 
                 {/* Name + icon */}
                 <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${plan.popular ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                  plan.id === 'vip' ? 'bg-amber-600 text-white' :
+                  plan.id === 'growth' ? 'bg-primary text-primary-foreground' :
+                  'bg-muted text-muted-foreground'
+                }`}>
                     {PLAN_ICONS[plan.id]}
                   </div>
                   <span className="font-bold text-foreground">{plan.name}</span>
