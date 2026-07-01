@@ -1,3 +1,6 @@
+// Feature gating is handled by the sidebar (AdminLayout) and FeatureGateModal.
+// This component no longer blocks page rendering — it only opens the gate for
+// suspended or explicitly blocked accounts.
 import { useEffect } from 'react'
 import { useSubscriptionStatus } from '../hooks/useSubscriptionStatus'
 import { useActivationGate } from '../store/activationGate'
@@ -7,18 +10,11 @@ export function RequireActiveSubscription({ children }: { children: React.ReactN
   const { open } = useActivationGate()
 
   useEffect(() => {
-    if (!isLoading && sub?.status !== 'active' && sub?.status !== 'trial') {
+    if (!isLoading && (sub?.status === 'suspended')) {
       open()
     }
   }, [isLoading, sub?.status, open])
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center h-64 text-gray-400 text-sm">Loading…</div>
-  }
-
-  if (sub?.status !== 'active' && sub?.status !== 'trial') {
-    return <div className="h-screen" />
-  }
-
+  // Always render children — feature access is controlled by FeatureGateModal in the sidebar
   return <>{children}</>
 }

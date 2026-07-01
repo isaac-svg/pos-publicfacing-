@@ -15,7 +15,8 @@ export function ActivationGateModal() {
   const [showPlans, setShowPlans] = useState(false)
 
   if (!isOpen) return null
-  if (sub?.status === 'trial' || sub?.status === 'active') return null
+  // Only show for suspended accounts; everything else navigates freely with feature gating
+  if (sub?.status !== 'suspended') return null
 
   const isSuspended     = sub?.status === 'suspended'
   const isPendingPayment = sub?.status === 'pending_payment'
@@ -57,7 +58,7 @@ export function ActivationGateModal() {
 
         {/* Support fallback */}
         <div className="rounded-lg bg-muted/40 border border-border px-4 py-3 text-sm space-y-1">
-          <p className="font-medium text-foreground text-xs uppercase tracking-wide text-muted-foreground">Need help?</p>
+          <p className="font-medium text-xs uppercase tracking-wide text-muted-foreground">Need help?</p>
           <p className="text-muted-foreground">📞 {SUPPORT_PHONE}</p>
           <p className="text-muted-foreground">✉️ {SUPPORT_EMAIL}</p>
         </div>
