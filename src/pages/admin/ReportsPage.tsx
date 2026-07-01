@@ -15,7 +15,19 @@ export default function ReportsPage() {
     enabled: !!from && !!to,
   })
 
-  const r = report as { summary?: { totalRevenue: number; totalCost: number; totalProfit: number; totalTransactions: number; totalItemsSold: number }; byProduct?: { name: string; revenue: number; quantity: number; profit: number }[]; chartData?: { date: string; revenue: number }[] } | undefined
+  type ReportData = { summary?: { totalRevenue: string | number; totalCost: string | number; totalProfit: string | number; totalTransactions: number; totalItemsSold: number }; byProduct?: { name: string; revenue: string | number; quantity: number; profit: string | number }[]; chartData?: { date: string; revenue: string | number }[] }
+  const raw = report as ReportData | undefined
+  const r = raw ? {
+    ...raw,
+    summary: raw.summary ? {
+      ...raw.summary,
+      totalRevenue: Number(raw.summary.totalRevenue),
+      totalCost: Number(raw.summary.totalCost),
+      totalProfit: Number(raw.summary.totalProfit),
+    } : undefined,
+    byProduct: raw.byProduct?.map(p => ({ ...p, revenue: Number(p.revenue), profit: Number(p.profit) })),
+    chartData: raw.chartData?.map(d => ({ ...d, revenue: Number(d.revenue) })),
+  } : undefined
 
   function exportCsv() {
     if (!r?.byProduct) return

@@ -31,6 +31,7 @@ import CreditAccountsPage from './pages/admin/credit/AccountsPage'
 import CreditReportsPage from './pages/admin/credit/CreditReportsPage'
 import CreditSettingsPage from './pages/admin/credit/CreditSettingsPage'
 import UsersPage from './pages/admin/users/UsersPage'
+import UserFormPage from './pages/admin/users/UserFormPage'
 import RolesPage from './pages/admin/users/RolesPage'
 import SettingsPage from './pages/admin/settings/SettingsPage'
 import TaxPage from './pages/admin/settings/TaxPage'
@@ -102,8 +103,10 @@ export default function App() {
 
             {/* Shops & Staff */}
             <Route path="/shops"      element={<G><ShopsPage /></G>} />
-            <Route path="/users"      element={<G><UsersPage /></G>} />
-            <Route path="/users/roles" element={<G><RolesPage /></G>} />
+            <Route path="/users"           element={<G><UsersPage /></G>} />
+            <Route path="/users/new"       element={<G><UserFormPage /></G>} />
+            <Route path="/users/:id/edit"  element={<G><UserFormPage /></G>} />
+            <Route path="/users/roles"     element={<G><RolesPage /></G>} />
 
             {/* Transactions */}
             <Route path="/returns"     element={<G><ReturnsPage /></G>} />

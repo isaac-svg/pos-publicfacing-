@@ -5,7 +5,7 @@ import { Loader2, Eye, EyeOff, Check } from 'lucide-react'
 
 export default function SignupPage() {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ businessName: '', email: '', phone: '', password: '', confirm: '' })
+  const [form, setForm] = useState({ businessName: '', shopName: '', email: '', phone: '', password: '', confirm: '' })
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -23,6 +23,7 @@ export default function SignupPage() {
     try {
       const res = await api.post('/api/v1/business/signup', {
         businessName: form.businessName,
+        shopName: form.shopName.trim() || undefined,
         ownerEmail: form.email || undefined,
         ownerPhone: form.phone,
         password: form.password,
@@ -75,6 +76,17 @@ export default function SignupPage() {
                 onChange={set('businessName')}
                 required
                 placeholder="e.g. Kofi's Provision Shop"
+                className="w-full h-10 rounded-lg border border-border bg-card px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring transition-colors"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-foreground">
+                Shop name <span className="text-muted-foreground font-normal text-xs">(optional — defaults to business name)</span>
+              </label>
+              <input
+                value={form.shopName}
+                onChange={set('shopName')}
+                placeholder="e.g. Main Branch, Osu Shop"
                 className="w-full h-10 rounded-lg border border-border bg-card px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring transition-colors"
               />
             </div>
