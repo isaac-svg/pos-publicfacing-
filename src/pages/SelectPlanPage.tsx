@@ -95,7 +95,7 @@ export default function SelectPlanPage() {
                 billingCycle === 'annual' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              Annual <span className="text-accent-foreground text-xs font-semibold ml-1">Save 17%</span>
+              Annual <span className="text-accent-foreground text-xs font-semibold ml-1">Save 2 months</span>
             </button>
           </div>
         </div>

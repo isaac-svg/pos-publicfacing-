@@ -92,7 +92,7 @@ export function UpgradeModal({ onClose }: { onClose: () => void }) {
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${billing === 'annual' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
             >
               Annual
-              <span className="ml-1.5 text-xs font-semibold text-emerald-600">Save 17%</span>
+              <span className="ml-1.5 text-xs font-semibold text-emerald-600">Save 2 months</span>
             </button>
           </div>
         </div>
