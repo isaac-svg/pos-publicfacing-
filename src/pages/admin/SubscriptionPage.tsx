@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Zap, ArrowUpRight } from 'lucide-react'
+import { Zap, ArrowUpRight, Copy, Check } from 'lucide-react'
 import { subscriptionApi } from '../../lib/api'
 import { UpgradeModal } from '../../components/UpgradeModal'
+import { useAuthStore } from '../../store/auth'
 
 interface SubStatus {
   status: string; plan: string; billingCycle: string | null
@@ -38,8 +39,32 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
+const PLAN_LABELS: Record<string, string> = {
+  free:   'Free',
+  solo:   'Solo Store',
+  growth: 'Growth Engine',
+  vip:    'Retail VIP Suite',
+}
+
+const PLAN_COLORS: Record<string, string> = {
+  free:   'bg-muted text-muted-foreground',
+  solo:   'bg-secondary/20 text-foreground',
+  growth: 'bg-primary/10 text-primary',
+  vip:    'bg-amber-100 text-amber-700',
+}
+
 export default function SubscriptionPage() {
   const [showUpgrade, setShowUpgrade] = useState(false)
+  const [codeCopied, setCodeCopied]   = useState(false)
+  const { business } = useAuthStore()
+  const businessSlug = business?.businessSlug
+
+  function copySlug() {
+    if (!businessSlug) return
+    navigator.clipboard.writeText(businessSlug)
+    setCodeCopied(true)
+    setTimeout(() => setCodeCopied(false), 2000)
+  }
 
   const { data: sub } = useQuery<SubStatus>({
     queryKey: ['subscription-status'],
@@ -64,13 +89,41 @@ export default function SubscriptionPage() {
     <div className="max-w-lg space-y-5">
       <h1 className="text-xl font-bold text-foreground">Subscription</h1>
 
+      {/* Shop Code — visible to admin only */}
+      {businessSlug && (
+        <div className="bg-card rounded-xl border border-border p-5 space-y-3">
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Your Shop Code</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Share this code with employees so they can log in.</p>
+          </div>
+          <div className="flex items-center justify-between bg-muted/40 rounded-lg px-4 py-3">
+            <span className="font-mono text-2xl font-bold tracking-widest text-foreground">{businessSlug}</span>
+            <button
+              onClick={copySlug}
+              title="Copy shop code"
+              className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            >
+              {codeCopied ? <><Check className="w-4 h-4" /> Copied</> : <><Copy className="w-4 h-4" /> Copy</>}
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Employees log in with: <span className="font-mono font-medium text-foreground">username@{businessSlug}</span>
+          </p>
+        </div>
+      )}
+
       {/* Main status card */}
       <div className="bg-card rounded-xl border border-border p-6 space-y-5">
         {/* Plan header */}
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <div className="flex items-center gap-2.5">
-              <p className="text-lg font-bold capitalize text-foreground">{sub.plan ?? 'Free'} plan</p>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <p className="text-lg font-bold text-foreground">
+                {PLAN_LABELS[sub.plan] ?? (sub.plan ? sub.plan.charAt(0).toUpperCase() + sub.plan.slice(1) : 'Free')}
+              </p>
+              <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${PLAN_COLORS[sub.plan] ?? 'bg-muted text-muted-foreground'}`}>
+                {PLAN_LABELS[sub.plan] ?? sub.plan ?? 'Free'}
+              </span>
               <StatusBadge status={sub.status} />
             </div>
             {isTrial && sub.trialEndsAt && (

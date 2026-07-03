@@ -75,13 +75,13 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Phone or Email</label>
+              <label className="text-sm font-medium text-foreground">Login ID</label>
               <input
                 type="text"
                 value={identifier}
                 onChange={e => setIdentifier(e.target.value)}
                 required
-                placeholder="024XXXXXXX or kofi@example.com"
+                placeholder="Enter your login ID"
                 className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring transition-colors"
               />
             </div>

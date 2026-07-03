@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 
 interface AuthState {
   token: string | null
-  business: { id: number; businessName: string } | null
+  business: { id: number; businessName: string; businessSlug?: string } | null
   subscription: { status: string; plan: string | null } | null
   login: (token: string, business: AuthState['business'], subscription: AuthState['subscription']) => void
   logout: () => void
