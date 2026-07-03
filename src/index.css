@@ -71,7 +71,7 @@
   }
 
   ::placeholder {
-    color: var(--color-muted-foreground);
+    color: rgb(156 163 175);
     font-weight: 400;
     opacity: 1;
   }
