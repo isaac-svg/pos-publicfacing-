@@ -12,7 +12,8 @@ export default function AdminDashboardPage() {
   }})
   const { data: allocs = [] } = useQuery({ queryKey: ['allocations-lowstock'], queryFn: () => allocationsApi.list({ low_stock: true }) })
 
-  const todaySales = (Array.isArray(sales) ? sales : []) as { totalAmount: string | number }[]
+  type SaleRow = { id?: number; totalAmount: string | number; status?: string; createdAt?: string }
+  const todaySales = (Array.isArray(sales) ? sales : []) as SaleRow[]
   const todayTotal = todaySales.reduce((s, sale) => s + (parseFloat(String(sale.totalAmount)) || 0), 0)
   const monthTotal = parseFloat(String((report as { summary?: { totalRevenue: string | number } })?.summary?.totalRevenue ?? 0)) || 0
   const lowStockCount = (allocs as unknown[]).length
@@ -71,7 +72,7 @@ export default function AdminDashboardPage() {
               </tr>
             </thead>
             <tbody className="divide-y">
-              {todaySales.slice(0, 10).map((s: { id?: number; totalAmount: string; status?: string; createdAt?: string }, i: number) => (
+              {todaySales.slice(0, 10).map((s, i) => (
                 <tr key={i} className="hover:bg-background">
                   <td className="px-4 py-2">#{s.id ?? i + 1}</td>
                   <td className="px-4 py-2 text-right font-medium">GH₵{(parseFloat(String(s.totalAmount)) || 0).toFixed(2)}</td>
