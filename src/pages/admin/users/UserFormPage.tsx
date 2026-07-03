@@ -36,8 +36,9 @@ export default function UserFormPage() {
   const { business } = useAuthStore()
 
   const [form, setForm] = useState({
-    username: '', fullName: '', phone: '', email: '', shopId: '', isActive: true, canGrantCredit: false, password: '',
+    username: '', fullName: '', phone: '', email: '', isActive: true, canGrantCredit: false, password: '',
   })
+  const [selectedShopIds, setSelectedShopIds] = useState<number[]>([])
   const [selectedRoles, setSelectedRoles] = useState<number[]>([])
   const [error, setError] = useState('')
   const [createdCreds, setCreatedCreds] = useState<{ username: string; password: string; emailSent: boolean; email?: string | null } | null>(null)
@@ -56,24 +57,26 @@ export default function UserFormPage() {
       fullName: user.fullName,
       phone: user.phone ?? '',
       email: user.email ?? '',
-      shopId: user.shopId ? String(user.shopId) : '',
       isActive: user.isActive,
       canGrantCredit: user.canGrantCredit,
       password: '',
     })
     setSelectedRoles(user.userRoles?.map(ur => ur.roleId) ?? [])
+    const shopIds = (user as { userShops?: { shopId: number }[] }).userShops?.map(us => us.shopId)
+      ?? (user.shopId ? [user.shopId] : [])
+    setSelectedShopIds(shopIds)
   }, [user])
 
   const createMutation = useMutation({
     mutationFn: () => {
-      if (!form.shopId) { setError('Shop assignment is required'); return Promise.reject() }
+      if (!selectedShopIds.length) { setError('At least one shop is required'); return Promise.reject() }
       if (!form.phone.trim()) { setError('Phone number is required'); return Promise.reject() }
       return usersApi.create({
         username: form.username.trim(),
         fullName: form.fullName.trim(),
         phone: form.phone.trim(),
         email: form.email.trim() || undefined,
-        shopId: Number(form.shopId),
+        shopIds: selectedShopIds,
         roleIds: selectedRoles.length ? selectedRoles : undefined,
         canGrantCredit: form.canGrantCredit,
       }) as Promise<{ username: string; generatedPassword: string; emailSent?: boolean; email?: string | null }>
@@ -91,7 +94,7 @@ export default function UserFormPage() {
       fullName: form.fullName.trim(),
       phone: form.phone.trim() || null,
       email: form.email.trim() || null,
-      shopId: form.shopId ? Number(form.shopId) : null,
+      shopIds: selectedShopIds,
       isActive: form.isActive,
       canGrantCredit: form.canGrantCredit,
       roleIds: selectedRoles,
@@ -152,7 +155,7 @@ export default function UserFormPage() {
           <button onClick={copyCreds} className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors">
             {copied ? <><Check className="w-4 h-4" /> Copied</> : <><Copy className="w-4 h-4" /> Copy credentials</>}
           </button>
-          <button onClick={() => { setCreatedCreds(null); setForm({ username: '', fullName: '', phone: '', email: '', shopId: '', isActive: true, canGrantCredit: false, password: '' }); setSelectedRoles([]) }} className="text-sm text-muted-foreground hover:text-foreground">
+          <button onClick={() => { setCreatedCreds(null); setForm({ username: '', fullName: '', phone: '', email: '', isActive: true, canGrantCredit: false, password: '' }); setSelectedRoles([]); setSelectedShopIds([]) }} className="text-sm text-muted-foreground hover:text-foreground">
             Add another
           </button>
         </div>
@@ -188,28 +191,40 @@ export default function UserFormPage() {
           )}
 
           <div className="space-y-1.5">
-            <label className={labelCls}>Phone number <span className="text-destructive">*</span></label>
+            <label className={labelCls}>Phone number {!isEdit && <span className="text-destructive">*</span>}</label>
             <input
               type="tel"
               value={form.phone}
               onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
-              required
               placeholder="024 000 0000"
               className={inputCls}
             />
           </div>
 
-          <div className="space-y-1.5">
-            <label className={labelCls}>Shop <span className="text-destructive">*</span></label>
-            <select
-              value={form.shopId}
-              onChange={e => setForm(p => ({ ...p, shopId: e.target.value }))}
-              required
-              className={inputCls}
-            >
-              <option value="" disabled>Select a shop</option>
-              {(shops as Shop[]).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
+          <div className="space-y-1.5 col-span-2">
+            <label className={labelCls}>Shops <span className="text-destructive">*</span></label>
+            {(shops as Shop[]).length === 0 ? (
+              <p className="text-xs text-muted-foreground">No shops available.</p>
+            ) : (
+              <div className="rounded-lg border border-input divide-y divide-border overflow-hidden">
+                {(shops as Shop[]).map(s => {
+                  const checked = selectedShopIds.includes(s.id)
+                  return (
+                    <label key={s.id} className="flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-muted/40 transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => setSelectedShopIds(prev =>
+                          checked ? prev.filter(id => id !== s.id) : [...prev, s.id]
+                        )}
+                        className="w-4 h-4 rounded accent-primary"
+                      />
+                      <span className="text-sm text-foreground">{s.name}</span>
+                    </label>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           <div className="space-y-1.5 col-span-2 sm:col-span-1">
@@ -259,7 +274,7 @@ export default function UserFormPage() {
         </Link>
         <button
           onClick={() => { setError(''); isEdit ? updateMutation.mutate() : createMutation.mutate() }}
-          disabled={createMutation.isPending || updateMutation.isPending || !form.fullName.trim() || (!isEdit && (!form.username.trim() || !form.phone.trim() || !form.shopId))}
+          disabled={createMutation.isPending || updateMutation.isPending || !form.fullName.trim() || (!isEdit && (!form.username.trim() || !form.phone.trim() || !selectedShopIds.length))}
           className="flex-1 h-10 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {(createMutation.isPending || updateMutation.isPending) && <Loader2 className="h-4 w-4 animate-spin" />}
