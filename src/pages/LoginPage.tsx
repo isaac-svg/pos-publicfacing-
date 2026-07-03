@@ -12,6 +12,7 @@ export default function LoginPage() {
 
   const [step, setStep]         = useState<Step>('credentials')
   const [username, setUsername] = useState('')
+  const [companyCode, setCompanyCode] = useState('')
   const [password, setPassword] = useState('')
   const [showPw, setShowPw]     = useState(false)
   const [hint, setHint]         = useState('')
@@ -31,9 +32,11 @@ export default function LoginPage() {
     e.preventDefault()
     setError(''); setLoading(true)
     try {
+      const code = companyCode.trim().toUpperCase()
       const res = await api.post('/api/v1/auth/login', {
         identifier: username.trim(),
         username:   username.trim(),
+        companyCode: code,
         password,
       })
       const data = res.data.data as { otpRequired?: boolean; hint?: string; token?: string; user?: object }
@@ -54,13 +57,18 @@ export default function LoginPage() {
     } finally { setLoading(false) }
   }
 
+  function scopedIdentifier() {
+    const code = companyCode.trim().toUpperCase()
+    return code ? `${username.trim()}@${code}` : username.trim()
+  }
+
   // Step 2: OTP verification
   async function handleOtp(e: React.FormEvent) {
     e.preventDefault()
     setError(''); setLoading(true)
     try {
       const res = await api.post('/api/v1/auth/verify-login-otp', {
-        identifier: username.trim(),
+        identifier: scopedIdentifier(),
         otp,
       })
       await finalise(res.data.data.token)
@@ -98,8 +106,9 @@ export default function LoginPage() {
   async function resend() {
     setCooldown(60); setError('')
     try {
+      const code = companyCode.trim().toUpperCase()
       await api.post('/api/v1/auth/login', {
-        identifier: username.trim(), username: username.trim(), password,
+        identifier: username.trim(), username: username.trim(), companyCode: code, password,
       })
     } catch { /* ignore */ }
   }
@@ -136,6 +145,18 @@ export default function LoginPage() {
                 required
                 placeholder="e.g. kofi"
                 autoComplete="username"
+                className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring transition-colors"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-foreground">Company Code</label>
+              <input
+                type="text"
+                value={companyCode}
+                onChange={e => setCompanyCode(e.target.value.toUpperCase())}
+                placeholder="e.g. ABC123"
+                autoComplete="off"
                 className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring transition-colors"
               />
             </div>

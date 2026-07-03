@@ -218,6 +218,11 @@ export default function AdminLayout() {
             <span className="text-sm font-semibold text-foreground truncate">
               {business?.businessName ?? 'Shepherd POS'}
             </span>
+            {business?.businessSlug && (
+              <span className="text-[10px] font-mono font-semibold text-muted-foreground bg-muted px-1.5 py-0.5 rounded shrink-0">
+                {business.businessSlug}
+              </span>
+            )}
           </div>
         )}
         <button
@@ -367,6 +372,11 @@ export default function AdminLayout() {
             <span className="text-sm text-muted-foreground hidden md:inline">
               {business?.businessName ?? 'Shepherd POS'}
             </span>
+            {business?.businessSlug && (
+              <span className="hidden md:inline text-[10px] font-mono font-semibold text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                {business.businessSlug}
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
