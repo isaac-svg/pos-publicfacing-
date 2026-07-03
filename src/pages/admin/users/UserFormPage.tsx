@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2, ArrowLeft, Copy, Check } from 'lucide-react'
 import { usersApi, rolesApi, shopsApi } from '../../../lib/api'
+import { useAuthStore } from '../../../store/auth'
 
 const inputCls = 'w-full h-9 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring'
 const labelCls = 'text-xs font-medium text-muted-foreground'
@@ -31,6 +32,8 @@ export default function UserFormPage() {
   const isEdit = Boolean(id)
   const navigate = useNavigate()
   const qc = useQueryClient()
+
+  const { business } = useAuthStore()
 
   const [form, setForm] = useState({
     username: '', fullName: '', email: '', shopId: '', isActive: true, canGrantCredit: false, password: '',
@@ -102,7 +105,9 @@ export default function UserFormPage() {
 
   function copyCreds() {
     if (!createdCreds) return
-    navigator.clipboard.writeText(`Username: ${createdCreds.username}\nPassword: ${createdCreds.password}`)
+    const parts = [`Username: ${createdCreds.username}`, `Password: ${createdCreds.password}`]
+    if (business?.businessSlug) parts.unshift(`Code: ${business.businessSlug}`)
+    navigator.clipboard.writeText(parts.join('\n'))
     setCopied(true); setTimeout(() => setCopied(false), 2000)
   }
 
@@ -129,6 +134,9 @@ export default function UserFormPage() {
         )}
 
         <div className="rounded-lg border border-border bg-muted/30 font-mono text-sm p-4 space-y-1.5">
+          {business?.businessSlug && (
+            <p><span className="text-muted-foreground">Company Code:</span> <strong className="text-foreground">{business.businessSlug}</strong></p>
+          )}
           <p><span className="text-muted-foreground">Username:</span> <strong className="text-foreground">{createdCreds.username}</strong></p>
           <p><span className="text-muted-foreground">Password:</span> <strong className="text-foreground">{createdCreds.password}</strong></p>
         </div>
