@@ -5,17 +5,17 @@ import { Loader2, ArrowLeft, Copy, Check } from 'lucide-react'
 import { usersApi, rolesApi, shopsApi } from '../../../lib/api'
 import { useAuthStore } from '../../../store/auth'
 
-const inputCls = 'w-full h-9 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring'
-const labelCls = 'text-xs font-medium text-muted-foreground'
+const inputCls = 'w-full h-9 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-ring'
+const labelCls = 'text-xs font-medium text-foreground'
 
-interface User { id: number; username: string; fullName: string; email?: string | null; isActive: boolean; shopId: number | null; canGrantCredit: boolean; userRoles?: { roleId: number; role: { id: number; name: string } }[] }
+interface User { id: number; username: string; fullName: string; phone?: string | null; email?: string | null; isActive: boolean; shopId: number | null; canGrantCredit: boolean; userRoles?: { roleId: number; role: { id: number; name: string } }[] }
 interface Shop { id: number; name: string }
 interface Role { id: number; name: string }
 
 function Toggle({ checked, label, onChange }: { checked: boolean; label: string; onChange: (v: boolean) => void }) {
   return (
     <div className="flex items-center justify-between py-2">
-      <span className="text-sm text-foreground">{label}</span>
+      <span className="text-sm font-normal text-foreground">{label}</span>
       <button
         type="button"
         onClick={() => onChange(!checked)}
@@ -36,7 +36,7 @@ export default function UserFormPage() {
   const { business } = useAuthStore()
 
   const [form, setForm] = useState({
-    username: '', fullName: '', email: '', shopId: '', isActive: true, canGrantCredit: false, password: '',
+    username: '', fullName: '', phone: '', email: '', shopId: '', isActive: true, canGrantCredit: false, password: '',
   })
   const [selectedRoles, setSelectedRoles] = useState<number[]>([])
   const [error, setError] = useState('')
@@ -54,6 +54,7 @@ export default function UserFormPage() {
     setForm({
       username: user.username,
       fullName: user.fullName,
+      phone: user.phone ?? '',
       email: user.email ?? '',
       shopId: user.shopId ? String(user.shopId) : '',
       isActive: user.isActive,
@@ -64,14 +65,19 @@ export default function UserFormPage() {
   }, [user])
 
   const createMutation = useMutation({
-    mutationFn: () => usersApi.create({
-      username: form.username.trim(),
-      fullName: form.fullName.trim(),
-      email: form.email.trim() || undefined,
-      shopId: form.shopId ? Number(form.shopId) : undefined,
-      roleIds: selectedRoles.length ? selectedRoles : undefined,
-      canGrantCredit: form.canGrantCredit,
-    }) as Promise<{ username: string; generatedPassword: string; emailSent?: boolean; email?: string | null }>,
+    mutationFn: () => {
+      if (!form.shopId) { setError('Shop assignment is required'); return Promise.reject() }
+      if (!form.phone.trim()) { setError('Phone number is required'); return Promise.reject() }
+      return usersApi.create({
+        username: form.username.trim(),
+        fullName: form.fullName.trim(),
+        phone: form.phone.trim(),
+        email: form.email.trim() || undefined,
+        shopId: Number(form.shopId),
+        roleIds: selectedRoles.length ? selectedRoles : undefined,
+        canGrantCredit: form.canGrantCredit,
+      }) as Promise<{ username: string; generatedPassword: string; emailSent?: boolean; email?: string | null }>
+    },
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['users'] })
       setCreatedCreds({ username: data.username, password: data.generatedPassword, emailSent: !!data.emailSent, email: data.email })
@@ -83,6 +89,7 @@ export default function UserFormPage() {
   const updateMutation = useMutation({
     mutationFn: () => usersApi.update(Number(id), {
       fullName: form.fullName.trim(),
+      phone: form.phone.trim() || null,
       email: form.email.trim() || null,
       shopId: form.shopId ? Number(form.shopId) : null,
       isActive: form.isActive,
@@ -99,14 +106,14 @@ export default function UserFormPage() {
 
   const assignableRoles = (roles as Role[]).filter(r => r.name !== 'Business Administrator')
 
-  function toggleRole(id: number) {
-    setSelectedRoles(prev => prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id])
+  function toggleRole(roleId: number) {
+    setSelectedRoles(prev => prev.includes(roleId) ? prev.filter(r => r !== roleId) : [...prev, roleId])
   }
 
   function copyCreds() {
     if (!createdCreds) return
     const parts = [`Username: ${createdCreds.username}`, `Password: ${createdCreds.password}`]
-    if (business?.businessSlug) parts.unshift(`Code: ${business.businessSlug}`)
+    if (business?.businessSlug) parts.unshift(`Store Code: ${business.businessSlug}`)
     navigator.clipboard.writeText(parts.join('\n'))
     setCopied(true); setTimeout(() => setCopied(false), 2000)
   }
@@ -135,7 +142,7 @@ export default function UserFormPage() {
 
         <div className="rounded-lg border border-border bg-muted/30 font-mono text-sm p-4 space-y-1.5">
           {business?.businessSlug && (
-            <p><span className="text-muted-foreground">Company Code:</span> <strong className="text-foreground">{business.businessSlug}</strong></p>
+            <p><span className="text-muted-foreground">Store Code:</span> <strong className="text-foreground">{business.businessSlug}</strong></p>
           )}
           <p><span className="text-muted-foreground">Username:</span> <strong className="text-foreground">{createdCreds.username}</strong></p>
           <p><span className="text-muted-foreground">Password:</span> <strong className="text-foreground">{createdCreds.password}</strong></p>
@@ -145,7 +152,7 @@ export default function UserFormPage() {
           <button onClick={copyCreds} className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors">
             {copied ? <><Check className="w-4 h-4" /> Copied</> : <><Copy className="w-4 h-4" /> Copy credentials</>}
           </button>
-          <button onClick={() => { setCreatedCreds(null); setForm({ username: '', fullName: '', email: '', shopId: '', isActive: true, canGrantCredit: false, password: '' }); setSelectedRoles([]) }} className="text-sm text-muted-foreground hover:text-foreground">
+          <button onClick={() => { setCreatedCreds(null); setForm({ username: '', fullName: '', phone: '', email: '', shopId: '', isActive: true, canGrantCredit: false, password: '' }); setSelectedRoles([]) }} className="text-sm text-muted-foreground hover:text-foreground">
             Add another
           </button>
         </div>
@@ -169,35 +176,55 @@ export default function UserFormPage() {
       <div className="rounded-xl border border-border bg-card p-5 space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className={labelCls}>Full name *</label>
+            <label className={labelCls}>Full name <span className="text-destructive">*</span></label>
             <input value={form.fullName} onChange={e => setForm(p => ({ ...p, fullName: e.target.value }))} required placeholder="Ama Owusu" className={inputCls} />
           </div>
+
           {!isEdit && (
             <div className="space-y-1.5">
-              <label className={labelCls}>Username *</label>
+              <label className={labelCls}>Username <span className="text-destructive">*</span></label>
               <input value={form.username} onChange={e => setForm(p => ({ ...p, username: e.target.value.toLowerCase().replace(/\s/g, '') }))} required placeholder="amaowusu" className={inputCls} />
             </div>
           )}
-          <div className="space-y-1.5 col-span-2 sm:col-span-1">
-            <label className={labelCls}>Email {!isEdit && <span className="font-normal text-muted-foreground/70">(optional — sends credentials)</span>}</label>
-            <input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} placeholder="ama@example.com" className={inputCls} />
-          </div>
+
           <div className="space-y-1.5">
-            <label className={labelCls}>Shop</label>
-            <select value={form.shopId} onChange={e => setForm(p => ({ ...p, shopId: e.target.value }))} className={inputCls}>
-              <option value="">No shop assigned</option>
+            <label className={labelCls}>Phone number <span className="text-destructive">*</span></label>
+            <input
+              type="tel"
+              value={form.phone}
+              onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
+              required
+              placeholder="024 000 0000"
+              className={inputCls}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className={labelCls}>Shop <span className="text-destructive">*</span></label>
+            <select
+              value={form.shopId}
+              onChange={e => setForm(p => ({ ...p, shopId: e.target.value }))}
+              required
+              className={inputCls}
+            >
+              <option value="" disabled>Select a shop</option>
               {(shops as Shop[]).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
+
+          <div className="space-y-1.5 col-span-2 sm:col-span-1">
+            <label className={labelCls}>Email <span className="text-muted-foreground font-normal text-xs">(optional)</span></label>
+            <input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} placeholder="ama@example.com" className={inputCls} />
+          </div>
+
           {isEdit && (
             <div className="space-y-1.5">
-              <label className={labelCls}>New password <span className="font-normal text-muted-foreground/70">(leave blank to keep)</span></label>
+              <label className={labelCls}>New password <span className="text-muted-foreground font-normal text-xs">(leave blank to keep)</span></label>
               <input type="password" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder="Leave blank to keep current" className={inputCls} />
             </div>
           )}
         </div>
 
-        {/* Roles */}
         {assignableRoles.length > 0 && (
           <div className="space-y-2">
             <label className={labelCls}>Roles</label>
@@ -227,12 +254,12 @@ export default function UserFormPage() {
       </div>
 
       <div className="flex gap-3">
-        <Link to="/users" className="flex-1 h-10 rounded-lg border border-border text-sm text-foreground flex items-center justify-center hover:bg-muted/40 transition-colors">
+        <Link to="/users" className="flex-1 h-10 rounded-lg border border-border text-sm text-foreground font-normal flex items-center justify-center hover:bg-muted/40 transition-colors">
           Cancel
         </Link>
         <button
           onClick={() => { setError(''); isEdit ? updateMutation.mutate() : createMutation.mutate() }}
-          disabled={createMutation.isPending || updateMutation.isPending || !form.fullName.trim() || (!isEdit && !form.username.trim())}
+          disabled={createMutation.isPending || updateMutation.isPending || !form.fullName.trim() || (!isEdit && (!form.username.trim() || !form.phone.trim() || !form.shopId))}
           className="flex-1 h-10 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {(createMutation.isPending || updateMutation.isPending) && <Loader2 className="h-4 w-4 animate-spin" />}

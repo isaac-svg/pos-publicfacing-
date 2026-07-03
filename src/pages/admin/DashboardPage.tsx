@@ -12,14 +12,14 @@ export default function AdminDashboardPage() {
   }})
   const { data: allocs = [] } = useQuery({ queryKey: ['allocations-lowstock'], queryFn: () => allocationsApi.list({ low_stock: true }) })
 
-  const todaySales = (sales as { totalAmount: string }[])
-  const todayTotal = todaySales.reduce((s: number, sale: { totalAmount: string }) => s + Number(sale.totalAmount), 0)
-  const monthTotal = Number((report as { summary?: { totalRevenue: string | number } })?.summary?.totalRevenue ?? 0)
+  const todaySales = (Array.isArray(sales) ? sales : []) as { totalAmount: string | number }[]
+  const todayTotal = todaySales.reduce((s, sale) => s + (parseFloat(String(sale.totalAmount)) || 0), 0)
+  const monthTotal = parseFloat(String((report as { summary?: { totalRevenue: string | number } })?.summary?.totalRevenue ?? 0)) || 0
   const lowStockCount = (allocs as unknown[]).length
 
   const topProducts = ((report as { byProduct?: { name: string; revenue: string | number }[] })?.byProduct ?? [])
     .slice(0, 5)
-    .map(p => ({ ...p, revenue: Number(p.revenue) }))
+    .map(p => ({ ...p, revenue: parseFloat(String(p.revenue)) || 0 }))
 
   return (
     <div className="space-y-6">
@@ -74,7 +74,7 @@ export default function AdminDashboardPage() {
               {todaySales.slice(0, 10).map((s: { id?: number; totalAmount: string; status?: string; createdAt?: string }, i: number) => (
                 <tr key={i} className="hover:bg-background">
                   <td className="px-4 py-2">#{s.id ?? i + 1}</td>
-                  <td className="px-4 py-2 text-right font-medium">GH₵{Number(s.totalAmount).toFixed(2)}</td>
+                  <td className="px-4 py-2 text-right font-medium">GH₵{(parseFloat(String(s.totalAmount)) || 0).toFixed(2)}</td>
                   <td className="px-4 py-2">
                     <span className="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-accent-foreground">{s.status ?? 'completed'}</span>
                   </td>
