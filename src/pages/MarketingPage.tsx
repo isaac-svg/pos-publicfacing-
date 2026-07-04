@@ -11,6 +11,7 @@ import PricingSection from '../components/marketing/sections/PricingSection'
 import FAQSection from '../components/marketing/sections/FAQSection'
 import NewsletterSection from '../components/marketing/sections/NewsletterSection'
 import ContactSection from '../components/marketing/sections/ContactSection'
+import DownloadSection from '../components/marketing/sections/DownloadSection'
 
 export default function MarketingPage() {
   useLenis()
@@ -27,6 +28,7 @@ export default function MarketingPage() {
         <PillarsSection />
         <ClarityGridSection />
         <TrialOfferSection />
+        <DownloadSection />
         <PricingSection />
         <FAQSection />
         <NewsletterSection />
