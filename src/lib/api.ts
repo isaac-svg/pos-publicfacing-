@@ -12,10 +12,14 @@ api.interceptors.request.use(config => {
 
 const PUBLIC_PATHS = ['/', '/login', '/signup', '/verify-otp', '/forgot-password', '/reset-password']
 
+const NO_LOGOUT_URLS = ['/subscriptions/status', '/subscriptions/plans']
+
 api.interceptors.response.use(r => r, err => {
   const path = window.location.pathname
+  const url: string = err.config?.url ?? ''
   const isPublic = PUBLIC_PATHS.some(p => path === p || path.startsWith(p + '?'))
-  if (err.response?.status === 401 && !isPublic) {
+  const skipLogout = NO_LOGOUT_URLS.some(u => url.includes(u))
+  if (err.response?.status === 401 && !isPublic && !skipLogout) {
     localStorage.removeItem('signup_token')
     window.location.href = '/login'
   }
