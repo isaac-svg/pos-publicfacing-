@@ -6,7 +6,7 @@ import { UpgradeModal } from './UpgradeModal'
 import { Zap } from 'lucide-react'
 
 const SUPPORT_PHONE = import.meta.env.VITE_SUPPORT_PHONE ?? '+233 XX XXX XXXX'
-const SUPPORT_EMAIL = import.meta.env.VITE_SUPPORT_EMAIL ?? 'support@shepherdpos.com'
+const SUPPORT_EMAIL = import.meta.env.VITE_SUPPORT_EMAIL ?? 'support@kixon.net'
 
 export function ActivationGateModal() {
   const { isOpen, close } = useActivationGate()
