@@ -1,23 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Download, Monitor, Loader2, CheckCircle } from 'lucide-react'
+import { api } from '../../../lib/api'
 
-const UPDATER_BASE = 'https://pos-updater.vercel.app/api/update'
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:3000'
+const DOWNLOAD_FILE_URL = `${API_BASE}/api/v1/public/download/windows/file`
 
 interface ReleaseInfo {
   version: string
   filename: string
-  downloadUrl: string
-}
-
-function parseLatestYml(text: string): ReleaseInfo | null {
-  const version  = text.match(/^version:\s*(.+)$/m)?.[1]?.trim()
-  const path     = text.match(/^path:\s*(.+)$/m)?.[1]?.trim()
-  if (!version || !path) return null
-  return {
-    version,
-    filename: path,
-    downloadUrl: `${UPDATER_BASE}/${encodeURIComponent(path)}`,
-  }
 }
 
 export default function DownloadSection() {
@@ -25,9 +15,8 @@ export default function DownloadSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch(`${UPDATER_BASE}/latest.yml`)
-      .then(r => r.text())
-      .then(text => { setRelease(parseLatestYml(text)) })
+    api.get('/api/v1/public/download/windows/info')
+      .then(r => { setRelease(r.data.data as ReleaseInfo) })
       .catch(() => { /* fallback: no version shown */ })
       .finally(() => setLoading(false))
   }, [])
@@ -84,8 +73,7 @@ export default function DownloadSection() {
           {/* Download button */}
           {release ? (
             <a
-              href={release.downloadUrl}
-              download
+              href={DOWNLOAD_FILE_URL}
               className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
             >
               <Download className="w-4 h-4" />
