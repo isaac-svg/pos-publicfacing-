@@ -70,10 +70,10 @@ export default function ContactSection() {
               Contact Us
             </span>
             <h2 className="contact-reveal text-2xl sm:text-3xl font-bold text-slate-900">
-              Got a Question? We're Here.
+              Enterprise &amp; Custom Solutions
             </h2>
             <p className="contact-reveal mt-3 text-sm text-slate-500 leading-relaxed">
-              Whether you need help getting started, have a feature request, or just want to chat about how Kixon can work for your shop - drop us a message. Our team responds fast.
+              Need a tailored retail system for multiple branches, a custom integration, or bespoke software built for your business? We build it. Drop your details and we'll get back to you within minutes.
             </p>
 
             <div className="contact-reveal mt-8 space-y-4">
