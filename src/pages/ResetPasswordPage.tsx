@@ -56,7 +56,7 @@ export default function ResetPasswordPage() {
         <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center">
           <span className="text-white font-bold text-xs">S</span>
         </div>
-        <span className="text-foreground font-semibold text-sm">Shepherd</span>
+        <span className="text-foreground font-semibold text-sm">Kixon</span>
       </Link>
     </header>
   )
@@ -99,7 +99,7 @@ export default function ResetPasswordPage() {
             <p className="text-sm text-muted-foreground">
               {tokenType === 'business'
                 ? 'Your password has been updated. You can now log in.'
-                : 'Your Shepherd POS password has been updated.'}
+                : 'Your Kixon password has been updated.'}
             </p>
           </div>
 
@@ -129,7 +129,7 @@ export default function ResetPasswordPage() {
           <div className="space-y-1">
             <h1 className="text-2xl font-bold text-foreground">Set a new password</h1>
             <p className="text-sm text-muted-foreground">
-              {tokenType === 'pos_user' ? 'Resetting your Shepherd POS app password.' : 'Resetting your Shepherd portal password.'}
+              {tokenType === 'pos_user' ? 'Resetting your Kixon app password.' : 'Resetting your Kixon portal password.'}
             </p>
           </div>
 

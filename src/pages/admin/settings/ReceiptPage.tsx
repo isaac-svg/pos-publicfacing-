@@ -65,7 +65,7 @@ const defaults: ReceiptConfig = {
   showHeaderDivider: true, showInvoiceId: true, showDatetime: true,
   showCashier: true, showSubtotal: true, showThankYou: true,
   thankYouMessage: 'Thank you for your purchase!',
-  showTagline: false, tagline: null, showPoweredBy: true, poweredByText: 'Powered by Shepherd POS',
+  showTagline: false, tagline: null, showPoweredBy: true, poweredByText: 'Powered by Kixon',
 }
 
 export default function ReceiptPage() {
@@ -170,7 +170,7 @@ export default function ReceiptPage() {
         {form.showTagline && <input value={form.tagline ?? ''} onChange={e => set('tagline', e.target.value || null)} placeholder="Your tagline here" className={inputCls} />}
         <Row label="Show powered-by" checked={form.showPoweredBy} onChange={v => set('showPoweredBy', v)} />
         {form.showPoweredBy && (
-          <input value={form.poweredByText} onChange={e => set('poweredByText', e.target.value)} placeholder="Powered by Shepherd POS" className={inputCls} />
+          <input value={form.poweredByText} onChange={e => set('poweredByText', e.target.value)} placeholder="Powered by Kixon" className={inputCls} />
         )}
       </Section>
     </form>

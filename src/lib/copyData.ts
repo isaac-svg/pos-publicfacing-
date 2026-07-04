@@ -1,5 +1,5 @@
 export const NAV = {
-  brand: 'Shepherd',
+  brand: 'Kixon',
   links: [
     { label: 'Features', href: '#pillars' },
     { label: 'Pricing', href: '#pricing' },
@@ -310,7 +310,7 @@ export const FAQ = {
 }
 
 export const FOOTER = {
-  brand: 'Shepherd POS',
+  brand: 'Kixon',
   tagline: 'The Gold Standard Retail OS for Ghana',
-  copyright: `© ${new Date().getFullYear()} Shepherd POS. All rights reserved.`,
+  copyright: `© ${new Date().getFullYear()} Kixon. All rights reserved.`,
 }

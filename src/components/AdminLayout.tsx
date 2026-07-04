@@ -216,7 +216,7 @@ export default function AdminLayout() {
               <span className="text-white text-[10px] font-bold">S</span>
             </div>
             <span className="text-sm font-semibold text-foreground truncate">
-              {business?.businessName ?? 'Shepherd POS'}
+              {business?.businessName ?? 'Kixon'}
             </span>
             {business?.businessSlug && (
               <span className="text-[10px] font-mono font-semibold text-muted-foreground bg-muted px-1.5 py-0.5 rounded shrink-0">
@@ -370,7 +370,7 @@ export default function AdminLayout() {
               <Menu className="h-5 w-5" />
             </button>
             <span className="text-sm text-muted-foreground hidden md:inline">
-              {business?.businessName ?? 'Shepherd POS'}
+              {business?.businessName ?? 'Kixon'}
             </span>
             {business?.businessSlug && (
               <span className="hidden md:inline text-[10px] font-mono font-semibold text-muted-foreground bg-muted px-1.5 py-0.5 rounded">

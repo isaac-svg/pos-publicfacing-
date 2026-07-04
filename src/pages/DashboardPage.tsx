@@ -109,7 +109,7 @@ export default function DashboardPage() {
 
         <div className="bg-card rounded-lg border p-6 text-center space-y-3">
           <h3 className="font-semibold">Download the POS App</h3>
-          <p className="text-sm text-muted-foreground">Install the Shepherd POS desktop app to start selling.</p>
+          <p className="text-sm text-muted-foreground">Install the Kixon desktop app to start selling.</p>
           <a
             href="https://github.com/your-org/shepherd-pos/releases/latest"
             target="_blank"

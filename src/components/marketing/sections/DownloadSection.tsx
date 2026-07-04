@@ -28,7 +28,7 @@ export default function DownloadSection() {
           Desktop App
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
-          Run Shepherd POS on your computer
+          Run Kixon on your computer
         </h2>
         <p className="text-muted-foreground max-w-xl mx-auto">
           The full-featured desktop app works offline, connects to receipt printers, and syncs automatically when back online.
@@ -48,7 +48,7 @@ export default function DownloadSection() {
           </div>
 
           <div className="space-y-1">
-            <p className="text-lg font-bold text-foreground">Shepherd POS for Windows</p>
+            <p className="text-lg font-bold text-foreground">Kixon for Windows</p>
             {loading ? (
               <p className="text-sm text-muted-foreground flex items-center justify-center gap-1.5">
                 <Loader2 className="w-3 h-3 animate-spin" /> Checking for latest version...
