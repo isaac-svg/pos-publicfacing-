@@ -16,8 +16,8 @@ export default function DownloadSection() {
 
   useEffect(() => {
     api.get('/api/v1/public/download/windows/info')
-      .then(r => { setRelease(r.data.data as ReleaseInfo) })
-      .catch(() => { /* fallback: no version shown */ })
+      .then(r => { setRelease(r.data.data ?? null) })
+      .catch(() => { /* fallback: show coming soon */ })
       .finally(() => setLoading(false))
   }, [])
 
@@ -56,11 +56,9 @@ export default function DownloadSection() {
             ) : release ? (
               <p className="text-sm text-muted-foreground flex items-center justify-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-green-500" />
-                Version {release.version} — latest release
+                Version {release.version}
               </p>
-            ) : (
-              <p className="text-sm text-muted-foreground">Latest release</p>
-            )}
+            ) : null}
           </div>
 
           {/* System requirements */}
@@ -71,7 +69,12 @@ export default function DownloadSection() {
           </div>
 
           {/* Download button */}
-          {release ? (
+          {loading ? (
+            <button disabled className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary/50 text-primary-foreground text-sm font-semibold cursor-not-allowed">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Checking availability...
+            </button>
+          ) : release ? (
             <a
               href={DOWNLOAD_FILE_URL}
               className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
@@ -80,13 +83,15 @@ export default function DownloadSection() {
               Download for Windows (.exe)
             </a>
           ) : (
-            <button
-              disabled
-              className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary/50 text-primary-foreground text-sm font-semibold cursor-not-allowed"
-            >
-              <Monitor className="w-4 h-4" />
-              {loading ? 'Checking availability...' : 'Download unavailable'}
-            </button>
+            <div className="space-y-2">
+              <div className="flex items-center justify-center gap-2 w-full h-11 rounded-xl border border-border bg-muted/40 text-sm text-muted-foreground">
+                <Monitor className="w-4 h-4" />
+                Coming soon
+              </div>
+              <p className="text-xs text-muted-foreground">
+                The Windows release is being prepared. Check back shortly.
+              </p>
+            </div>
           )}
 
           <p className="text-xs text-muted-foreground">
