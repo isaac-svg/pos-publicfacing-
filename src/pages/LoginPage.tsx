@@ -15,9 +15,10 @@ export default function LoginPage() {
   const [companyCode, setCompanyCode] = useState('')
   const [password, setPassword] = useState('')
   const [showPw, setShowPw]     = useState(false)
-  const [hint, setHint]         = useState('')
-  const [otp, setOtp]           = useState('')
-  const [cooldown, setCooldown] = useState(0)
+  const [hint, setHint]           = useState('')
+  const [sessionRef, setSessionRef] = useState('')
+  const [otp, setOtp]             = useState('')
+  const [cooldown, setCooldown]   = useState(0)
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState('')
 
@@ -39,13 +40,13 @@ export default function LoginPage() {
         companyCode: code,
         password,
       })
-      const data = res.data.data as { otpRequired?: boolean; hint?: string; token?: string; user?: object }
+      const data = res.data.data as { otpRequired?: boolean; maskedPhone?: string; sessionRef?: string; token?: string; user?: object }
 
       if (data.token) {
-        // Direct login (no phone on account)
         await finalise(data.token)
       } else {
-        setHint(data.hint ?? '')
+        setHint(data.maskedPhone ?? '')
+        setSessionRef(data.sessionRef ?? '')
         setStep('otp')
         setCooldown(60)
       }
@@ -68,7 +69,7 @@ export default function LoginPage() {
     setError(''); setLoading(true)
     try {
       const res = await api.post('/api/v1/auth/verify-login-otp', {
-        identifier: scopedIdentifier(),
+        sessionRef,
         otp,
       })
       await finalise(res.data.data.token)
@@ -106,10 +107,8 @@ export default function LoginPage() {
   async function resend() {
     setCooldown(60); setError('')
     try {
-      const code = companyCode.trim().toUpperCase()
-      await api.post('/api/v1/auth/login', {
-        identifier: username.trim(), username: username.trim(), companyCode: code, password,
-      })
+      const res = await api.post('/api/v1/auth/resend-otp', { sessionRef })
+      setSessionRef(res.data.data.sessionRef)
     } catch { /* ignore */ }
   }
 
