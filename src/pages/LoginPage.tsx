@@ -58,11 +58,6 @@ export default function LoginPage() {
     } finally { setLoading(false) }
   }
 
-  function scopedIdentifier() {
-    const code = companyCode.trim().toUpperCase()
-    return code ? `${username.trim()}@${code}` : username.trim()
-  }
-
   // Step 2: OTP verification
   async function handleOtp(e: React.FormEvent) {
     e.preventDefault()
